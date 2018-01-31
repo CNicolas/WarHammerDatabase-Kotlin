@@ -58,9 +58,11 @@ class HandsDaoTest {
             Hands.selectAll().forEach { println(it) }
         }
 
-        val hand = handsDao.findByNameInSeparateTransaction(handName)
+        transaction {
+            val hand = handsDao.findByName(handName)
 
-        assertNotNull(hand)
-        assertThat(hand!!.name).isEqualTo("SampleName")
+            assertNotNull(hand)
+            assertThat(hand!!.name).isEqualTo("SampleName")
+        }
     }
 }

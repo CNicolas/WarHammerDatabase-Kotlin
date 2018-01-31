@@ -4,7 +4,6 @@ import entities.Hand
 import entities.tables.Hands
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.sqlite.SQLiteException
 
 class HandsDao {
@@ -25,16 +24,6 @@ class HandsDao {
         } catch (e: SQLiteException) {
             return false
         }
-    }
-
-    fun findByNameInSeparateTransaction(name: String): Hand? {
-        var hand: Hand? = null
-
-        transaction {
-            hand = findByName(name)
-        }
-
-        return hand
     }
 
     fun findByName(name: String): Hand? {
