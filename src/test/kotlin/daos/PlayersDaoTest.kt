@@ -12,7 +12,7 @@ import org.testng.Assert.assertNotNull
 import org.testng.annotations.Test
 
 class PlayersDaoTest {
-    val playersDao = PlayersDao()
+    private val playersDao = PlayersDao()
 
     @Test
     fun should_insert_player_and_find_by_name() {

@@ -1,30 +1,22 @@
 package entities
 
+import entities.tables.Hands
 import org.assertj.core.api.Assertions.assertThat
+import org.h2.jdbc.JdbcSQLException
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils.create
 import org.jetbrains.exposed.sql.StdOutSqlLogger
-import org.jetbrains.exposed.sql.transactions.TransactionManager
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.testng.Assert
 import org.testng.annotations.Test
-import entities.tables.Hands
-import java.sql.Connection
 
 class HandTest {
     @Test
-    fun should_connect_h2() {
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
-    }
+    fun should_insert_a_hand() {
+        val handName = "SampleName"
 
-    @Test
-    fun should_connect_sqlite() {
-        Database.connect("jdbc:sqlite:file:test?mode=memory&cache=shared", driver = "org.sqlite.JDBC")
-
-        TransactionManager.manager.defaultIsolationLevel = Connection.TRANSACTION_SERIALIZABLE
-    }
-
-    @Test
-    fun should_insert_one_hand_by_dto() {
         Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
 
         transaction {
@@ -32,20 +24,16 @@ class HandTest {
 
             create(Hands)
 
-            val oneCharHand = Hand.new {
-                name = "One Characteristic"
-                characteristicDicesCount = 1
+            Hands.insert {
+                it[name] = handName
             }
 
-            println(oneCharHand.name)
-
-            assertThat(Hand.all().count()).isEqualTo(1)
-            assertThat(oneCharHand.characteristicDicesCount!!).isEqualTo(1)
+            assertThat(Hands.selectAll().count()).isEqualTo(1)
         }
     }
 
     @Test
-    fun should_select_by_name() {
+    fun should_throw_error_when_inserting_2_Hands_with_same_name() {
         Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
 
         transaction {
@@ -53,18 +41,17 @@ class HandTest {
 
             create(Hands)
 
-            Hand.new {
-                name = "SampleName"
-                characteristicDicesCount = 1
-                expertiseDicesCount = 2
+            Hands.insert {
+                it[name] = "Rocky"
             }
 
-            val oneCharHand = Hand.find { Hands.name eq "SampleName" }.single()
-
-            println(oneCharHand.name)
-
-            assertThat(oneCharHand.characteristicDicesCount!!).isEqualTo(1)
-            assertThat(oneCharHand.expertiseDicesCount!!).isEqualTo(2)
+            try {
+                Hands.insert {
+                    it[name] = "Rocky"
+                }
+            } catch (e: JdbcSQLException) {
+                Assert.assertTrue(true)
+            }
         }
     }
 }
