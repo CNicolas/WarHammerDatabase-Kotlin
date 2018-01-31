@@ -2,11 +2,11 @@ package daos
 
 import entities.Hand
 import entities.tables.Hands
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.statements.UpdateStatement
 import org.sqlite.SQLiteException
 
-class HandsDao : Dao<Hand> {
+class HandsDao(override val table: Table = Hands) : AbstractDao<Hand>() {
     override fun add(entity: Hand): Boolean {
         try {
             Hands.insert {
@@ -30,16 +30,51 @@ class HandsDao : Dao<Hand> {
         val result = Hands.select { Hands.name eq name }
                 .firstOrNull()
 
-        return when (result) {
-            null -> null
-            else -> Hand(result[Hands.name],
-                    characteristicDicesCount = result[Hands.characteristicDicesCount],
-                    expertiseDicesCount = result[Hands.expertiseDicesCount],
-                    fortuneDicesCount = result[Hands.fortuneDicesCount],
-                    conservativeDicesCount = result[Hands.conservativeDicesCount],
-                    recklessDicesCount = result[Hands.recklessDicesCount],
-                    challengeDicesCount = result[Hands.challengeDicesCount],
-                    misfortuneDicesCount = result[Hands.misfortuneDicesCount])
+        return mapResultRowToEntity(result)
+    }
+
+    override fun update(entity: Hand): Boolean {
+        return try {
+            Hands.update({ Hands.name eq entity.name }) {
+                mapEntityToTable(it, entity)
+            }
+
+            true
+        } catch (e: SQLiteException) {
+            false
         }
+    }
+
+    override fun delete(entity: Hand): Boolean {
+        return try {
+            Hands.deleteWhere { Hands.name eq entity.name }
+
+            true
+        } catch (e: SQLiteException) {
+            false
+        }
+    }
+
+    override fun mapResultRowToEntity(result: ResultRow?): Hand? = when (result) {
+        null -> null
+        else -> Hand(result[Hands.name],
+                characteristicDicesCount = result[Hands.characteristicDicesCount],
+                expertiseDicesCount = result[Hands.expertiseDicesCount],
+                fortuneDicesCount = result[Hands.fortuneDicesCount],
+                conservativeDicesCount = result[Hands.conservativeDicesCount],
+                recklessDicesCount = result[Hands.recklessDicesCount],
+                challengeDicesCount = result[Hands.challengeDicesCount],
+                misfortuneDicesCount = result[Hands.misfortuneDicesCount])
+    }
+
+    override fun mapEntityToTable(it: UpdateStatement, entity: Hand) {
+        it[Hands.name] = entity.name
+        it[Hands.characteristicDicesCount] = entity.characteristicDicesCount
+        it[Hands.expertiseDicesCount] = entity.expertiseDicesCount
+        it[Hands.fortuneDicesCount] = entity.fortuneDicesCount
+        it[Hands.conservativeDicesCount] = entity.conservativeDicesCount
+        it[Hands.recklessDicesCount] = entity.recklessDicesCount
+        it[Hands.challengeDicesCount] = entity.challengeDicesCount
+        it[Hands.misfortuneDicesCount] = entity.misfortuneDicesCount
     }
 }
