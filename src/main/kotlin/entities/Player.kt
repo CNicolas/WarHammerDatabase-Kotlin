@@ -1,3 +1,3 @@
 package entities
 
-data class Player(val name: String)
+data class Player(override val name: String) : WarHammerNamedEntity

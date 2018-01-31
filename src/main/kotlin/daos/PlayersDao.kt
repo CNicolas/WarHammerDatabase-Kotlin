@@ -4,15 +4,22 @@ import entities.Player
 import entities.tables.Players
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
+import org.sqlite.SQLiteException
 
-class PlayersDao {
-    fun add(player: Player): Unit {
-        Players.insert {
-            it[name] = player.name
+class PlayersDao : Dao<Player> {
+    override fun add(entity: Player): Boolean {
+        return try {
+            Players.insert {
+                it[name] = entity.name
+            }
+
+            true
+        } catch (e: SQLiteException) {
+            false
         }
     }
 
-    fun findByName(name: String): Player? {
+    override fun findByName(name: String): Player? {
         val result = Players.select { Players.name eq name }
                 .firstOrNull()
 
