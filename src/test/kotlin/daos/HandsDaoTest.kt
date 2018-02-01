@@ -154,12 +154,39 @@ class HandsDaoTest {
 
             assertThat(handsDao.findAll().size).isEqualTo(2)
 
-            val res = handsDao.deleteAll()
-            Assert.assertTrue(res)
+            handsDao.deleteAll()
             assertThat(handsDao.findAll()).isEmpty()
         }
     }
-    
+
+    @Test
+    fun should_return_false_when_delete_a_inexistant_hand() {
+        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+
+        transaction {
+            logger.addLogger(StdOutSqlLogger)
+            create(Hands)
+
+            assertThat(handsDao.findAll().size).isEqualTo(0)
+
+            val res = handsDao.delete(Hand("Inexistant"))
+            Assert.assertFalse(res)
+            assertThat(handsDao.findAll()).isEmpty()
+        }
+    }
+
+    @Test
+    fun should_return_false_when_delete_on_inexistant_table() {
+        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+
+        transaction {
+            logger.addLogger(StdOutSqlLogger)
+
+            val res = handsDao.delete(Hand("Inexistant"))
+            Assert.assertFalse(res)
+        }
+    }
+
     @Test
     fun should_return_one_hand_in_2_different_transaction() {
         val handName = "SampleName"

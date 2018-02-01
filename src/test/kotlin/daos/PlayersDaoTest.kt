@@ -7,8 +7,7 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils.create
 import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.testng.Assert.assertNotNull
-import org.testng.Assert.assertTrue
+import org.testng.Assert.*
 import org.testng.annotations.Test
 
 class PlayersDaoTest {
@@ -155,9 +154,36 @@ class PlayersDaoTest {
 
             assertThat(playersDao.findAll().size).isEqualTo(2)
 
-            val res = playersDao.deleteAll()
-            assertTrue(res)
+            playersDao.deleteAll()
             assertThat(playersDao.findAll()).isEmpty()
+        }
+    }
+
+    @Test
+    fun should_return_false_when_delete_a_inexistant_player() {
+        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+
+        transaction {
+            logger.addLogger(StdOutSqlLogger)
+            create(Players)
+
+            assertThat(playersDao.findAll().size).isEqualTo(0)
+
+            val res = playersDao.delete(Player("Inexistant"))
+            assertFalse(res)
+            assertThat(playersDao.findAll()).isEmpty()
+        }
+    }
+
+    @Test
+    fun should_return_false_when_delete_on_inexistant_table() {
+        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+
+        transaction {
+            logger.addLogger(StdOutSqlLogger)
+
+            val res = playersDao.delete(Player("Inexistant"))
+            assertFalse(res)
         }
     }
 }

@@ -14,5 +14,5 @@ interface Dao<T : WarHammerNamedEntity> {
     fun updateAll(entities: List<T>): List<Int>
 
     fun delete(entity: T): Boolean
-    fun deleteAll(): Boolean
+    fun deleteAll()
 }

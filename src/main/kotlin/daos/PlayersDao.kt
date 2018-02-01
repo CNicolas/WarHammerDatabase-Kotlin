@@ -7,6 +7,7 @@ import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateStatement
 import org.sqlite.SQLiteException
+import java.lang.Exception
 
 class PlayersDao(override val table: IntIdTable = Players) : AbstractDao<Player>() {
     override fun add(entity: Player): Int {
@@ -35,17 +36,16 @@ class PlayersDao(override val table: IntIdTable = Players) : AbstractDao<Player>
             }
 
             entity.id
-        } catch (e: SQLiteException) {
+        } catch (e: Exception) {
             -1
         }
     }
 
     override fun delete(entity: Player): Boolean {
         return try {
-            Players.deleteWhere { (Players.id eq entity.id) or (Players.name eq entity.name) }
-
-            true
-        } catch (e: SQLiteException) {
+            val numberOfDeletions = Players.deleteWhere { (Players.id eq entity.id) or (Players.name eq entity.name) }
+            numberOfDeletions == 1
+        } catch (e: Exception) {
             false
         }
     }

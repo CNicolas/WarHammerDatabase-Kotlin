@@ -7,7 +7,6 @@ import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.UpdateStatement
-import org.sqlite.SQLiteException
 
 abstract class AbstractDao<T : WarHammerNamedEntity> : Dao<T> {
     abstract val table: IntIdTable
@@ -49,14 +48,8 @@ abstract class AbstractDao<T : WarHammerNamedEntity> : Dao<T> {
         return updatedIds
     }
 
-    override fun deleteAll(): Boolean {
-        return try {
-            table.deleteAll()
-
-            true
-        } catch (e: SQLiteException) {
-            false
-        }
+    override fun deleteAll() {
+        table.deleteAll()
     }
 
     protected abstract fun mapResultRowToEntity(result: ResultRow?): T?
