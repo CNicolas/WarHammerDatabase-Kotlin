@@ -34,6 +34,8 @@ class PlayersTest {
 
     @Test
     fun should_throw_error_when_inserting_2_players_with_same_name() {
+        val playerName = "Rocky"
+
         Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
 
         transaction {
@@ -42,12 +44,12 @@ class PlayersTest {
             create(Players)
 
             Players.insert {
-                it[name] = "Rocky"
+                it[name] = playerName
             }
 
             try {
                 Players.insert {
-                    it[name] = "Rocky"
+                    it[name] = playerName
                 }
             } catch (e: JdbcSQLException) {
                 assertTrue(true)
