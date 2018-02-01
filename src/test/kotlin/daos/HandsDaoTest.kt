@@ -65,11 +65,11 @@ class HandsDaoTest {
             create(Hands)
 
             var resOfInsert = handsDao.add(Hand(handName))
-            Assert.assertEquals(1, resOfInsert)
+            assertThat(resOfInsert).isEqualTo(1)
             assertThat(handsDao.findAll().size).isEqualTo(1)
 
             resOfInsert = handsDao.add(Hand(handName))
-            Assert.assertEquals(-1, resOfInsert)
+            assertThat(resOfInsert).isEqualTo(-1)
             assertThat(handsDao.findAll().size).isEqualTo(1)
         }
     }

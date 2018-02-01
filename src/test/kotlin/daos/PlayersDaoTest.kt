@@ -63,11 +63,11 @@ class PlayersDaoTest {
             create(Players)
 
             var resOfInsert = playersDao.add(Player(playerName))
-            assertEquals(1, resOfInsert)
+            assertThat(resOfInsert).isEqualTo(1)
             assertThat(playersDao.findAll().size).isEqualTo(1)
 
             resOfInsert = playersDao.add(Player(playerName))
-            assertEquals(-1, resOfInsert)
+            assertThat(resOfInsert).isEqualTo(-1)
             assertThat(playersDao.findAll().size).isEqualTo(1)
         }
     }
