@@ -40,6 +40,8 @@ class HandsDao(override val table: IntIdTable = Hands) : AbstractDao<Hand>() {
             Hands.update({ Hands.id eq entity.id }) {
                 mapEntityToTable(it, entity)
             }
+
+            entity.id
         } catch (e: SQLiteException) {
             -1
         }
@@ -47,7 +49,7 @@ class HandsDao(override val table: IntIdTable = Hands) : AbstractDao<Hand>() {
 
     override fun delete(entity: Hand): Boolean {
         return try {
-            Hands.deleteWhere { Hands.id eq entity.id }
+            Hands.deleteWhere { (Hands.id eq entity.id) or (Hands.name eq entity.name) }
 
             true
         } catch (e: SQLiteException) {
