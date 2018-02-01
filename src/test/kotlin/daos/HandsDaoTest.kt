@@ -15,28 +15,70 @@ import java.sql.Connection
 class HandsDaoTest {
     private val handsDao = HandsDao()
 
+    // region CREATE
     @Test
-    fun should_return_one_hand_in_a_single_transaction() {
-        val handName = "SampleName"
+    fun should_add_a_hand() {
+        val handName = "TheLegend27"
 
         Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            SchemaUtils.create(Hands)
+            create(Hands)
 
             handsDao.add(Hand(handName))
 
-            val hand = handsDao.findByName(handName)
-
-            assertNotNull(hand)
-            assertThat(hand!!.name).isEqualTo(handName)
+            assertThat(handsDao.findAll().size).isEqualTo(1)
         }
     }
 
     @Test
-    fun should_insert_several_hands_with_addAll() {
+    fun should_add_all_hands() {
+        val handsToAdd = listOf(
+                Hand("Hand1"),
+                Hand("Hand2"),
+                Hand("Hand3"))
+
+        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+
+        transaction {
+            logger.addLogger(StdOutSqlLogger)
+
+            create(Hands)
+
+            handsDao.addAll(handsToAdd)
+
+            assertThat(handsDao.findAll().size).isEqualTo(3)
+        }
+    }
+    // endregion
+
+    // region READ
+    @Test
+    fun should_read_a_hand() {
+        val handName = "TheLegend27"
+
+        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+
+        transaction {
+            logger.addLogger(StdOutSqlLogger)
+
+            create(Hands)
+
+            handsDao.add(Hand(handName))
+
+            assertThat(handsDao.findAll().size).isEqualTo(1)
+
+            val hand = handsDao.findByName(handName)
+
+            assertNotNull(hand)
+            assertThat(hand?.name).isEqualTo(handName)
+        }
+    }
+
+    @Test
+    fun should_read_all_hands() {
         val handsToAdd = listOf(
                 Hand("Hand1"),
                 Hand("Hand2"),
@@ -56,11 +98,13 @@ class HandsDaoTest {
             assertThat(allInsertedHands.map { it?.name }).containsExactly("Hand1", "Hand2", "Hand3")
         }
     }
+    // endregion
 
+    // region UPDATE
     @Test
-    fun should_insert_then_find_and_update_hand() {
-        val handName = "SampleHandName"
-        val newHandName = "NewSampleHandName"
+    fun should_update_a_hand() {
+        val handName = "TheLegend27"
+        val newHandName = "TheLegend28"
 
         Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
 
@@ -70,7 +114,7 @@ class HandsDaoTest {
 
             // ADD
             val id = handsDao.add(Hand(handName))
-            assertThat(Hands.selectAll().count()).isEqualTo(1)
+            assertThat(handsDao.findAll().size).isEqualTo(1)
 
             // FIND
             val hand = handsDao.findById(id)
@@ -80,7 +124,7 @@ class HandsDaoTest {
             // UPDATE
             val handToUpdate = hand?.copy(name = newHandName)
             handsDao.update(handToUpdate!!)
-            assertThat(Hands.selectAll().count()).isEqualTo(1)
+            assertThat(handsDao.findAll().size).isEqualTo(1)
 
             // VERIFY
             val newHand = handsDao.findById(id)
@@ -90,7 +134,7 @@ class HandsDaoTest {
     }
 
     @Test
-    fun should_updateAll_hands() {
+    fun should_update_all_hands() {
         Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
 
         transaction {
@@ -100,7 +144,7 @@ class HandsDaoTest {
             // ADD
             val id1 = handsDao.add(Hand("Hand1"))
             val id2 = handsDao.add(Hand("Hand2"))
-            assertThat(Hands.selectAll().count()).isEqualTo(2)
+            assertThat(handsDao.findAll().size).isEqualTo(2)
 
             // UPDATE
             val updatedIds = handsDao.updateAll(listOf(Hand("Hand11", id1), Hand("Hand22", id2)))
@@ -113,7 +157,9 @@ class HandsDaoTest {
             assertThat(allInsertedHands.map { it?.id }).containsExactly(id1, id2)
         }
     }
+    // endregion
 
+    // region DELETE
     @Test
     fun should_delete_a_hand() {
         val hand1 = Hand("Hand1")
@@ -186,6 +232,7 @@ class HandsDaoTest {
             Assert.assertFalse(res)
         }
     }
+    // endregion
 
     @Test
     fun should_return_one_hand_in_2_different_transaction() {

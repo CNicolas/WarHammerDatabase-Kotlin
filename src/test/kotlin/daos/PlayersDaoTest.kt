@@ -13,8 +13,48 @@ import org.testng.annotations.Test
 class PlayersDaoTest {
     private val playersDao = PlayersDao()
 
+    // region CREATE
     @Test
-    fun should_insert_player_and_find_by_name() {
+    fun should_add_a_player() {
+        val playerName = "TheLegend27"
+
+        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+
+        transaction {
+            logger.addLogger(StdOutSqlLogger)
+
+            create(Players)
+
+            playersDao.add(Player(playerName))
+
+            assertThat(playersDao.findAll().size).isEqualTo(1)
+        }
+    }
+
+    @Test
+    fun should_add_all_players() {
+        val playersToAdd = listOf(
+                Player("Player1"),
+                Player("Player2"),
+                Player("Player3"))
+
+        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+
+        transaction {
+            logger.addLogger(StdOutSqlLogger)
+
+            create(Players)
+
+            playersDao.addAll(playersToAdd)
+
+            assertThat(playersDao.findAll().size).isEqualTo(3)
+        }
+    }
+    // endregion
+
+    // region READ
+    @Test
+    fun should_read_a_player() {
         val playerName = "TheLegend27"
 
         Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
@@ -36,7 +76,7 @@ class PlayersDaoTest {
     }
 
     @Test
-    fun should_insert_several_players_with_addAll() {
+    fun should_read_all_players() {
         val playersToAdd = listOf(
                 Player("Player1"),
                 Player("Player2"),
@@ -56,9 +96,11 @@ class PlayersDaoTest {
             assertThat(allInsertedPlayers.map { it?.name }).containsExactly("Player1", "Player2", "Player3")
         }
     }
+    // endregion
 
+    // region UPDATE
     @Test
-    fun should_insert_then_find_and_update_player() {
+    fun should_update_a_player() {
         val playerName = "TheLegend27"
         val newPlayerName = "TheLegend28"
 
@@ -90,7 +132,7 @@ class PlayersDaoTest {
     }
 
     @Test
-    fun should_updateAll_players() {
+    fun should_update_all_players() {
         Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
 
         transaction {
@@ -113,7 +155,9 @@ class PlayersDaoTest {
             assertThat(allInsertedPlayers.map { it?.id }).containsExactly(id1, id2)
         }
     }
+    // endregion
 
+    // region DELETE
     @Test
     fun should_delete_a_player() {
         val player1 = Player("Player1")
@@ -186,4 +230,5 @@ class PlayersDaoTest {
             assertFalse(res)
         }
     }
+    // endregion
 }
