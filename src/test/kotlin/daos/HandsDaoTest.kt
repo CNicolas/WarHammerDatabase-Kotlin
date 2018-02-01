@@ -52,6 +52,27 @@ class HandsDaoTest {
             assertThat(handsDao.findAll().size).isEqualTo(3)
         }
     }
+
+    @Test
+    fun should_add_a_hand_then_fail_to_add_it_again() {
+        val handName = "TheLegend27"
+
+        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+
+        transaction {
+            logger.addLogger(StdOutSqlLogger)
+
+            create(Hands)
+
+            var resOfInsert = handsDao.add(Hand(handName))
+            Assert.assertEquals(1, resOfInsert)
+            assertThat(handsDao.findAll().size).isEqualTo(1)
+
+            resOfInsert = handsDao.add(Hand(handName))
+            Assert.assertEquals(-1, resOfInsert)
+            assertThat(handsDao.findAll().size).isEqualTo(1)
+        }
+    }
     // endregion
 
     // region READ
@@ -155,6 +176,34 @@ class HandsDaoTest {
             assertThat(allInsertedHands.size).isEqualTo(2)
             assertThat(allInsertedHands.map { it?.name }).containsExactly("Hand11", "Hand22")
             assertThat(allInsertedHands.map { it?.id }).containsExactly(id1, id2)
+        }
+    }
+
+    @Test
+    fun should_return_false_when_update_a_inexistant_hand() {
+        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+
+        transaction {
+            logger.addLogger(StdOutSqlLogger)
+            create(Hands)
+
+            assertThat(handsDao.findAll().size).isEqualTo(0)
+
+            val res = handsDao.update(Hand("Inexistant"))
+            assertThat(res).isEqualTo(-1)
+            assertThat(handsDao.findAll()).isEmpty()
+        }
+    }
+
+    @Test
+    fun should_return_false_when_update_on_inexistant_table() {
+        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+
+        transaction {
+            logger.addLogger(StdOutSqlLogger)
+
+            val res = handsDao.update(Hand("Inexistant"))
+            assertThat(res).isEqualTo(-1)
         }
     }
     // endregion

@@ -6,7 +6,6 @@ import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateStatement
-import org.sqlite.SQLiteException
 import java.lang.Exception
 
 class HandsDao(override val table: IntIdTable = Hands) : AbstractDao<Hand>() {
@@ -24,7 +23,7 @@ class HandsDao(override val table: IntIdTable = Hands) : AbstractDao<Hand>() {
             }
 
             id?.value ?: -1
-        } catch (e: SQLiteException) {
+        } catch (e: Exception) {
             -1
         }
     }
@@ -38,7 +37,7 @@ class HandsDao(override val table: IntIdTable = Hands) : AbstractDao<Hand>() {
 
     override fun update(entity: Hand): Int {
         return try {
-            Hands.update({ Hands.id eq entity.id }) {
+            Hands.update({ (Hands.id eq entity.id) or (Hands.name eq entity.name) }) {
                 mapEntityToTable(it, entity)
             }
 

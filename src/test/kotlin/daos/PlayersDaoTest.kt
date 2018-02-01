@@ -50,6 +50,27 @@ class PlayersDaoTest {
             assertThat(playersDao.findAll().size).isEqualTo(3)
         }
     }
+
+    @Test
+    fun should_add_a_player_then_fail_to_add_it_again() {
+        val playerName = "TheLegend27"
+
+        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+
+        transaction {
+            logger.addLogger(StdOutSqlLogger)
+
+            create(Players)
+
+            var resOfInsert = playersDao.add(Player(playerName))
+            assertEquals(1, resOfInsert)
+            assertThat(playersDao.findAll().size).isEqualTo(1)
+
+            resOfInsert = playersDao.add(Player(playerName))
+            assertEquals(-1, resOfInsert)
+            assertThat(playersDao.findAll().size).isEqualTo(1)
+        }
+    }
     // endregion
 
     // region READ
@@ -153,6 +174,34 @@ class PlayersDaoTest {
             assertThat(allInsertedPlayers.size).isEqualTo(2)
             assertThat(allInsertedPlayers.map { it?.name }).containsExactly("Player11", "Player22")
             assertThat(allInsertedPlayers.map { it?.id }).containsExactly(id1, id2)
+        }
+    }
+
+    @Test
+    fun should_return_false_when_update_a_inexistant_player() {
+        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+
+        transaction {
+            logger.addLogger(StdOutSqlLogger)
+            create(Players)
+
+            assertThat(playersDao.findAll().size).isEqualTo(0)
+
+            val res = playersDao.update(Player("Inexistant"))
+            assertThat(res).isEqualTo(-1)
+            assertThat(playersDao.findAll()).isEmpty()
+        }
+    }
+
+    @Test
+    fun should_return_false_when_update_on_inexistant_table() {
+        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+
+        transaction {
+            logger.addLogger(StdOutSqlLogger)
+
+            val res = playersDao.update(Player("Inexistant"))
+            assertThat(res).isEqualTo(-1)
         }
     }
     // endregion
