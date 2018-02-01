@@ -36,14 +36,17 @@ abstract class AbstractDao<T : WarHammerNamedEntity> : Dao<T> {
         return table.selectAll().map { mapResultRowToEntity(it) }
     }
 
-    override fun updateAll(entities: List<T>): Boolean {
+    override fun updateAll(entities: List<T>): List<Int> {
+        val updatedIds = mutableListOf<Int>()
+
         entities.forEach {
-            if (!update(it)) {
-                return false
+            val updatedId = update(it)
+            if (updatedId > -1) {
+                updatedIds.add(updatedId)
             }
         }
 
-        return true
+        return updatedIds
     }
 
     override fun deleteAll(): Boolean {

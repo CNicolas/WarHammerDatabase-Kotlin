@@ -35,15 +35,13 @@ class HandsDao(override val table: IntIdTable = Hands) : AbstractDao<Hand>() {
         return mapResultRowToEntity(result)
     }
 
-    override fun update(entity: Hand): Boolean {
+    override fun update(entity: Hand): Int {
         return try {
             Hands.update({ Hands.id eq entity.id }) {
                 mapEntityToTable(it, entity)
             }
-
-            true
         } catch (e: SQLiteException) {
-            false
+            -1
         }
     }
 

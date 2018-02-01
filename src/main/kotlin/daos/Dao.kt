@@ -10,8 +10,8 @@ interface Dao<T : WarHammerNamedEntity> {
     fun findByName(name: String): T?
     fun findAll(): List<T?>
 
-    fun update(entity: T): Boolean
-    fun updateAll(entities: List<T>): Boolean
+    fun update(entity: T): Int
+    fun updateAll(entities: List<T>): List<Int>
 
     fun delete(entity: T): Boolean
     fun deleteAll(): Boolean

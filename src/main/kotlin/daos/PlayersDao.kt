@@ -28,15 +28,13 @@ class PlayersDao(override val table: IntIdTable = Players) : AbstractDao<Player>
         return mapResultRowToEntity(result)
     }
 
-    override fun update(entity: Player): Boolean {
+    override fun update(entity: Player): Int {
         return try {
             Players.update({ Players.id eq entity.id }) {
                 mapEntityToTable(it, entity)
             }
-
-            true
         } catch (e: SQLiteException) {
-            false
+            -1
         }
     }
 
