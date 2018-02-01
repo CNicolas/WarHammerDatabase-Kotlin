@@ -9,15 +9,15 @@ import org.jetbrains.exposed.sql.statements.UpdateStatement
 import org.sqlite.SQLiteException
 
 class PlayersDao(override val table: IntIdTable = Players) : AbstractDao<Player>() {
-    override fun add(entity: Player): Boolean {
+    override fun add(entity: Player): Int {
         return try {
-            Players.insert {
+            val id = Players.insertAndGetId {
                 it[name] = entity.name
             }
 
-            true
+            id?.value ?: -1
         } catch (e: SQLiteException) {
-            false
+            -1
         }
     }
 

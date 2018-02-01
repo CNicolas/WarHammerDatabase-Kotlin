@@ -12,14 +12,17 @@ import org.sqlite.SQLiteException
 abstract class AbstractDao<T : WarHammerNamedEntity> : Dao<T> {
     abstract val table: IntIdTable
 
-    override fun addAll(entities: List<T>): Boolean {
+    override fun addAll(entities: List<T>): List<Int> {
+        val addedIds = mutableListOf<Int>()
+
         entities.forEach {
-            if (!add(it)) {
-                return false
+            val addedId = add(it)
+            if (addedId > -1) {
+                addedIds.add(addedId)
             }
         }
 
-        return true
+        return addedIds
     }
 
     override fun findById(id: Int): T? {

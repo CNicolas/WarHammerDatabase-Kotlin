@@ -48,11 +48,11 @@ class PlayersDaoTest {
             create(Players)
 
             // ADD
-            playersDao.add(Player(playerName))
+            val id = playersDao.add(Player(playerName))
             assertThat(Players.selectAll().count()).isEqualTo(1)
 
             // FIND
-            val player = playersDao.findById(1)
+            val player = playersDao.findById(id)
             assertNotNull(player)
             assertThat(player?.name).isEqualTo(playerName)
 
@@ -62,7 +62,7 @@ class PlayersDaoTest {
             assertThat(Players.selectAll().count()).isEqualTo(1)
 
             // VERIFY
-            val newPlayer = playersDao.findById(1)
+            val newPlayer = playersDao.findById(id)
             assertNotNull(newPlayer)
             assertThat(newPlayer?.name).isEqualTo(newPlayerName)
         }

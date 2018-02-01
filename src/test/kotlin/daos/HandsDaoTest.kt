@@ -46,11 +46,11 @@ class HandsDaoTest {
             create(Hands)
 
             // ADD
-            handsDao.add(Hand(handName))
+            val id = handsDao.add(Hand(handName))
             assertThat(Hands.selectAll().count()).isEqualTo(1)
 
             // FIND
-            val hand = handsDao.findById(1)
+            val hand = handsDao.findById(id)
             assertNotNull(hand)
             assertThat(hand?.name).isEqualTo(handName)
 
@@ -60,7 +60,7 @@ class HandsDaoTest {
             assertThat(Hands.selectAll().count()).isEqualTo(1)
 
             // VERIFY
-            val newHand = handsDao.findById(1)
+            val newHand = handsDao.findById(id)
             assertNotNull(newHand)
             assertThat(newHand?.name).isEqualTo(newHandName)
         }

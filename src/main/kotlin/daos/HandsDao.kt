@@ -9,9 +9,9 @@ import org.jetbrains.exposed.sql.statements.UpdateStatement
 import org.sqlite.SQLiteException
 
 class HandsDao(override val table: IntIdTable = Hands) : AbstractDao<Hand>() {
-    override fun add(entity: Hand): Boolean {
-        try {
-            Hands.insert {
+    override fun add(entity: Hand): Int {
+        return try {
+            val id = Hands.insertAndGetId {
                 it[name] = entity.name
                 it[characteristicDicesCount] = entity.characteristicDicesCount
                 it[expertiseDicesCount] = entity.expertiseDicesCount
@@ -22,9 +22,9 @@ class HandsDao(override val table: IntIdTable = Hands) : AbstractDao<Hand>() {
                 it[misfortuneDicesCount] = entity.misfortuneDicesCount
             }
 
-            return true
+            id?.value ?: -1
         } catch (e: SQLiteException) {
-            return false
+            -1
         }
     }
 
