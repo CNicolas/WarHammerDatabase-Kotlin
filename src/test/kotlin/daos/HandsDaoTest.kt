@@ -35,6 +35,38 @@ class HandsDaoTest {
     }
 
     @Test
+    fun should_insert_then_find_and_update_hand() {
+        val handName = "SampleHandName"
+        val newHandName = "NewSampleHandName"
+
+        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+
+        transaction {
+            logger.addLogger(StdOutSqlLogger)
+            create(Hands)
+
+            // ADD
+            handsDao.add(Hand(handName))
+            assertThat(Hands.selectAll().count()).isEqualTo(1)
+
+            // FIND
+            val hand = handsDao.findById(1)
+            assertNotNull(hand)
+            assertThat(hand?.name).isEqualTo(handName)
+
+            // UPDATE
+            val handToUpdate = hand?.copy(name = newHandName)
+            handsDao.update(handToUpdate!!)
+            assertThat(Hands.selectAll().count()).isEqualTo(1)
+
+            // VERIFY
+            val newHand = handsDao.findById(1)
+            assertNotNull(newHand)
+            assertThat(newHand?.name).isEqualTo(newHandName)
+        }
+    }
+
+    @Test
     fun should_return_one_hand_in_2_different_transaction() {
         val handName = "SampleName"
 

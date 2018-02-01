@@ -2,11 +2,13 @@ package daos
 
 import entities.Hand
 import entities.tables.Hands
+import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateStatement
 import org.sqlite.SQLiteException
 
-class HandsDao(override val table: Table = Hands) : AbstractDao<Hand>() {
+class HandsDao(override val table: IntIdTable = Hands) : AbstractDao<Hand>() {
     override fun add(entity: Hand): Boolean {
         try {
             Hands.insert {
@@ -35,7 +37,7 @@ class HandsDao(override val table: Table = Hands) : AbstractDao<Hand>() {
 
     override fun update(entity: Hand): Boolean {
         return try {
-            Hands.update({ Hands.name eq entity.name }) {
+            Hands.update({ Hands.id eq entity.id }) {
                 mapEntityToTable(it, entity)
             }
 
@@ -47,7 +49,7 @@ class HandsDao(override val table: Table = Hands) : AbstractDao<Hand>() {
 
     override fun delete(entity: Hand): Boolean {
         return try {
-            Hands.deleteWhere { Hands.name eq entity.name }
+            Hands.deleteWhere { Hands.id eq entity.id }
 
             true
         } catch (e: SQLiteException) {
@@ -58,6 +60,7 @@ class HandsDao(override val table: Table = Hands) : AbstractDao<Hand>() {
     override fun mapResultRowToEntity(result: ResultRow?): Hand? = when (result) {
         null -> null
         else -> Hand(result[Hands.name],
+                result[Hands.id].value,
                 characteristicDicesCount = result[Hands.characteristicDicesCount],
                 expertiseDicesCount = result[Hands.expertiseDicesCount],
                 fortuneDicesCount = result[Hands.fortuneDicesCount],
@@ -69,6 +72,7 @@ class HandsDao(override val table: Table = Hands) : AbstractDao<Hand>() {
 
     override fun mapEntityToTable(it: UpdateStatement, entity: Hand) {
         it[Hands.name] = entity.name
+        it[Hands.id] = EntityID(entity.id, Hands)
         it[Hands.characteristicDicesCount] = entity.characteristicDicesCount
         it[Hands.expertiseDicesCount] = entity.expertiseDicesCount
         it[Hands.fortuneDicesCount] = entity.fortuneDicesCount

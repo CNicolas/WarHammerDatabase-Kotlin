@@ -1,9 +1,9 @@
 package entities.tables
 
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.dao.IntIdTable
 
-object Hands : Table() {
-    val name = varchar("name", length = 70).primaryKey()
+object Hands : IntIdTable() {
+    val name = varchar("name", length = 70).uniqueIndex()
 
     val characteristicDicesCount = integer("characteristicDicesCount").nullable()
     val expertiseDicesCount = integer("expertiseDicesCount").nullable()

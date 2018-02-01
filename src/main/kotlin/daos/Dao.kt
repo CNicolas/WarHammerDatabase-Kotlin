@@ -6,6 +6,7 @@ interface Dao<T : WarHammerNamedEntity> {
     fun add(entity: T): Boolean
     fun addAll(entities: List<T>): Boolean
 
+    fun findById(id: Int): T?
     fun findByName(name: String): T?
     fun findAll(): List<T?>
 

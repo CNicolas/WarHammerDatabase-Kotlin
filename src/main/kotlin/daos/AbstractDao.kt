@@ -1,15 +1,16 @@
 package daos
 
 import entities.WarHammerNamedEntity
+import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.deleteAll
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.UpdateStatement
 import org.sqlite.SQLiteException
 
 abstract class AbstractDao<T : WarHammerNamedEntity> : Dao<T> {
-    abstract val table: Table
+    abstract val table: IntIdTable
 
     override fun addAll(entities: List<T>): Boolean {
         entities.forEach {
@@ -19,6 +20,13 @@ abstract class AbstractDao<T : WarHammerNamedEntity> : Dao<T> {
         }
 
         return true
+    }
+
+    override fun findById(id: Int): T? {
+        val result = table.select { table.id eq id }
+                .firstOrNull()
+
+        return mapResultRowToEntity(result)
     }
 
     override fun findAll(): List<T?> {

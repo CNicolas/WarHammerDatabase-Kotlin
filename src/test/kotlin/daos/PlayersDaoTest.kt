@@ -35,4 +35,36 @@ class PlayersDaoTest {
             assertThat(player?.name).isEqualTo(playerName)
         }
     }
+
+    @Test
+    fun should_insert_then_find_and_update_player() {
+        val playerName = "TheLegend27"
+        val newPlayerName = "TheLegend28"
+
+        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+
+        transaction {
+            logger.addLogger(StdOutSqlLogger)
+            create(Players)
+
+            // ADD
+            playersDao.add(Player(playerName))
+            assertThat(Players.selectAll().count()).isEqualTo(1)
+
+            // FIND
+            val player = playersDao.findById(1)
+            assertNotNull(player)
+            assertThat(player?.name).isEqualTo(playerName)
+
+            // UPDATE
+            val playerToUpdate = player?.copy(name = newPlayerName)
+            playersDao.update(playerToUpdate!!)
+            assertThat(Players.selectAll().count()).isEqualTo(1)
+
+            // VERIFY
+            val newPlayer = playersDao.findById(1)
+            assertNotNull(newPlayer)
+            assertThat(newPlayer?.name).isEqualTo(newPlayerName)
+        }
+    }
 }
