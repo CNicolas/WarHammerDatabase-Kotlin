@@ -70,8 +70,10 @@ class HandsDao(override val table: IntIdTable = Hands) : AbstractDao<Hand>() {
     }
 
     override fun mapEntityToTable(it: UpdateStatement, entity: Hand) {
-        it[Hands.name] = entity.name
         it[Hands.id] = EntityID(entity.id, Hands)
+
+        it[Hands.name] = entity.name
+
         it[Hands.characteristicDicesCount] = entity.characteristicDicesCount
         it[Hands.expertiseDicesCount] = entity.expertiseDicesCount
         it[Hands.fortuneDicesCount] = entity.fortuneDicesCount

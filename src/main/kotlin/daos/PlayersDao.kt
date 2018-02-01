@@ -56,7 +56,8 @@ class PlayersDao(override val table: IntIdTable = Players) : AbstractDao<Player>
     }
 
     override fun mapEntityToTable(it: UpdateStatement, entity: Player) {
-        it[Players.name] = entity.name
         it[Players.id] = EntityID(entity.id, Players)
+
+        it[Players.name] = entity.name
     }
 }
