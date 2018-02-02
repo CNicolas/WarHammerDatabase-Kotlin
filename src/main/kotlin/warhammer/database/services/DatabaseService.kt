@@ -1,6 +1,6 @@
-package services
+package warhammer.database.services
 
-import entities.NamedEntity
+import warhammer.database.entities.NamedEntity
 
 interface DatabaseService<E : NamedEntity> {
     fun add(entity: E): E?

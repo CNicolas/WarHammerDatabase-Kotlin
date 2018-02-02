@@ -1,7 +1,7 @@
-package services
+package warhammer.database.services
 
-import daos.Dao
-import entities.NamedEntity
+import warhammer.database.daos.Dao
+import warhammer.database.entities.NamedEntity
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils

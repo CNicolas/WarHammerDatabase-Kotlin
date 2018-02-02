@@ -1,6 +1,6 @@
-package daos
+package warhammer.database.daos
 
-import entities.NamedEntity
+import warhammer.database.entities.NamedEntity
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.deleteAll

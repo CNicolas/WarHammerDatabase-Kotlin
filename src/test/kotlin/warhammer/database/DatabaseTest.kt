@@ -1,4 +1,4 @@
-package database
+package warhammer.database
 
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.TransactionManager

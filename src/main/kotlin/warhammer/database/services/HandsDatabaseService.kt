@@ -1,8 +1,8 @@
-package services
+package warhammer.database.services
 
-import daos.HandsDao
-import entities.HandEntity
-import entities.tables.Hands
+import warhammer.database.daos.HandsDao
+import warhammer.database.entities.HandEntity
+import warhammer.database.entities.tables.Hands
 
 class HandsDatabaseService(databaseUrl: String, driver: String) : AbstractDatabaseService<HandEntity>(databaseUrl, driver) {
     override val table = Hands

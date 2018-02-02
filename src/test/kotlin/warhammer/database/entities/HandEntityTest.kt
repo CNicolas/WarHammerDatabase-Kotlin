@@ -1,6 +1,6 @@
-package entities
+package warhammer.database.entities
 
-import entities.tables.Players
+import warhammer.database.entities.tables.Hands
 import org.assertj.core.api.Assertions.assertThat
 import org.h2.jdbc.JdbcSQLException
 import org.jetbrains.exposed.sql.Database
@@ -9,50 +9,48 @@ import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.testng.Assert.assertTrue
+import org.testng.Assert
 import org.testng.annotations.Test
 
-class PlayerEntityTest {
+class HandEntityTest {
     @Test
-    fun should_insert_a_player() {
-        val playerName = "SampleName"
+    fun should_insert_a_hand() {
+        val handName = "SampleName"
 
         Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            create(Players)
+            create(Hands)
 
-            Players.insert {
-                it[name] = playerName
+            Hands.insert {
+                it[name] = handName
             }
 
-            assertThat(Players.selectAll().count()).isEqualTo(1)
+            assertThat(Hands.selectAll().count()).isEqualTo(1)
         }
     }
 
     @Test
-    fun should_throw_error_when_inserting_2_players_with_same_name() {
-        val playerName = "Rocky"
-
+    fun should_throw_error_when_inserting_2_Hands_with_same_name() {
         Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            create(Players)
+            create(Hands)
 
-            Players.insert {
-                it[name] = playerName
+            Hands.insert {
+                it[name] = "Rocky"
             }
 
             try {
-                Players.insert {
-                    it[name] = playerName
+                Hands.insert {
+                    it[name] = "Rocky"
                 }
             } catch (e: JdbcSQLException) {
-                assertTrue(true)
+                Assert.assertTrue(true)
             }
         }
     }

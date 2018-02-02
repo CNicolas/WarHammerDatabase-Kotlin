@@ -1,6 +1,6 @@
-package daos
+package warhammer.database.daos
 
-import entities.NamedEntity
+import warhammer.database.entities.NamedEntity
 
 interface Dao<E : NamedEntity> {
     fun add(entity: E): Int

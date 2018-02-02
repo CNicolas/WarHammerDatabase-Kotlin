@@ -1,6 +1,6 @@
-package services
+package warhammer.database.services
 
-import entities.PlayerEntity
+import warhammer.database.entities.PlayerEntity
 import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test

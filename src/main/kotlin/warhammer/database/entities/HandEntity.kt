@@ -1,4 +1,4 @@
-package entities
+package warhammer.database.entities
 
 data class HandEntity(override val name: String,
                       override val id: Int = -1,

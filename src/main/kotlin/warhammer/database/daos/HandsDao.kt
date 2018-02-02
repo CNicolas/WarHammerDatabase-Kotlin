@@ -1,7 +1,7 @@
-package daos
+package warhammer.database.daos
 
-import entities.HandEntity
-import entities.tables.Hands
+import warhammer.database.entities.HandEntity
+import warhammer.database.entities.tables.Hands
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.*
