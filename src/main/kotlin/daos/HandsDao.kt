@@ -47,8 +47,7 @@ class HandsDao : AbstractDao<HandEntity>() {
 
     override fun delete(entity: HandEntity): Int {
         return try {
-            val numberOfDeletions = Hands.deleteWhere { Hands.name eq entity.name }
-            if (numberOfDeletions == 1) entity.id else -1
+            Hands.deleteWhere { Hands.name eq entity.name }
         } catch (e: Exception) {
             e.printStackTrace()
             -1

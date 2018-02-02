@@ -224,7 +224,7 @@ class HandsDaoTest {
             assertThat(addAllResult).containsExactly(1, 2, 3)
 
             val res = handsDao.delete(hand2)
-            assertThat(res).isEqualTo(2)
+            assertThat(res).isEqualTo(1)
             assertThat(handsDao.findAll().size).isEqualTo(2)
             assertThat(handsDao.findByName("Hand1")).isNotNull()
             assertThat(handsDao.findByName("Hand2")).isNull()
@@ -263,7 +263,7 @@ class HandsDaoTest {
             assertThat(handsDao.findAll().size).isEqualTo(0)
 
             val res = handsDao.delete(HandEntity("Inexistant"))
-            assertThat(res).isEqualTo(-1)
+            assertThat(res).isEqualTo(0)
             assertThat(handsDao.findAll()).isEmpty()
         }
     }

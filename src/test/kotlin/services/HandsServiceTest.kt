@@ -146,7 +146,7 @@ class HandsServiceTest {
 
 
         val res = handsService.delete(hand2)
-        assertThat(res).isEqualTo(2)
+        assertThat(res).isEqualTo(1)
         assertThat(handsService.countAll()).isEqualTo(2)
         assertThat(handsService.findByName("Hand1")).isNotNull()
         assertThat(handsService.findByName("Hand2")).isNull()
@@ -171,7 +171,7 @@ class HandsServiceTest {
         assertThat(handsService.countAll()).isEqualTo(0)
 
         val res = handsService.delete(HandEntity("Inexistant"))
-        assertThat(res).isEqualTo(-1)
+        assertThat(res).isEqualTo(0)
         assertThat(handsService.findAll()).isEmpty()
     }
     // endregion

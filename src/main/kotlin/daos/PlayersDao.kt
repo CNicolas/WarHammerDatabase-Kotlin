@@ -44,8 +44,7 @@ class PlayersDao : AbstractDao<PlayerEntity>() {
 
     override fun delete(entity: PlayerEntity): Int {
         return try {
-            val numberOfDeletions = Players.deleteWhere { (Players.id eq entity.id) or (Players.name eq entity.name) }
-            entity.id
+            Players.deleteWhere { (Players.id eq entity.id) or (Players.name eq entity.name) }
         } catch (e: Exception) {
             e.printStackTrace()
             -1

@@ -224,7 +224,7 @@ class PlayersDaoTest {
             assertThat(playersDao.findAll().size).isEqualTo(3)
 
             val res = playersDao.delete(player2)
-            assertThat(res).isEqualTo(2)
+            assertThat(res).isEqualTo(1)
             assertThat(playersDao.findAll().size).isEqualTo(2)
             assertThat(playersDao.findByName("Player1")).isNotNull()
             assertThat(playersDao.findByName("Player2")).isNull()
@@ -263,7 +263,7 @@ class PlayersDaoTest {
             assertThat(playersDao.findAll().size).isEqualTo(0)
 
             val res = playersDao.delete(PlayerEntity("Inexistant"))
-            assertThat(res).isEqualTo(-1)
+            assertThat(res).isEqualTo(0)
             assertThat(playersDao.findAll()).isEmpty()
         }
     }
