@@ -7,8 +7,6 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SchemaUtils.create
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.testng.Assert
-import org.testng.Assert.assertNotNull
 import org.testng.annotations.Test
 import java.sql.Connection
 
@@ -93,7 +91,7 @@ class HandsDaoTest {
 
             val hand = handsDao.findByName(handName)
 
-            assertNotNull(hand)
+            assertThat(hand).isNotNull()
             assertThat(hand?.name).isEqualTo(handName)
         }
     }
@@ -139,7 +137,7 @@ class HandsDaoTest {
 
             // FIND
             val hand = handsDao.findById(id)
-            assertNotNull(hand)
+            assertThat(hand).isNotNull()
             assertThat(hand?.name).isEqualTo(handName)
 
             // UPDATE
@@ -149,7 +147,7 @@ class HandsDaoTest {
 
             // VERIFY
             val newHand = handsDao.findById(id)
-            assertNotNull(newHand)
+            assertThat(newHand).isNotNull()
             assertThat(newHand?.name).isEqualTo(newHandName)
         }
     }
@@ -213,6 +211,7 @@ class HandsDaoTest {
     fun should_delete_a_hand() {
         val hand1 = HandEntity("Hand1")
         val hand2 = HandEntity("Hand2")
+        val hand3 = HandEntity("Hand3")
 
         Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
 
@@ -220,16 +219,16 @@ class HandsDaoTest {
             logger.addLogger(StdOutSqlLogger)
             create(Hands)
 
-            handsDao.add(hand1)
-            handsDao.add(hand2)
+            val addAllResult = handsDao.addAll(listOf(hand1, hand2, hand3))
+            assertThat(addAllResult.size).isEqualTo(3)
+            assertThat(addAllResult).containsExactly(1, 2, 3)
 
+            val res = handsDao.delete(hand2)
+            assertThat(res).isEqualTo(2)
             assertThat(handsDao.findAll().size).isEqualTo(2)
-
-            val res = handsDao.delete(hand1)
-            Assert.assertTrue(res)
-            assertThat(handsDao.findAll().size).isEqualTo(1)
-            assertThat(handsDao.findByName("Hand1")).isNull()
-            assertThat(handsDao.findByName("Hand2")).isNotNull()
+            assertThat(handsDao.findByName("Hand1")).isNotNull()
+            assertThat(handsDao.findByName("Hand2")).isNull()
+            assertThat(handsDao.findByName("Hand3")).isNotNull()
         }
     }
 
@@ -246,7 +245,6 @@ class HandsDaoTest {
 
             handsDao.add(hand1)
             handsDao.add(hand2)
-
             assertThat(handsDao.findAll().size).isEqualTo(2)
 
             handsDao.deleteAll()
@@ -265,7 +263,7 @@ class HandsDaoTest {
             assertThat(handsDao.findAll().size).isEqualTo(0)
 
             val res = handsDao.delete(HandEntity("Inexistant"))
-            Assert.assertFalse(res)
+            assertThat(res).isEqualTo(-1)
             assertThat(handsDao.findAll()).isEmpty()
         }
     }
@@ -278,7 +276,7 @@ class HandsDaoTest {
             logger.addLogger(StdOutSqlLogger)
 
             val res = handsDao.delete(HandEntity("Inexistant"))
-            Assert.assertFalse(res)
+            assertThat(res).isEqualTo(-1)
         }
     }
     // endregion
@@ -310,7 +308,7 @@ class HandsDaoTest {
         transaction {
             val hand = handsDao.findByName(handName)
 
-            assertNotNull(hand)
+            assertThat(hand).isNotNull()
             assertThat(hand!!.name).isEqualTo("SampleName")
         }
     }

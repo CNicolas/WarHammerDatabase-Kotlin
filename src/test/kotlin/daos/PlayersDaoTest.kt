@@ -7,7 +7,6 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils.create
 import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.testng.Assert.*
 import org.testng.annotations.Test
 
 class PlayersDaoTest {
@@ -91,7 +90,7 @@ class PlayersDaoTest {
 
             val player = playersDao.findByName(playerName)
 
-            assertNotNull(player)
+            assertThat(player).isNotNull()
             assertThat(player?.name).isEqualTo(playerName)
         }
     }
@@ -137,7 +136,7 @@ class PlayersDaoTest {
 
             // FIND
             val player = playersDao.findById(id)
-            assertNotNull(player)
+            assertThat(player).isNotNull()
             assertThat(player?.name).isEqualTo(playerName)
 
             // UPDATE
@@ -147,7 +146,7 @@ class PlayersDaoTest {
 
             // VERIFY
             val newPlayer = playersDao.findById(id)
-            assertNotNull(newPlayer)
+            assertThat(newPlayer).isNotNull()
             assertThat(newPlayer?.name).isEqualTo(newPlayerName)
         }
     }
@@ -211,6 +210,7 @@ class PlayersDaoTest {
     fun should_delete_a_player() {
         val player1 = PlayerEntity("Player1")
         val player2 = PlayerEntity("Player2")
+        val player3 = PlayerEntity("Player3")
 
         Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
 
@@ -220,14 +220,15 @@ class PlayersDaoTest {
 
             playersDao.add(player1)
             playersDao.add(player2)
+            playersDao.add(player3)
+            assertThat(playersDao.findAll().size).isEqualTo(3)
 
+            val res = playersDao.delete(player2)
+            assertThat(res).isEqualTo(2)
             assertThat(playersDao.findAll().size).isEqualTo(2)
-
-            val res = playersDao.delete(player1)
-            assertTrue(res)
-            assertThat(playersDao.findAll().size).isEqualTo(1)
-            assertThat(playersDao.findByName("Player1")).isNull()
-            assertThat(playersDao.findByName("Player2")).isNotNull()
+            assertThat(playersDao.findByName("Player1")).isNotNull()
+            assertThat(playersDao.findByName("Player2")).isNull()
+            assertThat(playersDao.findByName("Player3")).isNotNull()
         }
     }
 
@@ -244,7 +245,6 @@ class PlayersDaoTest {
 
             playersDao.add(player1)
             playersDao.add(player2)
-
             assertThat(playersDao.findAll().size).isEqualTo(2)
 
             playersDao.deleteAll()
@@ -263,7 +263,7 @@ class PlayersDaoTest {
             assertThat(playersDao.findAll().size).isEqualTo(0)
 
             val res = playersDao.delete(PlayerEntity("Inexistant"))
-            assertFalse(res)
+            assertThat(res).isEqualTo(-1)
             assertThat(playersDao.findAll()).isEmpty()
         }
     }
@@ -276,7 +276,7 @@ class PlayersDaoTest {
             logger.addLogger(StdOutSqlLogger)
 
             val res = playersDao.delete(PlayerEntity("Inexistant"))
-            assertFalse(res)
+            assertThat(res).isEqualTo(-1)
         }
     }
     // endregion

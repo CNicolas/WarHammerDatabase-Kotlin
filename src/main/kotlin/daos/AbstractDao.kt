@@ -9,10 +9,10 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
 
-abstract class AbstractDao<T : WarHammerNamedEntity> : Dao<T> {
+abstract class AbstractDao<E : WarHammerNamedEntity> : Dao<E> {
     abstract val table: IntIdTable
 
-    override fun addAll(entities: List<T>): List<Int> {
+    override fun addAll(entities: List<E>): List<Int> {
         val addedIds = mutableListOf<Int>()
 
         entities.forEach {
@@ -25,18 +25,18 @@ abstract class AbstractDao<T : WarHammerNamedEntity> : Dao<T> {
         return addedIds
     }
 
-    override fun findById(id: Int): T? {
+    override fun findById(id: Int): E? {
         val result = table.select { table.id eq id }
                 .firstOrNull()
 
         return mapResultRowToEntity(result)
     }
 
-    override fun findAll(): List<T?> {
+    override fun findAll(): List<E?> {
         return table.selectAll().map { mapResultRowToEntity(it) }
     }
 
-    override fun updateAll(entities: List<T>): List<Int> {
+    override fun updateAll(entities: List<E>): List<Int> {
         val updatedIds = mutableListOf<Int>()
 
         entities.forEach {
@@ -53,7 +53,7 @@ abstract class AbstractDao<T : WarHammerNamedEntity> : Dao<T> {
         table.deleteAll()
     }
 
-    protected abstract fun mapResultRowToEntity(result: ResultRow?): T?
-    protected abstract fun mapEntityToTable(it: UpdateStatement, entity: T)
-    protected abstract fun mapFieldsOfEntityToTable(it: UpdateBuilder<Int>, entity: T)
+    protected abstract fun mapResultRowToEntity(result: ResultRow?): E?
+    protected abstract fun mapEntityToTable(it: UpdateStatement, entity: E)
+    protected abstract fun mapFieldsOfEntityToTable(it: UpdateBuilder<Int>, entity: E)
 }
