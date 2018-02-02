@@ -3,13 +3,14 @@ package daos
 import entities.PlayerEntity
 import entities.tables.Players
 import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
 import java.lang.Exception
 
-class PlayersDao(override val table: IntIdTable = Players) : AbstractDao<PlayerEntity>() {
+class PlayersDao : AbstractDao<PlayerEntity>() {
+    override val table = Players
+
     override fun add(entity: PlayerEntity): Int {
         return try {
             val id = Players.insertAndGetId {

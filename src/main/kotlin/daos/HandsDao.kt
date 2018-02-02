@@ -9,7 +9,9 @@ import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
 import java.lang.Exception
 
-class HandsDao(override val table: IntIdTable = Hands) : AbstractDao<HandEntity>() {
+class HandsDao : AbstractDao<HandEntity>() {
+    override val table: IntIdTable = Hands
+
     override fun add(entity: HandEntity): Int {
         return try {
             val id = Hands.insertAndGetId {
