@@ -8,4 +8,4 @@ data class HandEntity(override val name: String,
                       val conservativeDicesCount: Int? = 0,
                       val recklessDicesCount: Int? = 0,
                       val challengeDicesCount: Int? = 0,
-                      val misfortuneDicesCount: Int? = 0) : WarHammerNamedEntity
+                      val misfortuneDicesCount: Int? = 0) : NamedEntity

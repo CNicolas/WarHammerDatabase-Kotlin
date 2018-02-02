@@ -1,8 +1,8 @@
 package daos
 
-import entities.WarHammerNamedEntity
+import entities.NamedEntity
 
-interface Dao<E : WarHammerNamedEntity> {
+interface Dao<E : NamedEntity> {
     fun add(entity: E): Int
     fun addAll(entities: List<E>): List<Int>
 

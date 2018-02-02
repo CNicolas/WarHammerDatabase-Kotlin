@@ -5,8 +5,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
-class PlayersServiceTest {
-    private val playersService = PlayersService(databaseUrl = "jdbc:sqlite:testSqlite:?mode=memory&cache=shared", driver = "org.sqlite.JDBC")
+class PlayersDatabaseServiceTest {
+    private val playersService = PlayersDatabaseService(databaseUrl = "jdbc:sqlite:testSqlite:?mode=memory&cache=shared", driver = "org.sqlite.JDBC")
     private val playerName = "SampleName"
     private val samplePlayer = PlayerEntity(playerName)
 

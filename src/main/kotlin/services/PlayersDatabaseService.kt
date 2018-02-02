@@ -4,7 +4,7 @@ import daos.PlayersDao
 import entities.PlayerEntity
 import entities.tables.Players
 
-class PlayersService(databaseUrl: String, driver: String) : AbstractService<PlayerEntity>(databaseUrl, driver) {
+class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractDatabaseService<PlayerEntity>(databaseUrl, driver) {
     override val table = Players
     override val dao = PlayersDao()
 

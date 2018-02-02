@@ -1,7 +1,7 @@
 package services
 
 import daos.Dao
-import entities.WarHammerNamedEntity
+import entities.NamedEntity
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -10,8 +10,8 @@ import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.sql.Connection
 
-abstract class AbstractService<E : WarHammerNamedEntity>(private val databaseUrl: String = "jdbc:sqlite:file:warhammer",
-                                                         private val driver: String = "org.sqlite.JDBC") : Service<E> {
+abstract class AbstractDatabaseService<E : NamedEntity>(private val databaseUrl: String = "jdbc:sqlite:file:warhammer",
+                                                        private val driver: String = "org.sqlite.JDBC") : DatabaseService<E> {
     abstract val table: IntIdTable
     protected abstract val dao: Dao<E>
 

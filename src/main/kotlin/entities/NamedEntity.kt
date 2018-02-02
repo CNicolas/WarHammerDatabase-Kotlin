@@ -1,6 +1,6 @@
 package entities
 
-interface WarHammerNamedEntity {
+interface NamedEntity {
     val id: Int
     val name: String
 }

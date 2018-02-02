@@ -1,8 +1,8 @@
 package services
 
-import entities.WarHammerNamedEntity
+import entities.NamedEntity
 
-interface Service<E : WarHammerNamedEntity> {
+interface DatabaseService<E : NamedEntity> {
     fun add(entity: E): E?
     fun addAll(entities: List<E>): List<E?>
 
