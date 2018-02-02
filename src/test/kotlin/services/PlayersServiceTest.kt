@@ -6,7 +6,7 @@ import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
 class PlayersServiceTest {
-    private val playersService = PlayersService(databaseUrl = "jdbc:sqlite:test:testSqlite?mode=memory&cache=shared", driver = "org.sqlite.JDBC")
+    private val playersService = PlayersService(databaseUrl = "jdbc:sqlite:testSqlite:?mode=memory&cache=shared", driver = "org.sqlite.JDBC")
     private val playerName = "SampleName"
     private val samplePlayer = PlayerEntity(playerName)
 
