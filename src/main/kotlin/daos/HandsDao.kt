@@ -5,6 +5,7 @@ import entities.tables.Hands
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
 import java.lang.Exception
 
@@ -12,14 +13,7 @@ class HandsDao(override val table: IntIdTable = Hands) : AbstractDao<Hand>() {
     override fun add(entity: Hand): Int {
         return try {
             val id = Hands.insertAndGetId {
-                it[name] = entity.name
-                it[characteristicDicesCount] = entity.characteristicDicesCount
-                it[expertiseDicesCount] = entity.expertiseDicesCount
-                it[fortuneDicesCount] = entity.fortuneDicesCount
-                it[conservativeDicesCount] = entity.conservativeDicesCount
-                it[recklessDicesCount] = entity.recklessDicesCount
-                it[challengeDicesCount] = entity.challengeDicesCount
-                it[misfortuneDicesCount] = entity.misfortuneDicesCount
+                mapFieldsOfEntityToTable(it, entity)
             }
 
             id?.value ?: -1
@@ -72,6 +66,10 @@ class HandsDao(override val table: IntIdTable = Hands) : AbstractDao<Hand>() {
     override fun mapEntityToTable(it: UpdateStatement, entity: Hand) {
         it[Hands.id] = EntityID(entity.id, Hands)
 
+        mapFieldsOfEntityToTable(it, entity)
+    }
+
+    override fun mapFieldsOfEntityToTable(it: UpdateBuilder<Int>, entity: Hand) {
         it[Hands.name] = entity.name
 
         it[Hands.characteristicDicesCount] = entity.characteristicDicesCount

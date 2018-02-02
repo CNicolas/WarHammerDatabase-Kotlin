@@ -6,6 +6,7 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
 
 abstract class AbstractDao<T : WarHammerNamedEntity> : Dao<T> {
@@ -54,4 +55,5 @@ abstract class AbstractDao<T : WarHammerNamedEntity> : Dao<T> {
 
     protected abstract fun mapResultRowToEntity(result: ResultRow?): T?
     protected abstract fun mapEntityToTable(it: UpdateStatement, entity: T)
+    protected abstract fun mapFieldsOfEntityToTable(it: UpdateBuilder<Int>, entity: T)
 }

@@ -5,6 +5,7 @@ import entities.tables.Players
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
 import java.lang.Exception
 
@@ -12,7 +13,7 @@ class PlayersDao(override val table: IntIdTable = Players) : AbstractDao<Player>
     override fun add(entity: Player): Int {
         return try {
             val id = Players.insertAndGetId {
-                it[name] = entity.name
+                mapFieldsOfEntityToTable(it, entity)
             }
 
             id?.value ?: -1
@@ -58,6 +59,10 @@ class PlayersDao(override val table: IntIdTable = Players) : AbstractDao<Player>
     override fun mapEntityToTable(it: UpdateStatement, entity: Player) {
         it[Players.id] = EntityID(entity.id, Players)
 
+        mapFieldsOfEntityToTable(it, entity)
+    }
+
+    override fun mapFieldsOfEntityToTable(it: UpdateBuilder<Int>, entity: Player) {
         it[Players.name] = entity.name
     }
 }
