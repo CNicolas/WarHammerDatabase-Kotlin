@@ -1,6 +1,6 @@
 package daos
 
-import entities.Hand
+import entities.HandEntity
 import entities.tables.Hands
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.exposed.sql.*
@@ -27,7 +27,7 @@ class HandsDaoTest {
 
             create(Hands)
 
-            handsDao.add(Hand(handName))
+            handsDao.add(HandEntity(handName))
 
             assertThat(handsDao.findAll().size).isEqualTo(1)
         }
@@ -36,9 +36,9 @@ class HandsDaoTest {
     @Test
     fun should_add_all_hands() {
         val handsToAdd = listOf(
-                Hand("Hand1"),
-                Hand("Hand2"),
-                Hand("Hand3"))
+                HandEntity("Hand1"),
+                HandEntity("Hand2"),
+                HandEntity("Hand3"))
 
         Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
 
@@ -64,11 +64,11 @@ class HandsDaoTest {
 
             create(Hands)
 
-            var resOfInsert = handsDao.add(Hand(handName))
+            var resOfInsert = handsDao.add(HandEntity(handName))
             assertThat(resOfInsert).isEqualTo(1)
             assertThat(handsDao.findAll().size).isEqualTo(1)
 
-            resOfInsert = handsDao.add(Hand(handName))
+            resOfInsert = handsDao.add(HandEntity(handName))
             assertThat(resOfInsert).isEqualTo(-1)
             assertThat(handsDao.findAll().size).isEqualTo(1)
         }
@@ -87,7 +87,7 @@ class HandsDaoTest {
 
             create(Hands)
 
-            handsDao.add(Hand(handName))
+            handsDao.add(HandEntity(handName))
 
             assertThat(handsDao.findAll().size).isEqualTo(1)
 
@@ -101,9 +101,9 @@ class HandsDaoTest {
     @Test
     fun should_read_all_hands() {
         val handsToAdd = listOf(
-                Hand("Hand1"),
-                Hand("Hand2"),
-                Hand("Hand3"))
+                HandEntity("Hand1"),
+                HandEntity("Hand2"),
+                HandEntity("Hand3"))
 
         Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
 
@@ -134,7 +134,7 @@ class HandsDaoTest {
             create(Hands)
 
             // ADD
-            val id = handsDao.add(Hand(handName))
+            val id = handsDao.add(HandEntity(handName))
             assertThat(handsDao.findAll().size).isEqualTo(1)
 
             // FIND
@@ -163,12 +163,12 @@ class HandsDaoTest {
             create(Hands)
 
             // ADD
-            val id1 = handsDao.add(Hand("Hand1"))
-            val id2 = handsDao.add(Hand("Hand2"))
+            val id1 = handsDao.add(HandEntity("Hand1"))
+            val id2 = handsDao.add(HandEntity("Hand2"))
             assertThat(handsDao.findAll().size).isEqualTo(2)
 
             // UPDATE
-            val updatedIds = handsDao.updateAll(listOf(Hand("Hand11", id1), Hand("Hand22", id2)))
+            val updatedIds = handsDao.updateAll(listOf(HandEntity("Hand11", id1), HandEntity("Hand22", id2)))
             assertThat(updatedIds).containsExactly(id1, id2)
 
             // VERIFY
@@ -189,7 +189,7 @@ class HandsDaoTest {
 
             assertThat(handsDao.findAll().size).isEqualTo(0)
 
-            val res = handsDao.update(Hand("Inexistant"))
+            val res = handsDao.update(HandEntity("Inexistant"))
             assertThat(res).isEqualTo(-1)
             assertThat(handsDao.findAll()).isEmpty()
         }
@@ -202,7 +202,7 @@ class HandsDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            val res = handsDao.update(Hand("Inexistant"))
+            val res = handsDao.update(HandEntity("Inexistant"))
             assertThat(res).isEqualTo(-1)
         }
     }
@@ -211,8 +211,8 @@ class HandsDaoTest {
     // region DELETE
     @Test
     fun should_delete_a_hand() {
-        val hand1 = Hand("Hand1")
-        val hand2 = Hand("Hand2")
+        val hand1 = HandEntity("Hand1")
+        val hand2 = HandEntity("Hand2")
 
         Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
 
@@ -235,8 +235,8 @@ class HandsDaoTest {
 
     @Test
     fun should_delete_all_hands() {
-        val hand1 = Hand("Hand1")
-        val hand2 = Hand("Hand2")
+        val hand1 = HandEntity("Hand1")
+        val hand2 = HandEntity("Hand2")
 
         Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
 
@@ -264,7 +264,7 @@ class HandsDaoTest {
 
             assertThat(handsDao.findAll().size).isEqualTo(0)
 
-            val res = handsDao.delete(Hand("Inexistant"))
+            val res = handsDao.delete(HandEntity("Inexistant"))
             Assert.assertFalse(res)
             assertThat(handsDao.findAll()).isEmpty()
         }
@@ -277,7 +277,7 @@ class HandsDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            val res = handsDao.delete(Hand("Inexistant"))
+            val res = handsDao.delete(HandEntity("Inexistant"))
             Assert.assertFalse(res)
         }
     }
@@ -302,7 +302,7 @@ class HandsDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            handsDao.add(Hand(handName))
+            handsDao.add(HandEntity(handName))
 
             Hands.selectAll().forEach { println(it) }
         }

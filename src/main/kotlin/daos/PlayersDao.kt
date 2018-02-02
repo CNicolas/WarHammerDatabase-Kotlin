@@ -1,6 +1,6 @@
 package daos
 
-import entities.Player
+import entities.PlayerEntity
 import entities.tables.Players
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntIdTable
@@ -9,8 +9,8 @@ import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
 import java.lang.Exception
 
-class PlayersDao(override val table: IntIdTable = Players) : AbstractDao<Player>() {
-    override fun add(entity: Player): Int {
+class PlayersDao(override val table: IntIdTable = Players) : AbstractDao<PlayerEntity>() {
+    override fun add(entity: PlayerEntity): Int {
         return try {
             val id = Players.insertAndGetId {
                 mapFieldsOfEntityToTable(it, entity)
@@ -22,14 +22,14 @@ class PlayersDao(override val table: IntIdTable = Players) : AbstractDao<Player>
         }
     }
 
-    override fun findByName(name: String): Player? {
+    override fun findByName(name: String): PlayerEntity? {
         val result = Players.select { Players.name eq name }
                 .firstOrNull()
 
         return mapResultRowToEntity(result)
     }
 
-    override fun update(entity: Player): Int {
+    override fun update(entity: PlayerEntity): Int {
         return try {
             Players.update({ (Players.id eq entity.id) or (Players.name eq entity.name) }) {
                 mapEntityToTable(it, entity)
@@ -41,7 +41,7 @@ class PlayersDao(override val table: IntIdTable = Players) : AbstractDao<Player>
         }
     }
 
-    override fun delete(entity: Player): Boolean {
+    override fun delete(entity: PlayerEntity): Boolean {
         return try {
             val numberOfDeletions = Players.deleteWhere { (Players.id eq entity.id) or (Players.name eq entity.name) }
             numberOfDeletions == 1
@@ -50,19 +50,19 @@ class PlayersDao(override val table: IntIdTable = Players) : AbstractDao<Player>
         }
     }
 
-    override fun mapResultRowToEntity(result: ResultRow?): Player? = when (result) {
+    override fun mapResultRowToEntity(result: ResultRow?): PlayerEntity? = when (result) {
         null -> null
-        else -> Player(result[Players.name],
+        else -> PlayerEntity(result[Players.name],
                 result[Players.id].value)
     }
 
-    override fun mapEntityToTable(it: UpdateStatement, entity: Player) {
+    override fun mapEntityToTable(it: UpdateStatement, entity: PlayerEntity) {
         it[Players.id] = EntityID(entity.id, Players)
 
         mapFieldsOfEntityToTable(it, entity)
     }
 
-    override fun mapFieldsOfEntityToTable(it: UpdateBuilder<Int>, entity: Player) {
+    override fun mapFieldsOfEntityToTable(it: UpdateBuilder<Int>, entity: PlayerEntity) {
         it[Players.name] = entity.name
     }
 }

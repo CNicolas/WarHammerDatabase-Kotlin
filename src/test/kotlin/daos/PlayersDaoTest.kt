@@ -1,6 +1,6 @@
 package daos
 
-import entities.Player
+import entities.PlayerEntity
 import entities.tables.Players
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.exposed.sql.Database
@@ -25,7 +25,7 @@ class PlayersDaoTest {
 
             create(Players)
 
-            playersDao.add(Player(playerName))
+            playersDao.add(PlayerEntity(playerName))
 
             assertThat(playersDao.findAll().size).isEqualTo(1)
         }
@@ -34,9 +34,9 @@ class PlayersDaoTest {
     @Test
     fun should_add_all_players() {
         val playersToAdd = listOf(
-                Player("Player1"),
-                Player("Player2"),
-                Player("Player3"))
+                PlayerEntity("Player1"),
+                PlayerEntity("Player2"),
+                PlayerEntity("Player3"))
 
         Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
 
@@ -62,11 +62,11 @@ class PlayersDaoTest {
 
             create(Players)
 
-            var resOfInsert = playersDao.add(Player(playerName))
+            var resOfInsert = playersDao.add(PlayerEntity(playerName))
             assertThat(resOfInsert).isEqualTo(1)
             assertThat(playersDao.findAll().size).isEqualTo(1)
 
-            resOfInsert = playersDao.add(Player(playerName))
+            resOfInsert = playersDao.add(PlayerEntity(playerName))
             assertThat(resOfInsert).isEqualTo(-1)
             assertThat(playersDao.findAll().size).isEqualTo(1)
         }
@@ -85,7 +85,7 @@ class PlayersDaoTest {
 
             create(Players)
 
-            playersDao.add(Player(playerName))
+            playersDao.add(PlayerEntity(playerName))
 
             assertThat(playersDao.findAll().size).isEqualTo(1)
 
@@ -99,9 +99,9 @@ class PlayersDaoTest {
     @Test
     fun should_read_all_players() {
         val playersToAdd = listOf(
-                Player("Player1"),
-                Player("Player2"),
-                Player("Player3"))
+                PlayerEntity("Player1"),
+                PlayerEntity("Player2"),
+                PlayerEntity("Player3"))
 
         Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
 
@@ -132,7 +132,7 @@ class PlayersDaoTest {
             create(Players)
 
             // ADD
-            val id = playersDao.add(Player(playerName))
+            val id = playersDao.add(PlayerEntity(playerName))
             assertThat(playersDao.findAll().size).isEqualTo(1)
 
             // FIND
@@ -161,12 +161,12 @@ class PlayersDaoTest {
             create(Players)
 
             // ADD
-            val id1 = playersDao.add(Player("Player1"))
-            val id2 = playersDao.add(Player("Player2"))
+            val id1 = playersDao.add(PlayerEntity("Player1"))
+            val id2 = playersDao.add(PlayerEntity("Player2"))
             assertThat(playersDao.findAll().size).isEqualTo(2)
 
             // UPDATE
-            val updatedIds = playersDao.updateAll(listOf(Player("Player11", id1), Player("Player22", id2)))
+            val updatedIds = playersDao.updateAll(listOf(PlayerEntity("Player11", id1), PlayerEntity("Player22", id2)))
             assertThat(updatedIds).containsExactly(id1, id2)
 
             // VERIFY
@@ -187,7 +187,7 @@ class PlayersDaoTest {
 
             assertThat(playersDao.findAll().size).isEqualTo(0)
 
-            val res = playersDao.update(Player("Inexistant"))
+            val res = playersDao.update(PlayerEntity("Inexistant"))
             assertThat(res).isEqualTo(-1)
             assertThat(playersDao.findAll()).isEmpty()
         }
@@ -200,7 +200,7 @@ class PlayersDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            val res = playersDao.update(Player("Inexistant"))
+            val res = playersDao.update(PlayerEntity("Inexistant"))
             assertThat(res).isEqualTo(-1)
         }
     }
@@ -209,8 +209,8 @@ class PlayersDaoTest {
     // region DELETE
     @Test
     fun should_delete_a_player() {
-        val player1 = Player("Player1")
-        val player2 = Player("Player2")
+        val player1 = PlayerEntity("Player1")
+        val player2 = PlayerEntity("Player2")
 
         Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
 
@@ -233,8 +233,8 @@ class PlayersDaoTest {
 
     @Test
     fun should_delete_all_players() {
-        val player1 = Player("Player1")
-        val player2 = Player("Player2")
+        val player1 = PlayerEntity("Player1")
+        val player2 = PlayerEntity("Player2")
 
         Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
 
@@ -262,7 +262,7 @@ class PlayersDaoTest {
 
             assertThat(playersDao.findAll().size).isEqualTo(0)
 
-            val res = playersDao.delete(Player("Inexistant"))
+            val res = playersDao.delete(PlayerEntity("Inexistant"))
             assertFalse(res)
             assertThat(playersDao.findAll()).isEmpty()
         }
@@ -275,7 +275,7 @@ class PlayersDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            val res = playersDao.delete(Player("Inexistant"))
+            val res = playersDao.delete(PlayerEntity("Inexistant"))
             assertFalse(res)
         }
     }

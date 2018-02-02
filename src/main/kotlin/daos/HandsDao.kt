@@ -1,6 +1,6 @@
 package daos
 
-import entities.Hand
+import entities.HandEntity
 import entities.tables.Hands
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntIdTable
@@ -9,8 +9,8 @@ import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
 import java.lang.Exception
 
-class HandsDao(override val table: IntIdTable = Hands) : AbstractDao<Hand>() {
-    override fun add(entity: Hand): Int {
+class HandsDao(override val table: IntIdTable = Hands) : AbstractDao<HandEntity>() {
+    override fun add(entity: HandEntity): Int {
         return try {
             val id = Hands.insertAndGetId {
                 mapFieldsOfEntityToTable(it, entity)
@@ -22,14 +22,14 @@ class HandsDao(override val table: IntIdTable = Hands) : AbstractDao<Hand>() {
         }
     }
 
-    override fun findByName(name: String): Hand? {
+    override fun findByName(name: String): HandEntity? {
         val result = Hands.select { Hands.name eq name }
                 .firstOrNull()
 
         return mapResultRowToEntity(result)
     }
 
-    override fun update(entity: Hand): Int {
+    override fun update(entity: HandEntity): Int {
         return try {
             Hands.update({ (Hands.id eq entity.id) or (Hands.name eq entity.name) }) {
                 mapEntityToTable(it, entity)
@@ -41,7 +41,7 @@ class HandsDao(override val table: IntIdTable = Hands) : AbstractDao<Hand>() {
         }
     }
 
-    override fun delete(entity: Hand): Boolean {
+    override fun delete(entity: HandEntity): Boolean {
         return try {
             val numberOfDeletions = Hands.deleteWhere { (Hands.id eq entity.id) or (Hands.name eq entity.name) }
             numberOfDeletions == 1
@@ -50,9 +50,9 @@ class HandsDao(override val table: IntIdTable = Hands) : AbstractDao<Hand>() {
         }
     }
 
-    override fun mapResultRowToEntity(result: ResultRow?): Hand? = when (result) {
+    override fun mapResultRowToEntity(result: ResultRow?): HandEntity? = when (result) {
         null -> null
-        else -> Hand(result[Hands.name],
+        else -> HandEntity(result[Hands.name],
                 result[Hands.id].value,
                 characteristicDicesCount = result[Hands.characteristicDicesCount],
                 expertiseDicesCount = result[Hands.expertiseDicesCount],
@@ -63,13 +63,13 @@ class HandsDao(override val table: IntIdTable = Hands) : AbstractDao<Hand>() {
                 misfortuneDicesCount = result[Hands.misfortuneDicesCount])
     }
 
-    override fun mapEntityToTable(it: UpdateStatement, entity: Hand) {
+    override fun mapEntityToTable(it: UpdateStatement, entity: HandEntity) {
         it[Hands.id] = EntityID(entity.id, Hands)
 
         mapFieldsOfEntityToTable(it, entity)
     }
 
-    override fun mapFieldsOfEntityToTable(it: UpdateBuilder<Int>, entity: Hand) {
+    override fun mapFieldsOfEntityToTable(it: UpdateBuilder<Int>, entity: HandEntity) {
         it[Hands.name] = entity.name
 
         it[Hands.characteristicDicesCount] = entity.characteristicDicesCount
