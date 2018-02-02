@@ -64,6 +64,16 @@ class HandsServiceTest {
     }
 
     @Test
+    fun should_find_a_hand_by_id() {
+        handsService.add(sampleHand)
+        assertThat(handsService.countAll()).isEqualTo(1)
+
+        val hand = handsService.findById(1)
+        assertThat(hand).isNotNull()
+        assertThat(hand?.name).isEqualTo(handName)
+    }
+    
+    @Test
     fun should_read_all_hands() {
         val handsToAdd = listOf(
                 HandEntity("Hand1"),
