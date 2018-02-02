@@ -20,6 +20,7 @@ class HandsDao : AbstractDao<HandEntity>() {
 
             id?.value ?: -1
         } catch (e: Exception) {
+            e.printStackTrace()
             -1
         }
     }
@@ -39,6 +40,7 @@ class HandsDao : AbstractDao<HandEntity>() {
 
             entity.id
         } catch (e: Exception) {
+            e.printStackTrace()
             -1
         }
     }
