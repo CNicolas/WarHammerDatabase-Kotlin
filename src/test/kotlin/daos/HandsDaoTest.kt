@@ -3,12 +3,11 @@ package daos
 import entities.HandEntity
 import entities.tables.Hands
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils.create
-import org.jetbrains.exposed.sql.transactions.TransactionManager
+import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.testng.annotations.Test
-import java.sql.Connection
 
 class HandsDaoTest {
     private val handsDao = HandsDao()
@@ -280,36 +279,4 @@ class HandsDaoTest {
         }
     }
     // endregion
-
-    @Test
-    fun should_return_one_hand_in_2_different_transaction() {
-        val handName = "SampleName"
-
-        Database.connect("jdbc:sqlite:file:testSqlite", driver = "org.sqlite.JDBC")
-        TransactionManager.manager.defaultIsolationLevel = Connection.TRANSACTION_SERIALIZABLE
-
-        transaction {
-            if (Hands.exists()) {
-                Hands.deleteAll()
-            } else {
-
-                create(Hands)
-            }
-        }
-
-        transaction {
-            logger.addLogger(StdOutSqlLogger)
-
-            handsDao.add(HandEntity(handName))
-
-            Hands.selectAll().forEach { println(it) }
-        }
-
-        transaction {
-            val hand = handsDao.findByName(handName)
-
-            assertThat(hand).isNotNull()
-            assertThat(hand!!.name).isEqualTo("SampleName")
-        }
-    }
 }
