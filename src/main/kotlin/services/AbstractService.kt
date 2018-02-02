@@ -16,16 +16,22 @@ abstract class AbstractService<E : WarHammerNamedEntity>(private val databaseUrl
     protected abstract val dao: Dao<E>
 
     // region CREATE
-    override fun add(entity: E): Int {
+    override fun add(entity: E): E? {
         connectToDatabase()
 
-        return transaction { dao.add(entity) }
+        return transaction {
+            val addedId = dao.add(entity)
+            dao.findById(addedId)
+        }
     }
 
-    override fun addAll(entities: List<E>): List<Int> {
+    override fun addAll(entities: List<E>): List<E?> {
         connectToDatabase()
 
-        return transaction { dao.addAll(entities) }
+        return transaction {
+            dao.addAll(entities)
+            dao.findAll()
+        }
     }
     // endregion
 
@@ -52,24 +58,30 @@ abstract class AbstractService<E : WarHammerNamedEntity>(private val databaseUrl
     // endregion
 
     // region UPDATE
-    override fun update(entity: E): Int {
+    override fun update(entity: E): E? {
         connectToDatabase()
 
-        return transaction { dao.update(entity) }
+        return transaction {
+            val updatedId = dao.update(entity)
+            dao.findById(updatedId)
+        }
     }
 
-    override fun updateAll(entities: List<E>): List<Int> {
+    override fun updateAll(entities: List<E>): List<E?> {
         connectToDatabase()
 
-        return transaction { dao.updateAll(entities) }
+        return transaction {
+            dao.updateAll(entities)
+            dao.findAll()
+        }
     }
     // endregion UPDATE
 
     // region DELETE
-    override fun delete(entity: E): Int {
+    override fun delete(entity: E): Boolean {
         connectToDatabase()
 
-        return transaction { dao.delete(entity) }
+        return transaction { dao.delete(entity) == 1 }
     }
 
     override fun deleteAll() {
