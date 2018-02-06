@@ -1,6 +1,6 @@
 package warhammer.database.services
 
-import warhammer.database.entities.HandEntity
+import warhammer.database.entities.Hand
 import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
@@ -8,7 +8,7 @@ import org.testng.annotations.Test
 class HandsDatabaseServiceTest {
     private val handsService = HandsDatabaseService(databaseUrl = "jdbc:sqlite:testSqlite:?mode=memory&cache=shared", driver = "org.sqlite.JDBC")
     private val handName = "SampleName"
-    private val sampleHand = HandEntity(handName, characteristicDicesCount = 3, challengeDicesCount = 1)
+    private val sampleHand = Hand(handName, characteristicDicesCount = 3, challengeDicesCount = 1)
 
     @BeforeMethod
     fun clearDatabase() {
@@ -28,9 +28,9 @@ class HandsDatabaseServiceTest {
     @Test
     fun should_add_all_hands() {
         val handsToAdd = listOf(
-                HandEntity("Hand1"),
-                HandEntity("Hand2"),
-                HandEntity("Hand3"))
+                Hand("Hand1"),
+                Hand("Hand2"),
+                Hand("Hand3"))
 
         val addAllResult = handsService.addAll(handsToAdd)
         assertThat(addAllResult.size).isEqualTo(handsToAdd.size)
@@ -76,9 +76,9 @@ class HandsDatabaseServiceTest {
     @Test
     fun should_read_all_hands() {
         val handsToAdd = listOf(
-                HandEntity("Hand1"),
-                HandEntity("Hand2"),
-                HandEntity("Hand3"))
+                Hand("Hand1"),
+                Hand("Hand2"),
+                Hand("Hand3"))
 
         handsService.addAll(handsToAdd)
 
@@ -118,8 +118,8 @@ class HandsDatabaseServiceTest {
     @Test
     fun should_update_all_hands() {
         // ADD
-        val hand1 = handsService.add(HandEntity("Hand1"))
-        val hand2 = handsService.add(HandEntity("Hand2"))
+        val hand1 = handsService.add(Hand("Hand1"))
+        val hand2 = handsService.add(Hand("Hand2"))
         assertThat(handsService.countAll()).isEqualTo(2)
 
         // UPDATE
@@ -135,7 +135,7 @@ class HandsDatabaseServiceTest {
     fun should_return_false_when_update_a_inexistant_hand() {
         assertThat(handsService.countAll()).isEqualTo(0)
 
-        val updatedHand = handsService.update(HandEntity("Inexistant"))
+        val updatedHand = handsService.update(Hand("Inexistant"))
         assertThat(updatedHand).isNull()
         assertThat(handsService.findAll()).isEmpty()
     }
@@ -144,9 +144,9 @@ class HandsDatabaseServiceTest {
     // region DELETE
     @Test
     fun should_delete_a_hand() {
-        val hand1 = HandEntity("Hand1")
-        val hand2 = HandEntity("Hand2")
-        val hand3 = HandEntity("Hand3")
+        val hand1 = Hand("Hand1")
+        val hand2 = Hand("Hand2")
+        val hand3 = Hand("Hand3")
 
         val addAllResult = handsService.addAll(listOf(hand1, hand2, hand3))
         assertThat(addAllResult.size).isEqualTo(3)
@@ -162,8 +162,8 @@ class HandsDatabaseServiceTest {
 
     @Test
     fun should_delete_all_hands() {
-        val hand1 = HandEntity("Hand1")
-        val hand2 = HandEntity("Hand2")
+        val hand1 = Hand("Hand1")
+        val hand2 = Hand("Hand2")
 
         handsService.add(hand1)
         handsService.add(hand2)
@@ -177,7 +177,7 @@ class HandsDatabaseServiceTest {
     fun should_return_false_when_delete_a_inexistant_hand() {
         assertThat(handsService.countAll()).isEqualTo(0)
 
-        val res = handsService.delete(HandEntity("Inexistant"))
+        val res = handsService.delete(Hand("Inexistant"))
         assertThat(res).isFalse()
         assertThat(handsService.findAll()).isEmpty()
     }

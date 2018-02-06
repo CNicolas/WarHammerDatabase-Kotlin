@@ -12,7 +12,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.testng.Assert
 import org.testng.annotations.Test
 
-class HandEntityTest {
+class HandTest {
     @Test
     fun should_insert_a_hand() {
         val handName = "SampleName"
