@@ -1,6 +1,6 @@
 package warhammer.database.services
 
-import warhammer.database.entities.PlayerEntity
+import warhammer.database.entities.Player
 import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
@@ -8,7 +8,7 @@ import org.testng.annotations.Test
 class PlayersDatabaseServiceTest {
     private val playersService = PlayersDatabaseService(databaseUrl = "jdbc:sqlite:testSqlite:?mode=memory&cache=shared", driver = "org.sqlite.JDBC")
     private val playerName = "SampleName"
-    private val samplePlayer = PlayerEntity(playerName)
+    private val samplePlayer = Player(playerName)
 
     @BeforeMethod
     fun clearDatabase() {
@@ -26,9 +26,9 @@ class PlayersDatabaseServiceTest {
     @Test
     fun should_add_all_players() {
         val playersToAdd = listOf(
-                PlayerEntity("Player1"),
-                PlayerEntity("Player2"),
-                PlayerEntity("Player3"))
+                Player("Player1"),
+                Player("Player2"),
+                Player("Player3"))
 
         val addAllResult = playersService.addAll(playersToAdd)
         assertThat(addAllResult.size).isEqualTo(playersToAdd.size)
@@ -72,9 +72,9 @@ class PlayersDatabaseServiceTest {
     @Test
     fun should_read_all_players() {
         val playersToAdd = listOf(
-                PlayerEntity("Player1"),
-                PlayerEntity("Player2"),
-                PlayerEntity("Player3"))
+                Player("Player1"),
+                Player("Player2"),
+                Player("Player3"))
 
         playersService.addAll(playersToAdd)
 
@@ -110,8 +110,8 @@ class PlayersDatabaseServiceTest {
     @Test
     fun should_update_all_players() {
         // ADD
-        val player1 = playersService.add(PlayerEntity("Player1"))
-        val player2 = playersService.add(PlayerEntity("Player2"))
+        val player1 = playersService.add(Player("Player1"))
+        val player2 = playersService.add(Player("Player2"))
         assertThat(playersService.countAll()).isEqualTo(2)
 
         // UPDATE
@@ -127,7 +127,7 @@ class PlayersDatabaseServiceTest {
     fun should_return_false_when_update_a_inexistant_player() {
         assertThat(playersService.countAll()).isEqualTo(0)
 
-        val updatedPlayer = playersService.update(PlayerEntity("Inexistant"))
+        val updatedPlayer = playersService.update(Player("Inexistant"))
         assertThat(updatedPlayer).isNull()
         assertThat(playersService.findAll()).isEmpty()
     }
@@ -136,9 +136,9 @@ class PlayersDatabaseServiceTest {
     // region DELETE
     @Test
     fun should_delete_a_player() {
-        val player1 = PlayerEntity("Player1")
-        val player2 = PlayerEntity("Player2")
-        val player3 = PlayerEntity("Player3")
+        val player1 = Player("Player1")
+        val player2 = Player("Player2")
+        val player3 = Player("Player3")
 
         val addAllResult = playersService.addAll(listOf(player1, player2, player3))
         assertThat(addAllResult.size).isEqualTo(3)
@@ -154,8 +154,8 @@ class PlayersDatabaseServiceTest {
 
     @Test
     fun should_delete_all_players() {
-        val player1 = PlayerEntity("Player1")
-        val player2 = PlayerEntity("Player2")
+        val player1 = Player("Player1")
+        val player2 = Player("Player2")
 
         playersService.add(player1)
         playersService.add(player2)
@@ -169,7 +169,7 @@ class PlayersDatabaseServiceTest {
     fun should_return_false_when_delete_a_inexistant_player() {
         assertThat(playersService.countAll()).isEqualTo(0)
 
-        val res = playersService.delete(PlayerEntity("Inexistant"))
+        val res = playersService.delete(Player("Inexistant"))
         assertThat(res).isFalse()
         assertThat(playersService.findAll()).isEmpty()
     }
