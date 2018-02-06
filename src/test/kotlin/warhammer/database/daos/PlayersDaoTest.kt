@@ -1,13 +1,14 @@
 package warhammer.database.daos
 
-import warhammer.database.entities.Player
-import warhammer.database.tables.Players
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils.create
 import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.testng.annotations.Test
+import warhammer.database.entities.Player
+import warhammer.database.tables.PlayerCharacteristicsTable
+import warhammer.database.tables.PlayersTable
 
 class PlayersDaoTest {
     private val playersDao = PlayersDao()
@@ -22,7 +23,7 @@ class PlayersDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            create(Players)
+            create(PlayersTable, PlayerCharacteristicsTable)
 
             playersDao.add(Player(playerName))
 
@@ -42,7 +43,7 @@ class PlayersDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            create(Players)
+            create(PlayersTable, PlayerCharacteristicsTable)
 
             playersDao.addAll(playersToAdd)
 
@@ -59,7 +60,7 @@ class PlayersDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            create(Players)
+            create(PlayersTable, PlayerCharacteristicsTable)
 
             var resOfInsert = playersDao.add(Player(playerName))
             assertThat(resOfInsert).isEqualTo(1)
@@ -82,7 +83,7 @@ class PlayersDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            create(Players)
+            create(PlayersTable, PlayerCharacteristicsTable)
 
             playersDao.add(Player(playerName))
 
@@ -107,7 +108,7 @@ class PlayersDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            create(Players)
+            create(PlayersTable, PlayerCharacteristicsTable)
 
             playersDao.addAll(playersToAdd)
 
@@ -128,7 +129,7 @@ class PlayersDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            create(Players)
+            create(PlayersTable, PlayerCharacteristicsTable)
 
             // ADD
             val id = playersDao.add(Player(playerName))
@@ -157,7 +158,7 @@ class PlayersDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            create(Players)
+            create(PlayersTable, PlayerCharacteristicsTable)
 
             // ADD
             val id1 = playersDao.add(Player("Player1"))
@@ -182,7 +183,7 @@ class PlayersDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            create(Players)
+            create(PlayersTable, PlayerCharacteristicsTable)
 
             assertThat(playersDao.findAll().size).isEqualTo(0)
 
@@ -216,7 +217,7 @@ class PlayersDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            create(Players)
+            create(PlayersTable, PlayerCharacteristicsTable)
 
             playersDao.add(player1)
             playersDao.add(player2)
@@ -241,7 +242,7 @@ class PlayersDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            create(Players)
+            create(PlayersTable, PlayerCharacteristicsTable)
 
             playersDao.add(player1)
             playersDao.add(player2)
@@ -258,7 +259,7 @@ class PlayersDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            create(Players)
+            create(PlayersTable, PlayerCharacteristicsTable)
 
             assertThat(playersDao.findAll().size).isEqualTo(0)
 

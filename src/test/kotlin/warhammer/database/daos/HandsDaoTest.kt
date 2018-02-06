@@ -1,7 +1,7 @@
 package warhammer.database.daos
 
 import warhammer.database.entities.Hand
-import warhammer.database.tables.Hands
+import warhammer.database.tables.HandsTable
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils.create
@@ -22,7 +22,7 @@ class HandsDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            create(Hands)
+            create(HandsTable)
 
             handsDao.add(Hand(handName))
 
@@ -42,7 +42,7 @@ class HandsDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            create(Hands)
+            create(HandsTable)
 
             handsDao.addAll(handsToAdd)
 
@@ -59,7 +59,7 @@ class HandsDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            create(Hands)
+            create(HandsTable)
 
             var resOfInsert = handsDao.add(Hand(handName))
             assertThat(resOfInsert).isEqualTo(1)
@@ -82,7 +82,7 @@ class HandsDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            create(Hands)
+            create(HandsTable)
 
             handsDao.add(Hand(handName))
 
@@ -107,7 +107,7 @@ class HandsDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            create(Hands)
+            create(HandsTable)
 
             handsDao.addAll(handsToAdd)
 
@@ -128,7 +128,7 @@ class HandsDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            create(Hands)
+            create(HandsTable)
 
             // ADD
             val id = handsDao.add(Hand(handName))
@@ -157,7 +157,7 @@ class HandsDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            create(Hands)
+            create(HandsTable)
 
             // ADD
             val id1 = handsDao.add(Hand("Hand1"))
@@ -182,7 +182,7 @@ class HandsDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            create(Hands)
+            create(HandsTable)
 
             assertThat(handsDao.findAll().size).isEqualTo(0)
 
@@ -216,7 +216,7 @@ class HandsDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            create(Hands)
+            create(HandsTable)
 
             val addAllResult = handsDao.addAll(listOf(hand1, hand2, hand3))
             assertThat(addAllResult.size).isEqualTo(3)
@@ -240,7 +240,7 @@ class HandsDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            create(Hands)
+            create(HandsTable)
 
             handsDao.add(hand1)
             handsDao.add(hand2)
@@ -257,7 +257,7 @@ class HandsDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            create(Hands)
+            create(HandsTable)
 
             assertThat(handsDao.findAll().size).isEqualTo(0)
 

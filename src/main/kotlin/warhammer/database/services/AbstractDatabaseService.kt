@@ -1,13 +1,13 @@
 package warhammer.database.services
 
-import warhammer.database.daos.Dao
-import warhammer.database.entities.NamedEntity
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
+import warhammer.database.daos.Dao
+import warhammer.database.entities.NamedEntity
 import java.sql.Connection
 
 abstract class AbstractDatabaseService<E : NamedEntity>(private val databaseUrl: String = "jdbc:sqlite:file:warhammer",

@@ -1,6 +1,6 @@
 package warhammer.database.entities
 
-import warhammer.database.tables.Hands
+import warhammer.database.tables.HandsTable
 import org.assertj.core.api.Assertions.assertThat
 import org.h2.jdbc.JdbcSQLException
 import org.jetbrains.exposed.sql.Database
@@ -22,13 +22,13 @@ class HandTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            create(Hands)
+            create(HandsTable)
 
-            Hands.insert {
+            HandsTable.insert {
                 it[name] = handName
             }
 
-            assertThat(Hands.selectAll().count()).isEqualTo(1)
+            assertThat(HandsTable.selectAll().count()).isEqualTo(1)
         }
     }
 
@@ -39,14 +39,14 @@ class HandTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            create(Hands)
+            create(HandsTable)
 
-            Hands.insert {
+            HandsTable.insert {
                 it[name] = "Rocky"
             }
 
             try {
-                Hands.insert {
+                HandsTable.insert {
                     it[name] = "Rocky"
                 }
             } catch (e: JdbcSQLException) {

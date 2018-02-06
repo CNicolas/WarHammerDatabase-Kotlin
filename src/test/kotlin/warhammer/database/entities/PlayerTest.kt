@@ -1,6 +1,5 @@
 package warhammer.database.entities
 
-import warhammer.database.tables.Players
 import org.assertj.core.api.Assertions.assertThat
 import org.h2.jdbc.JdbcSQLException
 import org.jetbrains.exposed.sql.Database
@@ -11,6 +10,7 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.testng.Assert.assertTrue
 import org.testng.annotations.Test
+import warhammer.database.tables.PlayersTable
 
 class PlayerTest {
     @Test
@@ -22,13 +22,13 @@ class PlayerTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            create(Players)
+            create(PlayersTable)
 
-            Players.insert {
+            PlayersTable.insert {
                 it[name] = playerName
             }
 
-            assertThat(Players.selectAll().count()).isEqualTo(1)
+            assertThat(PlayersTable.selectAll().count()).isEqualTo(1)
         }
     }
 
@@ -41,14 +41,14 @@ class PlayerTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            create(Players)
+            create(PlayersTable)
 
-            Players.insert {
+            PlayersTable.insert {
                 it[name] = playerName
             }
 
             try {
-                Players.insert {
+                PlayersTable.insert {
                     it[name] = playerName
                 }
             } catch (e: JdbcSQLException) {
