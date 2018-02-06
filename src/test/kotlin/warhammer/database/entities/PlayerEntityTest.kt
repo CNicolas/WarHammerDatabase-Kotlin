@@ -1,6 +1,6 @@
 package warhammer.database.entities
 
-import warhammer.database.entities.tables.Players
+import warhammer.database.tables.Players
 import org.assertj.core.api.Assertions.assertThat
 import org.h2.jdbc.JdbcSQLException
 import org.jetbrains.exposed.sql.Database

@@ -1,7 +1,7 @@
 package warhammer.database.daos
 
 import warhammer.database.entities.Hand
-import warhammer.database.entities.tables.Hands
+import warhammer.database.tables.Hands
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils.create

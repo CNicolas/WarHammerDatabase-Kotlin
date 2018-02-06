@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
 import warhammer.database.entities.Hand
-import warhammer.database.entities.tables.Hands
+import warhammer.database.tables.Hands
 import java.lang.Exception
 
 class HandsDao : AbstractDao<Hand>() {

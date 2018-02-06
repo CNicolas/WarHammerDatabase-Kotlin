@@ -1,7 +1,7 @@
 package warhammer.database.daos
 
 import warhammer.database.entities.PlayerEntity
-import warhammer.database.entities.tables.Players
+import warhammer.database.tables.Players
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateBuilder

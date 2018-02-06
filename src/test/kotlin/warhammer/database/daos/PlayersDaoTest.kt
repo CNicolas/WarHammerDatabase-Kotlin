@@ -1,7 +1,7 @@
 package warhammer.database.daos
 
 import warhammer.database.entities.PlayerEntity
-import warhammer.database.entities.tables.Players
+import warhammer.database.tables.Players
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils.create

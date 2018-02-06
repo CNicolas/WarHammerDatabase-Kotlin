@@ -1,4 +1,4 @@
-package warhammer.database.entities.tables
+package warhammer.database.tables
 
 import org.jetbrains.exposed.dao.IntIdTable
 
