@@ -1,4 +1,4 @@
-package warhammer.database.entities.characteristics
+package warhammer.database.entities
 
 class PlayerCharacteristicsEntity(val playerId: Int,
                                   val id: Int = -1,

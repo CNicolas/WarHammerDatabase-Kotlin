@@ -173,7 +173,7 @@ class PlayersDaoTest {
             assertThat(playersDao.findAll().size).isEqualTo(2)
 
             // UPDATE
-            val updatedIds = playersDao.updateAll(listOf(Player("Player11", id1), Player("Player22", id2)))
+            val updatedIds = playersDao.updateAll(listOf(Player("Player11", id = id1), Player("Player22", id = id2)))
             assertThat(updatedIds).containsExactly(id1, id2)
 
             // VERIFY

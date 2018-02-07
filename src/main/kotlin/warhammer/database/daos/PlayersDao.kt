@@ -5,7 +5,7 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
 import warhammer.database.entities.Player
-import warhammer.database.entities.characteristics.PlayerCharacteristicsEntity
+import warhammer.database.entities.PlayerCharacteristicsEntity
 import warhammer.database.entities.characteristics.PlayerCharacteristicsMapper
 import warhammer.database.tables.PlayerCharacteristicsTable
 import warhammer.database.tables.PlayersTable
@@ -105,7 +105,7 @@ class PlayersDao : AbstractDao<Player>() {
                             )
                     )
 
-            Player(result[PlayersTable.name], playerId, characteristics)
+            Player(result[PlayersTable.name], characteristics, playerId)
         }
     }
 
