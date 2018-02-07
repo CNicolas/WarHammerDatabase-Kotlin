@@ -12,7 +12,7 @@ import java.sql.Connection
 
 abstract class AbstractDatabaseService<E : NamedEntity>(private val databaseUrl: String = "jdbc:sqlite:file:warhammer",
                                                         private val driver: String = "org.sqlite.JDBC") : DatabaseService<E> {
-    abstract val table: IntIdTable
+    abstract val tables: List<IntIdTable>
     protected abstract val dao: Dao<E>
 
     // region CREATE
@@ -97,7 +97,7 @@ abstract class AbstractDatabaseService<E : NamedEntity>(private val databaseUrl:
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            SchemaUtils.create(table)
+            tables.forEach { SchemaUtils.create(it) }
         }
     }
 

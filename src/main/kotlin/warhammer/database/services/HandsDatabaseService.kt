@@ -5,7 +5,7 @@ import warhammer.database.entities.Hand
 import warhammer.database.tables.HandsTable
 
 class HandsDatabaseService(databaseUrl: String, driver: String) : AbstractDatabaseService<Hand>(databaseUrl, driver) {
-    override val table = HandsTable
+    override val tables = listOf(HandsTable)
     override val dao = HandsDao()
 
     init {

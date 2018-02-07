@@ -54,7 +54,6 @@ class PlayersDao : AbstractDao<Player>() {
             val playerCharacteristicsToUpdate = PlayerCharacteristicsMapper.mapResultRowToEntity(
                     PlayerCharacteristicsTable.select { PlayerCharacteristicsTable.playerId eq entity.id }.firstOrNull()
             )
-            println("entity:" + entity.id + "  characId" + playerCharacteristicsToUpdate?.id)
 
             PlayerCharacteristicsTable.update({ PlayerCharacteristicsTable.playerId eq entity.id }) {
                 val entityToUpdate = PlayerCharacteristicsMapper.mapPlayerCharacteristicsToEntityKnowingId(
