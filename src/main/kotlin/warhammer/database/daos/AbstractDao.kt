@@ -1,6 +1,5 @@
 package warhammer.database.daos
 
-import warhammer.database.entities.NamedEntity
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.deleteAll
@@ -8,6 +7,7 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
+import warhammer.database.entities.NamedEntity
 
 abstract class AbstractDao<E : NamedEntity> : Dao<E> {
     abstract val table: IntIdTable

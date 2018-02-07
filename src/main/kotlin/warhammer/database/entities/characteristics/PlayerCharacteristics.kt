@@ -24,7 +24,7 @@ data class PlayerCharacteristics(private val characteristics: HashMap<Characteri
                     WILLPOWER to willpowerValue,
                     FELLOWSHIP to fellowShipValue))
 
-    fun getHand(name: String, characteristic: Characteristic): Hand {
+    fun getHand(characteristic: Characteristic, name: String = "Hand"): Hand {
         return characteristics[characteristic]!!.getHand(name)
     }
 
