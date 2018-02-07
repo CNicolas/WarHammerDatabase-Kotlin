@@ -3,7 +3,7 @@ package warhammer.database.tables
 import org.jetbrains.exposed.dao.IntIdTable
 
 object PlayerCharacteristicsTable : IntIdTable() {
-    val playerId = reference("player", PlayersTable).uniqueIndex()
+    val playerId = reference("characteristics", PlayersTable).uniqueIndex()
 
     val strength = integer("strength").nullable()
     val toughness = integer("toughness").nullable()

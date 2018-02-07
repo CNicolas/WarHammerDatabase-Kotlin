@@ -1,4 +1,4 @@
-package warhammer.database.entities.player
+package warhammer.database.entities.characteristics
 
 import warhammer.database.entities.Hand
 

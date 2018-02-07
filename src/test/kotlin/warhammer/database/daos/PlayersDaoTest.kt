@@ -7,9 +7,9 @@ import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.testng.annotations.Test
 import warhammer.database.entities.Player
-import warhammer.database.entities.player.Characteristic
-import warhammer.database.entities.player.CharacteristicValue
-import warhammer.database.entities.player.PlayerCharacteristics
+import warhammer.database.entities.characteristics.Characteristic
+import warhammer.database.entities.characteristics.CharacteristicValue
+import warhammer.database.entities.characteristics.PlayerCharacteristics
 import warhammer.database.tables.PlayerCharacteristicsTable
 import warhammer.database.tables.PlayersTable
 

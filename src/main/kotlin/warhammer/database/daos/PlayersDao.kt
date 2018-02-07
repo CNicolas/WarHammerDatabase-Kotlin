@@ -5,8 +5,8 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
 import warhammer.database.entities.Player
-import warhammer.database.entities.player.PlayerCharacteristicsEntity
-import warhammer.database.entities.player.PlayerCharacteristicsMapper
+import warhammer.database.entities.characteristics.PlayerCharacteristicsEntity
+import warhammer.database.entities.characteristics.PlayerCharacteristicsMapper
 import warhammer.database.tables.PlayerCharacteristicsTable
 import warhammer.database.tables.PlayersTable
 import java.lang.Exception

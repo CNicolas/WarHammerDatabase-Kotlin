@@ -1,7 +1,7 @@
-package warhammer.database.entities.player
+package warhammer.database.entities.characteristics
 
 import warhammer.database.entities.Hand
-import warhammer.database.entities.player.Characteristic.*
+import warhammer.database.entities.characteristics.Characteristic.*
 
 data class PlayerCharacteristics(private val characteristics: HashMap<Characteristic, CharacteristicValue> =
                                  hashMapOf(STRENGTH to CharacteristicValue(0),
