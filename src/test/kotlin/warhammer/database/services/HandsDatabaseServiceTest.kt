@@ -1,9 +1,12 @@
 package warhammer.database.services
 
-import warhammer.database.entities.Hand
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.exposed.sql.exists
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
+import warhammer.database.entities.Hand
+import warhammer.database.tables.HandsTable
 
 class HandsDatabaseServiceTest {
     private val handsService = HandsDatabaseService(databaseUrl = "jdbc:sqlite:testSqlite:?mode=memory&cache=shared", driver = "org.sqlite.JDBC")
@@ -13,6 +16,13 @@ class HandsDatabaseServiceTest {
     @BeforeMethod
     fun clearDatabase() {
         handsService.deleteAll()
+    }
+
+    @Test
+    fun should_be_initialize() {
+        transaction {
+            assertThat(HandsTable.exists()).isTrue()
+        }
     }
 
     // region CREATE
@@ -72,7 +82,7 @@ class HandsDatabaseServiceTest {
         assertThat(hand).isNotNull()
         assertThat(hand?.name).isEqualTo(handName)
     }
-    
+
     @Test
     fun should_read_all_hands() {
         val handsToAdd = listOf(

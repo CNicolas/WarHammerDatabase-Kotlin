@@ -2,7 +2,7 @@ package warhammer.database.services
 
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.SchemaUtils.create
 import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -97,7 +97,9 @@ abstract class AbstractDatabaseService<E : NamedEntity>(private val databaseUrl:
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            tables.forEach { SchemaUtils.create(it) }
+            tables.forEach {
+                create(it)
+            }
         }
     }
 

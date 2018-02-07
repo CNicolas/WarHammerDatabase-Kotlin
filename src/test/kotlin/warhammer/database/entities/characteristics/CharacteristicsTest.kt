@@ -3,8 +3,20 @@ package warhammer.database.entities.characteristics
 import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.Test
 import warhammer.database.entities.Player
+import warhammer.database.entities.characteristics.Characteristic.STRENGTH
 
 class CharacteristicsTest {
+    @Test
+    fun should_set_strength() {
+        val playerCharacteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(4, 1))
+        assertThat(playerCharacteristics[STRENGTH].value).isEqualTo(4)
+        assertThat(playerCharacteristics[STRENGTH].fortuneValue).isEqualTo(1)
+
+        playerCharacteristics[STRENGTH] = CharacteristicValue(3,2)
+        assertThat(playerCharacteristics[STRENGTH].value).isEqualTo(3)
+        assertThat(playerCharacteristics[STRENGTH].fortuneValue).isEqualTo(2)
+    }
+
     @Test
     fun should_create_hand_from_characteristics_value() {
         val characteristicValue = CharacteristicValue(3, 2)
@@ -21,7 +33,7 @@ class CharacteristicsTest {
     fun should_create_hand_from_player_strength() {
         val playerCharacteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(4, 1))
         val player = Player("SamplePlayer", characteristics = playerCharacteristics)
-        val hand = player.characteristics.getHand(Characteristic.STRENGTH)
+        val hand = player.characteristics.getHand(STRENGTH)
 
         assertThat(hand).isNotNull()
         assertThat(hand.name).isEqualTo("Hand")
