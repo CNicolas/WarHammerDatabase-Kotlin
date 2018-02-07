@@ -1,13 +1,14 @@
 package warhammer.database.entities.player
 
 import org.jetbrains.exposed.sql.ResultRow
+import warhammer.database.entities.player.Characteristic.*
 import warhammer.database.tables.PlayerCharacteristicsTable
 
 object PlayerCharacteristicsMapper {
-    fun mapResultRowToEntity(result: ResultRow?): PlayerCharacteristicEntity? = when (result) {
+    fun mapResultRowToEntity(result: ResultRow?): PlayerCharacteristicsEntity? = when (result) {
         null -> null
         else -> {
-            PlayerCharacteristicEntity(
+            PlayerCharacteristicsEntity(
                     playerId = result[PlayerCharacteristicsTable.playerId].value,
                     id = result[PlayerCharacteristicsTable.id].value,
                     strength = result[PlayerCharacteristicsTable.strength],
@@ -26,7 +27,7 @@ object PlayerCharacteristicsMapper {
         }
     }
 
-    fun mapEntityToPlayerCharacteristics(entity: PlayerCharacteristicEntity?): PlayerCharacteristics {
+    fun mapEntityToPlayerCharacteristics(entity: PlayerCharacteristicsEntity?): PlayerCharacteristics {
         return when (entity) {
             null -> PlayerCharacteristics()
             else -> PlayerCharacteristics(
@@ -39,4 +40,45 @@ object PlayerCharacteristicsMapper {
             )
         }
     }
+
+    fun mapPlayerCharacteristicsToEntity(playerCharacteristics: PlayerCharacteristics, playerId: Int): PlayerCharacteristicsEntity =
+            PlayerCharacteristicsEntity(
+                    playerId = playerId,
+
+                    strength = playerCharacteristics[STRENGTH].value,
+                    toughness = playerCharacteristics[TOUGHNESS].value,
+                    agility = playerCharacteristics[AGILITY].value,
+                    intelligence = playerCharacteristics[INTELLIGENCE].value,
+                    willpower = playerCharacteristics[WILLPOWER].value,
+                    fellowship = playerCharacteristics[FELLOWSHIP].value,
+
+                    strengthFortune = playerCharacteristics[STRENGTH].fortuneValue,
+                    toughnessFortune = playerCharacteristics[TOUGHNESS].fortuneValue,
+                    agilityFortune = playerCharacteristics[AGILITY].fortuneValue,
+                    intelligenceFortune = playerCharacteristics[INTELLIGENCE].fortuneValue,
+                    willpowerFortune = playerCharacteristics[WILLPOWER].fortuneValue,
+                    fellowshipFortune = playerCharacteristics[FELLOWSHIP].fortuneValue
+            )
+
+    fun mapPlayerCharacteristicsToEntityKnowingId(playerCharacteristics: PlayerCharacteristics,
+                                         playerId: Int,
+                                         id: Int): PlayerCharacteristicsEntity =
+            PlayerCharacteristicsEntity(
+                    id = id,
+                    playerId = playerId,
+
+                    strength = playerCharacteristics[STRENGTH].value,
+                    toughness = playerCharacteristics[TOUGHNESS].value,
+                    agility = playerCharacteristics[AGILITY].value,
+                    intelligence = playerCharacteristics[INTELLIGENCE].value,
+                    willpower = playerCharacteristics[WILLPOWER].value,
+                    fellowship = playerCharacteristics[FELLOWSHIP].value,
+
+                    strengthFortune = playerCharacteristics[STRENGTH].fortuneValue,
+                    toughnessFortune = playerCharacteristics[TOUGHNESS].fortuneValue,
+                    agilityFortune = playerCharacteristics[AGILITY].fortuneValue,
+                    intelligenceFortune = playerCharacteristics[INTELLIGENCE].fortuneValue,
+                    willpowerFortune = playerCharacteristics[WILLPOWER].fortuneValue,
+                    fellowshipFortune = playerCharacteristics[FELLOWSHIP].fortuneValue
+            )
 }

@@ -5,7 +5,7 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
 import warhammer.database.entities.Player
-import warhammer.database.entities.player.Characteristic.*
+import warhammer.database.entities.player.PlayerCharacteristicsEntity
 import warhammer.database.entities.player.PlayerCharacteristicsMapper
 import warhammer.database.tables.PlayerCharacteristicsTable
 import warhammer.database.tables.PlayersTable
@@ -24,19 +24,8 @@ class PlayersDao : AbstractDao<Player>() {
                 PlayerCharacteristicsTable.insert {
                     it[PlayerCharacteristicsTable.playerId] = EntityID(playerId.value, PlayerCharacteristicsTable)
 
-                    it[PlayerCharacteristicsTable.strength] = entity.characteristics[STRENGTH].value
-                    it[PlayerCharacteristicsTable.toughness] = entity.characteristics[TOUGHNESS].value
-                    it[PlayerCharacteristicsTable.agility] = entity.characteristics[AGILITY].value
-                    it[PlayerCharacteristicsTable.intelligence] = entity.characteristics[INTELLIGENCE].value
-                    it[PlayerCharacteristicsTable.willpower] = entity.characteristics[WILLPOWER].value
-                    it[PlayerCharacteristicsTable.fellowship] = entity.characteristics[FELLOWSHIP].value
-
-                    it[PlayerCharacteristicsTable.strengthFortune] = entity.characteristics[STRENGTH].fortuneValue
-                    it[PlayerCharacteristicsTable.toughnessFortune] = entity.characteristics[TOUGHNESS].fortuneValue
-                    it[PlayerCharacteristicsTable.agilityFortune] = entity.characteristics[AGILITY].fortuneValue
-                    it[PlayerCharacteristicsTable.intelligenceFortune] = entity.characteristics[INTELLIGENCE].fortuneValue
-                    it[PlayerCharacteristicsTable.willpowerFortune] = entity.characteristics[WILLPOWER].fortuneValue
-                    it[PlayerCharacteristicsTable.fellowshipFortune] = entity.characteristics[FELLOWSHIP].fortuneValue
+                    mapPlayerCharacteristicsEntityFieldsToTable(it,
+                            PlayerCharacteristicsMapper.mapPlayerCharacteristicsToEntity(entity.characteristics, playerId.value))
                 }
 
                 playerId.value
@@ -62,6 +51,20 @@ class PlayersDao : AbstractDao<Player>() {
                 mapEntityToTable(it, entity)
             }
 
+            val playerCharacteristicsToUpdate = PlayerCharacteristicsMapper.mapResultRowToEntity(
+                    PlayerCharacteristicsTable.select { PlayerCharacteristicsTable.playerId eq entity.id }.firstOrNull()
+            )
+            println("entity:" + entity.id + "  characId" + playerCharacteristicsToUpdate?.id)
+
+            PlayerCharacteristicsTable.update({ PlayerCharacteristicsTable.playerId eq entity.id }) {
+                val entityToUpdate = PlayerCharacteristicsMapper.mapPlayerCharacteristicsToEntityKnowingId(
+                        entity.characteristics,
+                        entity.id,
+                        playerCharacteristicsToUpdate!!.id
+                )
+                mapPlayerCharacteristicsEntityToTable(it, entityToUpdate)
+            }
+
             entity.id
         } catch (e: Exception) {
             e.printStackTrace()
@@ -74,7 +77,7 @@ class PlayersDao : AbstractDao<Player>() {
             val playerToDelete = findByName(entity.name)
             if (playerToDelete != null) {
                 PlayerCharacteristicsTable.deleteWhere { PlayerCharacteristicsTable.playerId eq playerToDelete.id }
-                PlayersTable.deleteWhere { (PlayersTable.id eq playerToDelete.id) }
+                PlayersTable.deleteWhere { (PlayersTable.id eq playerToDelete.id) or (PlayersTable.name eq entity.name) }
             } else {
                 0
             }
@@ -115,5 +118,27 @@ class PlayersDao : AbstractDao<Player>() {
 
     override fun mapFieldsOfEntityToTable(it: UpdateBuilder<Int>, entity: Player) {
         it[PlayersTable.name] = entity.name
+    }
+
+    private fun mapPlayerCharacteristicsEntityToTable(updating: UpdateStatement, entity: PlayerCharacteristicsEntity) {
+        updating[PlayerCharacteristicsTable.id] = EntityID(entity.id, PlayerCharacteristicsTable)
+
+        mapPlayerCharacteristicsEntityFieldsToTable(updating, entity)
+    }
+
+    private fun mapPlayerCharacteristicsEntityFieldsToTable(updating: UpdateBuilder<Int>, entity: PlayerCharacteristicsEntity) {
+        updating[PlayerCharacteristicsTable.strength] = entity.strength
+        updating[PlayerCharacteristicsTable.toughness] = entity.toughness
+        updating[PlayerCharacteristicsTable.agility] = entity.agility
+        updating[PlayerCharacteristicsTable.intelligence] = entity.intelligence
+        updating[PlayerCharacteristicsTable.willpower] = entity.willpower
+        updating[PlayerCharacteristicsTable.fellowship] = entity.fellowship
+
+        updating[PlayerCharacteristicsTable.strengthFortune] = entity.strengthFortune
+        updating[PlayerCharacteristicsTable.toughnessFortune] = entity.toughnessFortune
+        updating[PlayerCharacteristicsTable.agilityFortune] = entity.agilityFortune
+        updating[PlayerCharacteristicsTable.intelligenceFortune] = entity.intelligenceFortune
+        updating[PlayerCharacteristicsTable.willpowerFortune] = entity.willpowerFortune
+        updating[PlayerCharacteristicsTable.fellowshipFortune] = entity.fellowshipFortune
     }
 }
