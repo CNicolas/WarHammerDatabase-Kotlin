@@ -1,7 +1,9 @@
 package warhammer.database.entities.player
 
-class PlayerCharacteristicsEntity(val playerId: Int,
-                                  val id: Int = -1,
+import warhammer.database.entities.WarHammerEntity
+
+data class PlayerCharacteristicsEntity(val playerId: Int,
+                                  override val id: Int = -1,
                                   val strength: Int? = 0,
                                   val toughness: Int? = 0,
                                   val agility: Int? = 0,
@@ -13,6 +15,6 @@ class PlayerCharacteristicsEntity(val playerId: Int,
                                   val agilityFortune: Int? = 0,
                                   val intelligenceFortune: Int? = 0,
                                   val willpowerFortune: Int? = 0,
-                                  val fellowshipFortune: Int? = 0) {
+                                  val fellowshipFortune: Int? = 0) : WarHammerEntity {
 
 }
