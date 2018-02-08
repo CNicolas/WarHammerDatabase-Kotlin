@@ -1,9 +1,9 @@
-package warhammer.database.entities.characteristics
+package warhammer.database.entities.player.characteristics
 
 import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.Test
-import warhammer.database.entities.Player
-import warhammer.database.entities.characteristics.Characteristic.STRENGTH
+import warhammer.database.entities.player.Player
+import warhammer.database.entities.player.characteristics.Characteristic.STRENGTH
 
 class CharacteristicsTest {
     @Test
@@ -12,7 +12,7 @@ class CharacteristicsTest {
         assertThat(playerCharacteristics[STRENGTH].value).isEqualTo(4)
         assertThat(playerCharacteristics[STRENGTH].fortuneValue).isEqualTo(1)
 
-        playerCharacteristics[STRENGTH] = CharacteristicValue(3,2)
+        playerCharacteristics[STRENGTH] = CharacteristicValue(3, 2)
         assertThat(playerCharacteristics[STRENGTH].value).isEqualTo(3)
         assertThat(playerCharacteristics[STRENGTH].fortuneValue).isEqualTo(2)
     }
@@ -33,10 +33,10 @@ class CharacteristicsTest {
     fun should_create_hand_from_player_strength() {
         val playerCharacteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(4, 1))
         val player = Player("SamplePlayer", characteristics = playerCharacteristics)
-        val hand = player.characteristics.getHand(STRENGTH)
+        val hand = player.characteristics[STRENGTH].getHand("SampleHand")
 
         assertThat(hand).isNotNull()
-        assertThat(hand.name).isEqualTo("Hand")
+        assertThat(hand.name).isEqualTo("SampleHand")
         assertThat(hand.characteristicDicesCount).isEqualTo(4)
         assertThat(hand.fortuneDicesCount).isEqualTo(1)
         assertThat(hand.challengeDicesCount).isEqualTo(0)

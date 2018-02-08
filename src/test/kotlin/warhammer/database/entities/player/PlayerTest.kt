@@ -1,4 +1,4 @@
-package warhammer.database.entities
+package warhammer.database.entities.player
 
 import org.assertj.core.api.Assertions.assertThat
 import org.h2.jdbc.JdbcSQLException

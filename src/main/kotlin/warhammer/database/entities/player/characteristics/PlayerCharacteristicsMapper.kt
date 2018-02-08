@@ -1,8 +1,8 @@
-package warhammer.database.entities.characteristics
+package warhammer.database.entities.player.characteristics
 
 import org.jetbrains.exposed.sql.ResultRow
-import warhammer.database.entities.PlayerCharacteristicsEntity
-import warhammer.database.entities.characteristics.Characteristic.*
+import warhammer.database.entities.player.PlayerCharacteristicsEntity
+import warhammer.database.entities.player.characteristics.Characteristic.*
 import warhammer.database.tables.PlayerCharacteristicsTable
 
 object PlayerCharacteristicsMapper {

@@ -5,7 +5,7 @@ import org.jetbrains.exposed.sql.exists
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
-import warhammer.database.entities.Player
+import warhammer.database.entities.player.Player
 import warhammer.database.tables.PlayerCharacteristicsTable
 import warhammer.database.tables.PlayersTable
 

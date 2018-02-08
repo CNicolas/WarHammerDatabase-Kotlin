@@ -1,7 +1,6 @@
-package warhammer.database.entities.characteristics
+package warhammer.database.entities.player.characteristics
 
-import warhammer.database.entities.Hand
-import warhammer.database.entities.characteristics.Characteristic.*
+import warhammer.database.entities.player.characteristics.Characteristic.*
 
 data class PlayerCharacteristics(private val characteristics: HashMap<Characteristic, CharacteristicValue> =
                                  hashMapOf(STRENGTH to CharacteristicValue(0),
@@ -23,10 +22,6 @@ data class PlayerCharacteristics(private val characteristics: HashMap<Characteri
                     INTELLIGENCE to intelligenceValue,
                     WILLPOWER to willpowerValue,
                     FELLOWSHIP to fellowShipValue))
-
-    fun getHand(characteristic: Characteristic, name: String = "Hand"): Hand {
-        return characteristics[characteristic]!!.getHand(name)
-    }
 
     operator fun set(characteristic: Characteristic, value: CharacteristicValue) {
         characteristics[characteristic] = value
