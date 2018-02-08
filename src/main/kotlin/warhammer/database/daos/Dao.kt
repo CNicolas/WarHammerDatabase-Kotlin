@@ -1,13 +1,12 @@
 package warhammer.database.daos
 
-import warhammer.database.entities.NamedEntity
+import warhammer.database.entities.WarHammerEntity
 
-interface Dao<E : NamedEntity> {
+interface Dao<E : WarHammerEntity> {
     fun add(entity: E): Int
     fun addAll(entities: List<E>): List<Int>
 
     fun findById(id: Int): E?
-    fun findByName(name: String): E?
     fun findAll(): List<E?>
 
     fun update(entity: E): Int

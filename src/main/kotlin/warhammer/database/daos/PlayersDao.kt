@@ -12,7 +12,7 @@ import warhammer.database.tables.PlayerCharacteristicsTable
 import warhammer.database.tables.PlayersTable
 import java.lang.Exception
 
-class PlayersDao : AbstractDao<Player>() {
+class PlayersDao : AbstractDao<Player>(), NamedDao<Player> {
     override val table = PlayersTable
 
     override fun add(entity: Player): Int {

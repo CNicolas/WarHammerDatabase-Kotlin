@@ -7,9 +7,9 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
-import warhammer.database.entities.NamedEntity
+import warhammer.database.entities.WarHammerEntity
 
-abstract class AbstractDao<E : NamedEntity> : Dao<E> {
+abstract class AbstractDao<E : WarHammerEntity> : Dao<E> {
     abstract val table: IntIdTable
 
     override fun addAll(entities: List<E>): List<Int> {

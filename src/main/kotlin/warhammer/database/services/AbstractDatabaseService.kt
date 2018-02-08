@@ -48,12 +48,6 @@ abstract class AbstractDatabaseService<E : NamedEntity>(private val databaseUrl:
         return transaction { dao.findById(id) }
     }
 
-    override fun findByName(name: String): E? {
-        connectToDatabase()
-
-        return transaction { dao.findByName(name) }
-    }
-
     override fun countAll(): Int = findAll().size
     // endregion
 
@@ -103,7 +97,7 @@ abstract class AbstractDatabaseService<E : NamedEntity>(private val databaseUrl:
         }
     }
 
-    private fun connectToDatabase() {
+    protected fun connectToDatabase() {
         Database.connect(url = databaseUrl, driver = driver)
         TransactionManager.manager.defaultIsolationLevel = Connection.TRANSACTION_SERIALIZABLE
     }

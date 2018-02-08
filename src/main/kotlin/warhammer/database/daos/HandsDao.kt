@@ -9,7 +9,7 @@ import warhammer.database.entities.Hand
 import warhammer.database.tables.HandsTable
 import java.lang.Exception
 
-class HandsDao : AbstractDao<Hand>() {
+class HandsDao : AbstractDao<Hand>(), NamedDao<Hand> {
     override val table: IntIdTable = HandsTable
 
     override fun add(entity: Hand): Int {
