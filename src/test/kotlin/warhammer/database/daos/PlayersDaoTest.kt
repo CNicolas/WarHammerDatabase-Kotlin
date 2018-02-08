@@ -10,6 +10,7 @@ import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.characteristics.Characteristic
 import warhammer.database.entities.player.characteristics.CharacteristicValue
 import warhammer.database.entities.player.characteristics.PlayerCharacteristics
+import warhammer.database.entities.player.other.Race
 import warhammer.database.tables.PlayerCharacteristicsTable
 import warhammer.database.tables.PlayersTable
 
@@ -103,9 +104,9 @@ class PlayersDaoTest {
     @Test
     fun should_read_all_players() {
         val playersToAdd = listOf(
-                Player("Player1"),
-                Player("Player2"),
-                Player("Player3"))
+                Player("Player1", race = Race.DWARF),
+                Player("Player2", size = 92),
+                Player("Player3", age = 219))
 
         Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
 
@@ -117,8 +118,12 @@ class PlayersDaoTest {
             playersDao.addAll(playersToAdd)
 
             val allInsertedPlayers = playersDao.findAll()
+            assertThat(allInsertedPlayers).isNotNull()
             assertThat(allInsertedPlayers.size).isEqualTo(3)
             assertThat(allInsertedPlayers.map { it?.name }).containsExactly("Player1", "Player2", "Player3")
+            assertThat(allInsertedPlayers[0]?.race).isEqualTo(Race.DWARF)
+            assertThat(allInsertedPlayers[1]?.size).isEqualTo(92)
+            assertThat(allInsertedPlayers[2]?.age).isEqualTo(219)
         }
     }
     // endregion

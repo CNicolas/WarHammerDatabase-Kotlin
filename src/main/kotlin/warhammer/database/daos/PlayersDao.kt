@@ -7,6 +7,7 @@ import org.jetbrains.exposed.sql.statements.UpdateStatement
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.PlayerCharacteristicsEntity
 import warhammer.database.entities.player.characteristics.PlayerCharacteristicsMapper
+import warhammer.database.entities.player.other.Race
 import warhammer.database.tables.PlayerCharacteristicsTable
 import warhammer.database.tables.PlayersTable
 import java.lang.Exception
@@ -105,7 +106,12 @@ class PlayersDao : AbstractDao<Player>() {
                             )
                     )
 
-            Player(result[PlayersTable.name], characteristics, playerId)
+            Player(result[PlayersTable.name],
+                    Race.valueOf(result[PlayersTable.race]),
+                    result[PlayersTable.age],
+                    result[PlayersTable.size],
+                    characteristics = characteristics,
+                    id = playerId)
         }
     }
 
@@ -117,6 +123,9 @@ class PlayersDao : AbstractDao<Player>() {
 
     override fun mapFieldsOfEntityToTable(it: UpdateBuilder<Int>, entity: Player) {
         it[PlayersTable.name] = entity.name
+        it[PlayersTable.race] = entity.race.toString()
+        it[PlayersTable.age] = entity.age
+        it[PlayersTable.size] = entity.size
     }
 
     private fun mapPlayerCharacteristicsEntityToTable(updating: UpdateStatement, entity: PlayerCharacteristicsEntity) {
