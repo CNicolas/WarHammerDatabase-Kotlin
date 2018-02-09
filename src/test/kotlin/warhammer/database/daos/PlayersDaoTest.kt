@@ -3,30 +3,40 @@ package warhammer.database.daos
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils.create
+import org.jetbrains.exposed.sql.SchemaUtils.drop
 import org.jetbrains.exposed.sql.StdOutSqlLogger
+import org.jetbrains.exposed.sql.deleteAll
+import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.other.Race
-import warhammer.database.tables.PlayerCharacteristicsTable
 import warhammer.database.tables.PlayersTable
+import java.sql.Connection
 
 class PlayersDaoTest {
     private val playersDao = PlayersDao()
 
-    // region CREATE
-    @Test
-    fun should_add_a_player() {
-        val playerName = "TheLegend27"
-
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+    @BeforeMethod
+    fun initializeDatabase() {
+        Database.connect("jdbc:sqlite:testSqlite:?mode=memory&cache=shared", driver = "org.sqlite.JDBC")
+        TransactionManager.manager.defaultIsolationLevel = Connection.TRANSACTION_SERIALIZABLE
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            create(PlayersTable, PlayerCharacteristicsTable)
+            create(PlayersTable)
 
-            playersDao.add(Player(playerName))
+            PlayersTable.deleteAll()
+        }
+    }
+
+    // region CREATE
+    @Test
+    fun should_add_a_player() {
+        transaction {
+            playersDao.add(Player("PlayerName"))
 
             assertThat(playersDao.findAll().size).isEqualTo(1)
         }
@@ -39,13 +49,7 @@ class PlayersDaoTest {
                 Player("Player2"),
                 Player("Player3"))
 
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
-
         transaction {
-            logger.addLogger(StdOutSqlLogger)
-
-            create(PlayersTable)
-
             playersDao.addAll(playersToAdd)
 
             assertThat(playersDao.findAll().size).isEqualTo(3)
@@ -54,15 +58,9 @@ class PlayersDaoTest {
 
     @Test
     fun should_add_a_player_then_fail_to_add_it_again() {
-        val playerName = "TheLegend27"
-
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+        val playerName = "PlayerName"
 
         transaction {
-            logger.addLogger(StdOutSqlLogger)
-
-            create(PlayersTable)
-
             var resOfInsert = playersDao.add(Player(playerName))
             assertThat(resOfInsert).isEqualTo(1)
             assertThat(playersDao.findAll().size).isEqualTo(1)
@@ -77,21 +75,13 @@ class PlayersDaoTest {
     // region READ
     @Test
     fun should_read_a_player() {
-        val playerName = "TheLegend27"
-
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+        val playerName = "PlayerName"
 
         transaction {
-            logger.addLogger(StdOutSqlLogger)
-
-            create(PlayersTable)
-
             playersDao.add(Player(playerName))
-
             assertThat(playersDao.findAll().size).isEqualTo(1)
 
             val player = playersDao.findByName(playerName)
-
             assertThat(player).isNotNull()
             assertThat(player?.name).isEqualTo(playerName)
         }
@@ -104,13 +94,7 @@ class PlayersDaoTest {
                 Player("Player2", size = 92),
                 Player("Player3", age = 219))
 
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
-
         transaction {
-            logger.addLogger(StdOutSqlLogger)
-
-            create(PlayersTable, PlayerCharacteristicsTable)
-
             playersDao.addAll(playersToAdd)
 
             val allInsertedPlayers = playersDao.findAll()
@@ -130,12 +114,7 @@ class PlayersDaoTest {
         val playerName = "TheLegend27"
         val newPlayerName = "TheLegend28"
 
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
-
         transaction {
-            logger.addLogger(StdOutSqlLogger)
-            create(PlayersTable, PlayerCharacteristicsTable)
-
             // ADD
             val id = playersDao.add(Player(playerName))
             assertThat(playersDao.findAll().size).isEqualTo(1)
@@ -159,12 +138,7 @@ class PlayersDaoTest {
 
     @Test
     fun should_update_all_players() {
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
-
         transaction {
-            logger.addLogger(StdOutSqlLogger)
-            create(PlayersTable, PlayerCharacteristicsTable)
-
             // ADD
             val id1 = playersDao.add(Player("Player1"))
             val id2 = playersDao.add(Player("Player2"))
@@ -184,12 +158,7 @@ class PlayersDaoTest {
 
     @Test
     fun should_return_false_when_update_a_inexistant_player() {
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
-
         transaction {
-            logger.addLogger(StdOutSqlLogger)
-            create(PlayersTable, PlayerCharacteristicsTable)
-
             assertThat(playersDao.findAll().size).isEqualTo(0)
 
             val res = playersDao.update(Player("Inexistant"))
@@ -200,10 +169,8 @@ class PlayersDaoTest {
 
     @Test
     fun should_return_false_when_update_on_inexistant_table() {
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
-
         transaction {
-            logger.addLogger(StdOutSqlLogger)
+            drop(PlayersTable)
 
             val res = playersDao.update(Player("Inexistant"))
             assertThat(res).isEqualTo(-1)
@@ -218,12 +185,7 @@ class PlayersDaoTest {
         val player2 = Player("Player2")
         val player3 = Player("Player3")
 
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
-
         transaction {
-            logger.addLogger(StdOutSqlLogger)
-            create(PlayersTable)
-
             playersDao.add(player1)
             playersDao.add(player2)
             playersDao.add(player3)
@@ -243,12 +205,7 @@ class PlayersDaoTest {
         val player1 = Player("Player1")
         val player2 = Player("Player2")
 
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
-
         transaction {
-            logger.addLogger(StdOutSqlLogger)
-            create(PlayersTable)
-
             playersDao.add(player1)
             playersDao.add(player2)
             assertThat(playersDao.findAll().size).isEqualTo(2)
@@ -260,12 +217,7 @@ class PlayersDaoTest {
 
     @Test
     fun should_return_false_when_delete_a_inexistant_player() {
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
-
         transaction {
-            logger.addLogger(StdOutSqlLogger)
-            create(PlayersTable)
-
             assertThat(playersDao.findAll().size).isEqualTo(0)
 
             val res = playersDao.delete(Player("Inexistant"))
@@ -276,10 +228,8 @@ class PlayersDaoTest {
 
     @Test
     fun should_return_false_when_delete_on_inexistant_table() {
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
-
         transaction {
-            logger.addLogger(StdOutSqlLogger)
+            drop(PlayersTable)
 
             val res = playersDao.delete(Player("Inexistant"))
             assertThat(res).isEqualTo(-1)
