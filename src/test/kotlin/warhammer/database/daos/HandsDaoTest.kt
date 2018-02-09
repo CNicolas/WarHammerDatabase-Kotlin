@@ -1,30 +1,41 @@
 package warhammer.database.daos
 
-import warhammer.database.entities.Hand
-import warhammer.database.tables.HandsTable
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils.create
+import org.jetbrains.exposed.sql.SchemaUtils.drop
 import org.jetbrains.exposed.sql.StdOutSqlLogger
+import org.jetbrains.exposed.sql.deleteAll
+import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
+import warhammer.database.entities.Hand
+import warhammer.database.tables.HandsTable
+import java.sql.Connection
 
 class HandsDaoTest {
     private val handsDao = HandsDao()
 
-    // region CREATE
-    @Test
-    fun should_add_a_hand() {
-        val handName = "TheLegend27"
-
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+    @BeforeMethod
+    fun initializeDatabase() {
+        Database.connect("jdbc:sqlite:testSqlite:?mode=memory&cache=shared", driver = "org.sqlite.JDBC")
+        TransactionManager.manager.defaultIsolationLevel = Connection.TRANSACTION_SERIALIZABLE
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
             create(HandsTable)
 
-            handsDao.add(Hand(handName))
+            HandsTable.deleteAll()
+        }
+    }
+
+    // region CREATE
+    @Test
+    fun should_add_a_hand() {
+        transaction {
+            handsDao.add(Hand("HandName"))
 
             assertThat(handsDao.findAll().size).isEqualTo(1)
         }
@@ -37,13 +48,7 @@ class HandsDaoTest {
                 Hand("Hand2"),
                 Hand("Hand3"))
 
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
-
         transaction {
-            logger.addLogger(StdOutSqlLogger)
-
-            create(HandsTable)
-
             handsDao.addAll(handsToAdd)
 
             assertThat(handsDao.findAll().size).isEqualTo(3)
@@ -52,15 +57,9 @@ class HandsDaoTest {
 
     @Test
     fun should_add_a_hand_then_fail_to_add_it_again() {
-        val handName = "TheLegend27"
-
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+        val handName = "PlayerName"
 
         transaction {
-            logger.addLogger(StdOutSqlLogger)
-
-            create(HandsTable)
-
             var resOfInsert = handsDao.add(Hand(handName))
             assertThat(resOfInsert).isEqualTo(1)
             assertThat(handsDao.findAll().size).isEqualTo(1)
@@ -75,15 +74,9 @@ class HandsDaoTest {
     // region READ
     @Test
     fun should_read_a_hand() {
-        val handName = "TheLegend27"
-
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+        val handName = "PlayerName"
 
         transaction {
-            logger.addLogger(StdOutSqlLogger)
-
-            create(HandsTable)
-
             handsDao.add(Hand(handName))
 
             assertThat(handsDao.findAll().size).isEqualTo(1)
@@ -121,15 +114,10 @@ class HandsDaoTest {
     // region UPDATE
     @Test
     fun should_update_a_hand() {
-        val handName = "TheLegend27"
-        val newHandName = "TheLegend28"
-
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+        val handName = "HandName1"
+        val newHandName = "HandName2"
 
         transaction {
-            logger.addLogger(StdOutSqlLogger)
-            create(HandsTable)
-
             // ADD
             val id = handsDao.add(Hand(handName))
             assertThat(handsDao.findAll().size).isEqualTo(1)
@@ -153,12 +141,7 @@ class HandsDaoTest {
 
     @Test
     fun should_update_all_hands() {
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
-
         transaction {
-            logger.addLogger(StdOutSqlLogger)
-            create(HandsTable)
-
             // ADD
             val id1 = handsDao.add(Hand("Hand1"))
             val id2 = handsDao.add(Hand("Hand2"))
@@ -178,12 +161,7 @@ class HandsDaoTest {
 
     @Test
     fun should_return_false_when_update_a_inexistant_hand() {
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
-
         transaction {
-            logger.addLogger(StdOutSqlLogger)
-            create(HandsTable)
-
             assertThat(handsDao.findAll().size).isEqualTo(0)
 
             val res = handsDao.update(Hand("Inexistant"))
@@ -194,10 +172,8 @@ class HandsDaoTest {
 
     @Test
     fun should_return_false_when_update_on_inexistant_table() {
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
-
         transaction {
-            logger.addLogger(StdOutSqlLogger)
+            drop(HandsTable)
 
             val res = handsDao.update(Hand("Inexistant"))
             assertThat(res).isEqualTo(-1)
@@ -212,12 +188,7 @@ class HandsDaoTest {
         val hand2 = Hand("Hand2")
         val hand3 = Hand("Hand3")
 
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
-
         transaction {
-            logger.addLogger(StdOutSqlLogger)
-            create(HandsTable)
-
             val addAllResult = handsDao.addAll(listOf(hand1, hand2, hand3))
             assertThat(addAllResult.size).isEqualTo(3)
             assertThat(addAllResult).containsExactly(1, 2, 3)
@@ -236,12 +207,7 @@ class HandsDaoTest {
         val hand1 = Hand("Hand1")
         val hand2 = Hand("Hand2")
 
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
-
         transaction {
-            logger.addLogger(StdOutSqlLogger)
-            create(HandsTable)
-
             handsDao.add(hand1)
             handsDao.add(hand2)
             assertThat(handsDao.findAll().size).isEqualTo(2)
@@ -253,12 +219,8 @@ class HandsDaoTest {
 
     @Test
     fun should_return_false_when_delete_a_inexistant_hand() {
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
-
         transaction {
-            logger.addLogger(StdOutSqlLogger)
-            create(HandsTable)
-
+            HandsTable.deleteAll()
             assertThat(handsDao.findAll().size).isEqualTo(0)
 
             val res = handsDao.delete(Hand("Inexistant"))
@@ -269,10 +231,8 @@ class HandsDaoTest {
 
     @Test
     fun should_return_false_when_delete_on_inexistant_table() {
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
-
         transaction {
-            logger.addLogger(StdOutSqlLogger)
+            drop(HandsTable)
 
             val res = handsDao.delete(Hand("Inexistant"))
             assertThat(res).isEqualTo(-1)
