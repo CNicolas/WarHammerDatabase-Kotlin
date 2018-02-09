@@ -1,6 +1,7 @@
 package warhammer.database.entities.mapping
 
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import warhammer.database.entities.Hand
 import warhammer.database.tables.HandsTable
 
@@ -19,4 +20,16 @@ fun ResultRow?.mapToHand(): Hand? = when (this) {
                 misfortuneDicesCount = this[HandsTable.misfortuneDicesCount]
         )
     }
+}
+
+fun UpdateBuilder<Int>.mapFieldsOfEntity(entity: Hand) {
+    this[HandsTable.name] = entity.name
+
+    this[HandsTable.characteristicDicesCount] = entity.characteristicDicesCount
+    this[HandsTable.expertiseDicesCount] = entity.expertiseDicesCount
+    this[HandsTable.fortuneDicesCount] = entity.fortuneDicesCount
+    this[HandsTable.conservativeDicesCount] = entity.conservativeDicesCount
+    this[HandsTable.recklessDicesCount] = entity.recklessDicesCount
+    this[HandsTable.challengeDicesCount] = entity.challengeDicesCount
+    this[HandsTable.misfortuneDicesCount] = entity.misfortuneDicesCount
 }

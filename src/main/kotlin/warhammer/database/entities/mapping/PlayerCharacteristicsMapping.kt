@@ -1,11 +1,14 @@
 package warhammer.database.entities.mapping
 
+import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import warhammer.database.entities.player.PlayerCharacteristicsEntity
 import warhammer.database.entities.player.characteristics.Characteristic.*
 import warhammer.database.entities.player.characteristics.CharacteristicValue
 import warhammer.database.entities.player.characteristics.PlayerCharacteristics
 import warhammer.database.tables.PlayerCharacteristicsTable
+import warhammer.database.tables.PlayersTable
 
 internal fun ResultRow?.mapToPlayerCharacteristicsEntity(): PlayerCharacteristicsEntity? = when (this) {
     null -> null
@@ -61,3 +64,21 @@ fun PlayerCharacteristics.mapToEntity(playerId:Int):PlayerCharacteristicsEntity=
                 willpowerFortune = this[WILLPOWER].fortuneValue,
                 fellowshipFortune = this[FELLOWSHIP].fortuneValue
         )
+
+fun UpdateBuilder<Int>.mapFieldsOfEntity(entity: PlayerCharacteristicsEntity) {
+    this[PlayerCharacteristicsTable.playerId] = EntityID(entity.playerId, PlayersTable)
+
+    this[PlayerCharacteristicsTable.strength] = entity.strength
+    this[PlayerCharacteristicsTable.toughness] = entity.toughness
+    this[PlayerCharacteristicsTable.agility] = entity.agility
+    this[PlayerCharacteristicsTable.intelligence] = entity.intelligence
+    this[PlayerCharacteristicsTable.willpower] = entity.willpower
+    this[PlayerCharacteristicsTable.fellowship] = entity.fellowship
+
+    this[PlayerCharacteristicsTable.strengthFortune] = entity.strengthFortune
+    this[PlayerCharacteristicsTable.toughnessFortune] = entity.toughnessFortune
+    this[PlayerCharacteristicsTable.agilityFortune] = entity.agilityFortune
+    this[PlayerCharacteristicsTable.intelligenceFortune] = entity.intelligenceFortune
+    this[PlayerCharacteristicsTable.willpowerFortune] = entity.willpowerFortune
+    this[PlayerCharacteristicsTable.fellowshipFortune] = entity.fellowshipFortune
+}

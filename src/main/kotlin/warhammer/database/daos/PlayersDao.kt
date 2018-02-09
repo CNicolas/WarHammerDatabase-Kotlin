@@ -4,6 +4,7 @@ import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
+import warhammer.database.entities.mapping.mapFieldsOfEntity
 import warhammer.database.entities.mapping.mapToPlayer
 import warhammer.database.entities.player.Player
 import warhammer.database.tables.PlayersTable
@@ -66,10 +67,5 @@ class PlayersDao : AbstractDao<Player>(), NamedDao<Player> {
         mapFieldsOfEntityToTable(it, entity)
     }
 
-    override fun mapFieldsOfEntityToTable(it: UpdateBuilder<Int>, entity: Player) {
-        it[PlayersTable.name] = entity.name
-        it[PlayersTable.race] = entity.race.toString()
-        it[PlayersTable.age] = entity.age
-        it[PlayersTable.size] = entity.size
-    }
+    override fun mapFieldsOfEntityToTable(it: UpdateBuilder<Int>, entity: Player) = it.mapFieldsOfEntity(entity)
 }

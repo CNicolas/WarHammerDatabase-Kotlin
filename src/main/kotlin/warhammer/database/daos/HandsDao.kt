@@ -6,6 +6,7 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
 import warhammer.database.entities.Hand
+import warhammer.database.entities.mapping.mapFieldsOfEntity
 import warhammer.database.entities.mapping.mapToHand
 import warhammer.database.tables.HandsTable
 import java.lang.Exception
@@ -63,15 +64,5 @@ class HandsDao : AbstractDao<Hand>(), NamedDao<Hand> {
         mapFieldsOfEntityToTable(it, entity)
     }
 
-    override fun mapFieldsOfEntityToTable(it: UpdateBuilder<Int>, entity: Hand) {
-        it[HandsTable.name] = entity.name
-
-        it[HandsTable.characteristicDicesCount] = entity.characteristicDicesCount
-        it[HandsTable.expertiseDicesCount] = entity.expertiseDicesCount
-        it[HandsTable.fortuneDicesCount] = entity.fortuneDicesCount
-        it[HandsTable.conservativeDicesCount] = entity.conservativeDicesCount
-        it[HandsTable.recklessDicesCount] = entity.recklessDicesCount
-        it[HandsTable.challengeDicesCount] = entity.challengeDicesCount
-        it[HandsTable.misfortuneDicesCount] = entity.misfortuneDicesCount
-    }
+    override fun mapFieldsOfEntityToTable(it: UpdateBuilder<Int>, entity: Hand) = it.mapFieldsOfEntity(entity)
 }

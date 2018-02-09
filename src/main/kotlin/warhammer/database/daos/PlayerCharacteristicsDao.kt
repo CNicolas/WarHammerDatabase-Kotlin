@@ -5,10 +5,10 @@ import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
+import warhammer.database.entities.mapping.mapFieldsOfEntity
 import warhammer.database.entities.mapping.mapToPlayerCharacteristicsEntity
 import warhammer.database.entities.player.PlayerCharacteristicsEntity
 import warhammer.database.tables.PlayerCharacteristicsTable
-import warhammer.database.tables.PlayersTable
 import java.lang.Exception
 
 class PlayerCharacteristicsDao : AbstractDao<PlayerCharacteristicsEntity>() {
@@ -78,21 +78,6 @@ class PlayerCharacteristicsDao : AbstractDao<PlayerCharacteristicsEntity>() {
         mapFieldsOfEntityToTable(it, entity)
     }
 
-    override fun mapFieldsOfEntityToTable(it: UpdateBuilder<Int>, entity: PlayerCharacteristicsEntity) {
-        it[PlayerCharacteristicsTable.playerId] = EntityID(entity.playerId, PlayersTable)
-
-        it[PlayerCharacteristicsTable.strength] = entity.strength
-        it[PlayerCharacteristicsTable.toughness] = entity.toughness
-        it[PlayerCharacteristicsTable.agility] = entity.agility
-        it[PlayerCharacteristicsTable.intelligence] = entity.intelligence
-        it[PlayerCharacteristicsTable.willpower] = entity.willpower
-        it[PlayerCharacteristicsTable.fellowship] = entity.fellowship
-
-        it[PlayerCharacteristicsTable.strengthFortune] = entity.strengthFortune
-        it[PlayerCharacteristicsTable.toughnessFortune] = entity.toughnessFortune
-        it[PlayerCharacteristicsTable.agilityFortune] = entity.agilityFortune
-        it[PlayerCharacteristicsTable.intelligenceFortune] = entity.intelligenceFortune
-        it[PlayerCharacteristicsTable.willpowerFortune] = entity.willpowerFortune
-        it[PlayerCharacteristicsTable.fellowshipFortune] = entity.fellowshipFortune
-    }
+    override fun mapFieldsOfEntityToTable(it: UpdateBuilder<Int>, entity: PlayerCharacteristicsEntity) =
+            it.mapFieldsOfEntity(entity)
 }
