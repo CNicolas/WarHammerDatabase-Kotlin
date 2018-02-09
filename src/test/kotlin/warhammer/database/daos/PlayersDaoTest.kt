@@ -7,9 +7,6 @@ import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.testng.annotations.Test
 import warhammer.database.entities.player.Player
-import warhammer.database.entities.player.characteristics.Characteristic
-import warhammer.database.entities.player.characteristics.CharacteristicValue
-import warhammer.database.entities.player.characteristics.PlayerCharacteristics
 import warhammer.database.entities.player.other.Race
 import warhammer.database.tables.PlayerCharacteristicsTable
 import warhammer.database.tables.PlayersTable
@@ -29,7 +26,7 @@ class PlayersDaoTest {
 
             create(PlayersTable, PlayerCharacteristicsTable)
 
-            playersDao.add(Player(playerName, characteristics = PlayerCharacteristics(CharacteristicValue(4, 2))))
+            playersDao.add(Player(playerName))
 
             assertThat(playersDao.findAll().size).isEqualTo(1)
         }
@@ -38,16 +35,16 @@ class PlayersDaoTest {
     @Test
     fun should_add_all_players() {
         val playersToAdd = listOf(
-                Player("Player1", characteristics = PlayerCharacteristics(CharacteristicValue(4, 2))),
-                Player("Player2", characteristics = PlayerCharacteristics(CharacteristicValue(4, 2))),
-                Player("Player3", characteristics = PlayerCharacteristics(CharacteristicValue(4, 2))))
+                Player("Player1"),
+                Player("Player2"),
+                Player("Player3"))
 
         Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            create(PlayersTable, PlayerCharacteristicsTable)
+            create(PlayersTable)
 
             playersDao.addAll(playersToAdd)
 
@@ -64,7 +61,7 @@ class PlayersDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            create(PlayersTable, PlayerCharacteristicsTable)
+            create(PlayersTable)
 
             var resOfInsert = playersDao.add(Player(playerName))
             assertThat(resOfInsert).isEqualTo(1)
@@ -87,9 +84,9 @@ class PlayersDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            create(PlayersTable, PlayerCharacteristicsTable)
+            create(PlayersTable)
 
-            playersDao.add(Player(playerName, characteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(2))))
+            playersDao.add(Player(playerName))
 
             assertThat(playersDao.findAll().size).isEqualTo(1)
 
@@ -97,7 +94,6 @@ class PlayersDaoTest {
 
             assertThat(player).isNotNull()
             assertThat(player?.name).isEqualTo(playerName)
-            assertThat(player?.characteristics?.get(Characteristic.STRENGTH)?.value).isEqualTo(2)
         }
     }
 
@@ -150,8 +146,7 @@ class PlayersDaoTest {
             assertThat(player?.name).isEqualTo(playerName)
 
             // UPDATE
-            val playerToUpdate = player?.copy(name = newPlayerName,
-                    characteristics = PlayerCharacteristics(toughnessValue = CharacteristicValue(3, 1)))
+            val playerToUpdate = player?.copy(name = newPlayerName)
             playersDao.update(playerToUpdate!!)
             assertThat(playersDao.findAll().size).isEqualTo(1)
 
@@ -159,8 +154,6 @@ class PlayersDaoTest {
             val newPlayer = playersDao.findById(id)
             assertThat(newPlayer).isNotNull()
             assertThat(newPlayer?.name).isEqualTo(newPlayerName)
-            assertThat(newPlayer?.characteristics?.get(Characteristic.TOUGHNESS)?.value).isEqualTo(3)
-            assertThat(newPlayer?.characteristics?.get(Characteristic.TOUGHNESS)?.fortuneValue).isEqualTo(1)
         }
     }
 
@@ -222,15 +215,14 @@ class PlayersDaoTest {
     @Test
     fun should_delete_a_player() {
         val player1 = Player("Player1")
-        val player2 = Player("Player2",
-                characteristics = PlayerCharacteristics(fellowShipValue = CharacteristicValue(2, 2)))
+        val player2 = Player("Player2")
         val player3 = Player("Player3")
 
         Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            create(PlayersTable, PlayerCharacteristicsTable)
+            create(PlayersTable)
 
             playersDao.add(player1)
             playersDao.add(player2)
@@ -255,7 +247,7 @@ class PlayersDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            create(PlayersTable, PlayerCharacteristicsTable)
+            create(PlayersTable)
 
             playersDao.add(player1)
             playersDao.add(player2)
@@ -272,7 +264,7 @@ class PlayersDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            create(PlayersTable, PlayerCharacteristicsTable)
+            create(PlayersTable)
 
             assertThat(playersDao.findAll().size).isEqualTo(0)
 

@@ -92,7 +92,23 @@ class PlayerCharacteristicsDaoTest {
 
             assertThat(playerCharacteristicsDao.findAll().size).isEqualTo(1)
 
-            val playerCharacteristic = playerCharacteristicsDao.findByPlayerId(1)
+            val playerCharacteristic = playerCharacteristicsDao.findById(1)
+
+            assertThat(playerCharacteristic).isNotNull()
+            assertThat(playerCharacteristic?.agility).isEqualTo(1)
+        }
+    }
+
+    @Test
+    fun should_read_a_playerCharacteristic_from_playerId() {
+        transaction {
+            logger.addLogger(StdOutSqlLogger)
+
+            playerCharacteristicsDao.add(PlayerCharacteristicsEntity(2, agility = 1))
+
+            assertThat(playerCharacteristicsDao.findAll().size).isEqualTo(1)
+
+            val playerCharacteristic = playerCharacteristicsDao.findByPlayerId(2)
 
             assertThat(playerCharacteristic).isNotNull()
             assertThat(playerCharacteristic?.agility).isEqualTo(1)
@@ -105,8 +121,6 @@ class PlayerCharacteristicsDaoTest {
                 PlayerCharacteristicsEntity(1, intelligence = 3),
                 PlayerCharacteristicsEntity(2, toughnessFortune = 2),
                 PlayerCharacteristicsEntity(3, willpower = 4))
-
-
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
@@ -238,6 +252,24 @@ class PlayerCharacteristicsDaoTest {
             assertThat(playerCharacteristicsDao.findByPlayerId(1)).isNotNull()
             assertThat(playerCharacteristicsDao.findByPlayerId(2)).isNull()
             assertThat(playerCharacteristicsDao.findByPlayerId(3)).isNotNull()
+        }
+    }
+
+    @Test
+    fun should_delete_a_playerCharacteristic_from_playerId() {
+        val playerCharacteristic = PlayerCharacteristicsEntity(2)
+
+        transaction {
+            logger.addLogger(StdOutSqlLogger)
+            create(PlayerCharacteristicsTable)
+
+            val addedCharacteristics = playerCharacteristicsDao.add(playerCharacteristic)
+            assertThat(addedCharacteristics).isEqualTo(1)
+            assertThat(playerCharacteristicsDao.findByPlayerId(2)).isNotNull()
+
+            val res = playerCharacteristicsDao.deleteByPlayerId(2)
+            assertThat(res).isEqualTo(1)
+            assertThat(playerCharacteristicsDao.findByPlayerId(2)).isNull()
         }
     }
 

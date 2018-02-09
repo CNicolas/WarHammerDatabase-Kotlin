@@ -60,6 +60,15 @@ class PlayerCharacteristicsDao : AbstractDao<PlayerCharacteristicsEntity>() {
         }
     }
 
+    fun deleteByPlayerId(playerId: Int): Int {
+        return try {
+            PlayerCharacteristicsTable.deleteWhere { PlayerCharacteristicsTable.playerId eq playerId }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            -1
+        }
+    }
+
     override fun mapResultRowToEntity(result: ResultRow?): PlayerCharacteristicsEntity? =
             PlayerCharacteristicsMapper.mapResultRowToEntity(result)
 
