@@ -4,8 +4,8 @@ import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
+import warhammer.database.entities.mapping.mapToPlayer
 import warhammer.database.entities.player.Player
-import warhammer.database.entities.player.PlayerMapper
 import warhammer.database.tables.PlayersTable
 import java.lang.Exception
 
@@ -58,9 +58,7 @@ class PlayersDao : AbstractDao<Player>(), NamedDao<Player> {
         PlayersTable.deleteAll()
     }
 
-    override fun mapResultRowToEntity(result: ResultRow?): Player? =
-            PlayerMapper.mapResultRowToEntity(result)
-
+    override fun mapResultRowToEntity(result: ResultRow?): Player? = result.mapToPlayer()
 
     override fun mapEntityToTable(it: UpdateStatement, entity: Player) {
         it[PlayersTable.id] = EntityID(entity.id, PlayersTable)

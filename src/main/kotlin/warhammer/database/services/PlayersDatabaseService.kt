@@ -3,8 +3,9 @@ package warhammer.database.services
 import org.jetbrains.exposed.sql.transactions.transaction
 import warhammer.database.daos.PlayerCharacteristicsDao
 import warhammer.database.daos.PlayersDao
+import warhammer.database.entities.mapping.mapToEntity
+import warhammer.database.entities.mapping.mapToPlayerCharacteristics
 import warhammer.database.entities.player.Player
-import warhammer.database.entities.player.characteristics.PlayerCharacteristicsMapper
 import warhammer.database.tables.PlayerCharacteristicsTable
 import warhammer.database.tables.PlayersTable
 
@@ -36,9 +37,7 @@ class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractData
 
     private fun addInsideTransaction(entity: Player): Player? {
         val playerId = dao.add(entity)
-        playerCharacteristicsDao.add(
-                PlayerCharacteristicsMapper.mapPlayerCharacteristicsToEntity(entity.characteristics, playerId)
-        )
+        playerCharacteristicsDao.add(entity.characteristics.mapToEntity(playerId))
 
         return findByIdInsideTransaction(playerId)
     }
@@ -61,9 +60,7 @@ class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractData
                 player != null -> {
                     val playerCharacteristicsEntity = playerCharacteristicsDao.findByPlayerId(player.id)
 
-                    player.copy(
-                            characteristics = PlayerCharacteristicsMapper.mapEntityToPlayerCharacteristics(playerCharacteristicsEntity)
-                    )
+                    player.copy(characteristics = playerCharacteristicsEntity.mapToPlayerCharacteristics())
                 }
                 else -> null
             }
@@ -84,10 +81,10 @@ class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractData
     override fun countAll(): Int = findAll().size
 
     private fun findByIdInsideTransaction(playerId: Int): Player? {
-        val playerCharacteristics = playerCharacteristicsDao.findByPlayerId(playerId)
+        val playerCharacteristicsEntity = playerCharacteristicsDao.findByPlayerId(playerId)
         val player = dao.findById(playerId)
 
-        return player?.copy(characteristics = PlayerCharacteristicsMapper.mapEntityToPlayerCharacteristics(playerCharacteristics))
+        return player?.copy(characteristics = playerCharacteristicsEntity.mapToPlayerCharacteristics())
     }
     // endregion
 
@@ -97,9 +94,7 @@ class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractData
 
         return transaction {
             val updatedPlayerId = dao.update(entity)
-            playerCharacteristicsDao.update(
-                    PlayerCharacteristicsMapper.mapPlayerCharacteristicsToEntity(entity.characteristics, updatedPlayerId)
-            )
+            playerCharacteristicsDao.update(entity.characteristics.mapToEntity(updatedPlayerId))
 
             findByIdInsideTransaction(updatedPlayerId)
         }

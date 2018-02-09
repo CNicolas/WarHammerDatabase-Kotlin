@@ -5,8 +5,8 @@ import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
+import warhammer.database.entities.mapping.mapToPlayerCharacteristicsEntity
 import warhammer.database.entities.player.PlayerCharacteristicsEntity
-import warhammer.database.entities.player.characteristics.PlayerCharacteristicsMapper
 import warhammer.database.tables.PlayerCharacteristicsTable
 import warhammer.database.tables.PlayersTable
 import java.lang.Exception
@@ -70,7 +70,7 @@ class PlayerCharacteristicsDao : AbstractDao<PlayerCharacteristicsEntity>() {
     }
 
     override fun mapResultRowToEntity(result: ResultRow?): PlayerCharacteristicsEntity? =
-            PlayerCharacteristicsMapper.mapResultRowToEntity(result)
+            result.mapToPlayerCharacteristicsEntity()
 
     override fun mapEntityToTable(it: UpdateStatement, entity: PlayerCharacteristicsEntity) {
         it[PlayerCharacteristicsTable.id] = EntityID(entity.id, PlayerCharacteristicsTable)
