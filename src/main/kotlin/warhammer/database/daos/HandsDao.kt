@@ -6,6 +6,7 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
 import warhammer.database.entities.Hand
+import warhammer.database.entities.mapping.mapToHand
 import warhammer.database.tables.HandsTable
 import java.lang.Exception
 
@@ -54,18 +55,7 @@ class HandsDao : AbstractDao<Hand>(), NamedDao<Hand> {
         }
     }
 
-    override fun mapResultRowToEntity(result: ResultRow?): Hand? = when (result) {
-        null -> null
-        else -> Hand(result[HandsTable.name],
-                result[HandsTable.id].value,
-                characteristicDicesCount = result[HandsTable.characteristicDicesCount],
-                expertiseDicesCount = result[HandsTable.expertiseDicesCount],
-                fortuneDicesCount = result[HandsTable.fortuneDicesCount],
-                conservativeDicesCount = result[HandsTable.conservativeDicesCount],
-                recklessDicesCount = result[HandsTable.recklessDicesCount],
-                challengeDicesCount = result[HandsTable.challengeDicesCount],
-                misfortuneDicesCount = result[HandsTable.misfortuneDicesCount])
-    }
+    override fun mapResultRowToEntity(result: ResultRow?): Hand? = result.mapToHand()
 
     override fun mapEntityToTable(it: UpdateStatement, entity: Hand) {
         it[HandsTable.id] = EntityID(entity.id, HandsTable)
