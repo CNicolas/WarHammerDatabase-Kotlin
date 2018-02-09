@@ -3,17 +3,17 @@ package warhammer.database.entities.mapping
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
-import warhammer.database.entities.player.PlayerCharacteristicsEntity
+import warhammer.database.entities.player.PlayerCharacteristics
 import warhammer.database.entities.player.characteristics.Characteristic.*
 import warhammer.database.entities.player.characteristics.CharacteristicValue
-import warhammer.database.entities.player.characteristics.PlayerCharacteristics
+import warhammer.database.entities.player.characteristics.PlayerCharacteristicsMap
 import warhammer.database.tables.PlayerCharacteristicsTable
 import warhammer.database.tables.PlayersTable
 
-internal fun ResultRow?.mapToPlayerCharacteristicsEntity(): PlayerCharacteristicsEntity? = when (this) {
+internal fun ResultRow?.mapToPlayerCharacteristicsEntity(): PlayerCharacteristics? = when (this) {
     null -> null
     else -> {
-        PlayerCharacteristicsEntity(
+        PlayerCharacteristics(
                 playerId = this[PlayerCharacteristicsTable.playerId].value,
                 id = this[PlayerCharacteristicsTable.id].value,
                 strength = this[PlayerCharacteristicsTable.strength],
@@ -32,10 +32,10 @@ internal fun ResultRow?.mapToPlayerCharacteristicsEntity(): PlayerCharacteristic
     }
 }
 
-fun PlayerCharacteristicsEntity?.mapToPlayerCharacteristics(): PlayerCharacteristics {
+fun PlayerCharacteristics?.mapToPlayerCharacteristics(): PlayerCharacteristicsMap {
     return when (this) {
-        null -> PlayerCharacteristics()
-        else -> PlayerCharacteristics(
+        null -> PlayerCharacteristicsMap()
+        else -> PlayerCharacteristicsMap(
                 strengthValue = CharacteristicValue(this.strength ?: 0, this.strengthFortune ?: 0),
                 toughnessValue = CharacteristicValue(this.toughness ?: 0, this.toughnessFortune ?: 0),
                 agilityValue = CharacteristicValue(this.agility ?: 0, this.agilityFortune ?: 0),
@@ -46,8 +46,8 @@ fun PlayerCharacteristicsEntity?.mapToPlayerCharacteristics(): PlayerCharacteris
     }
 }
 
-fun PlayerCharacteristics.mapToEntity(playerId:Int):PlayerCharacteristicsEntity=
-        PlayerCharacteristicsEntity(
+fun PlayerCharacteristicsMap.mapToEntity(playerId:Int): PlayerCharacteristics =
+        PlayerCharacteristics(
                 playerId = playerId,
 
                 strength = this[STRENGTH].value,
@@ -65,7 +65,7 @@ fun PlayerCharacteristics.mapToEntity(playerId:Int):PlayerCharacteristicsEntity=
                 fellowshipFortune = this[FELLOWSHIP].fortuneValue
         )
 
-fun UpdateBuilder<Int>.mapFieldsOfEntity(entity: PlayerCharacteristicsEntity) {
+fun UpdateBuilder<Int>.mapFieldsOfEntity(entity: PlayerCharacteristics) {
     this[PlayerCharacteristicsTable.playerId] = EntityID(entity.playerId, PlayersTable)
 
     this[PlayerCharacteristicsTable.strength] = entity.strength

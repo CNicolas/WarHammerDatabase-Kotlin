@@ -11,7 +11,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 import warhammer.database.entities.player.Player
-import warhammer.database.entities.player.PlayerCharacteristicsEntity
+import warhammer.database.entities.player.PlayerCharacteristics
 import warhammer.database.tables.PlayerCharacteristicsTable
 import warhammer.database.tables.PlayersTable
 import java.sql.Connection
@@ -44,7 +44,7 @@ class PlayerCharacteristicsDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            playerCharacteristicsDao.add(PlayerCharacteristicsEntity(1))
+            playerCharacteristicsDao.add(PlayerCharacteristics(1))
 
             assertThat(playerCharacteristicsDao.findAll().size).isEqualTo(1)
         }
@@ -53,9 +53,9 @@ class PlayerCharacteristicsDaoTest {
     @Test
     fun should_add_all_playerCharacteristics() {
         val playerCharacteristicsToAdd = listOf(
-                PlayerCharacteristicsEntity(1),
-                PlayerCharacteristicsEntity(2),
-                PlayerCharacteristicsEntity(3))
+                PlayerCharacteristics(1),
+                PlayerCharacteristics(2),
+                PlayerCharacteristics(3))
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
@@ -71,11 +71,11 @@ class PlayerCharacteristicsDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            var resOfInsert = playerCharacteristicsDao.add(PlayerCharacteristicsEntity(1))
+            var resOfInsert = playerCharacteristicsDao.add(PlayerCharacteristics(1))
             assertThat(resOfInsert).isEqualTo(1)
             assertThat(playerCharacteristicsDao.findAll().size).isEqualTo(1)
 
-            resOfInsert = playerCharacteristicsDao.add(PlayerCharacteristicsEntity(1))
+            resOfInsert = playerCharacteristicsDao.add(PlayerCharacteristics(1))
             assertThat(resOfInsert).isEqualTo(-1)
             assertThat(playerCharacteristicsDao.findAll().size).isEqualTo(1)
         }
@@ -88,7 +88,7 @@ class PlayerCharacteristicsDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            playerCharacteristicsDao.add(PlayerCharacteristicsEntity(1, agility = 1))
+            playerCharacteristicsDao.add(PlayerCharacteristics(1, agility = 1))
 
             assertThat(playerCharacteristicsDao.findAll().size).isEqualTo(1)
 
@@ -104,7 +104,7 @@ class PlayerCharacteristicsDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            playerCharacteristicsDao.add(PlayerCharacteristicsEntity(2, agility = 1))
+            playerCharacteristicsDao.add(PlayerCharacteristics(2, agility = 1))
 
             assertThat(playerCharacteristicsDao.findAll().size).isEqualTo(1)
 
@@ -118,9 +118,9 @@ class PlayerCharacteristicsDaoTest {
     @Test
     fun should_read_all_playerCharacteristics() {
         val playerCharacteristicsToAdd = listOf(
-                PlayerCharacteristicsEntity(1, intelligence = 3),
-                PlayerCharacteristicsEntity(2, toughnessFortune = 2),
-                PlayerCharacteristicsEntity(3, willpower = 4))
+                PlayerCharacteristics(1, intelligence = 3),
+                PlayerCharacteristics(2, toughnessFortune = 2),
+                PlayerCharacteristics(3, willpower = 4))
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
@@ -151,7 +151,7 @@ class PlayerCharacteristicsDaoTest {
             logger.addLogger(StdOutSqlLogger)
 
             // ADD
-            val id = playerCharacteristicsDao.add(PlayerCharacteristicsEntity(1))
+            val id = playerCharacteristicsDao.add(PlayerCharacteristics(1))
             assertThat(playerCharacteristicsDao.findAll().size).isEqualTo(1)
 
             // FIND
@@ -180,14 +180,14 @@ class PlayerCharacteristicsDaoTest {
             create(PlayerCharacteristicsTable)
 
             // ADD
-            val id1 = playerCharacteristicsDao.add(PlayerCharacteristicsEntity(1))
-            val id2 = playerCharacteristicsDao.add(PlayerCharacteristicsEntity(2))
+            val id1 = playerCharacteristicsDao.add(PlayerCharacteristics(1))
+            val id2 = playerCharacteristicsDao.add(PlayerCharacteristics(2))
             assertThat(playerCharacteristicsDao.findAll().size).isEqualTo(2)
 
             // UPDATE
             val updatedIds = playerCharacteristicsDao.updateAll(
-                    listOf(PlayerCharacteristicsEntity(1, id1, strength = 2),
-                            PlayerCharacteristicsEntity(2, id2, strengthFortune = 2))
+                    listOf(PlayerCharacteristics(1, id1, strength = 2),
+                            PlayerCharacteristics(2, id2, strengthFortune = 2))
             )
             assertThat(updatedIds).containsExactly(id1, id2)
 
@@ -212,7 +212,7 @@ class PlayerCharacteristicsDaoTest {
 
             assertThat(playerCharacteristicsDao.findAll().size).isEqualTo(0)
 
-            val res = playerCharacteristicsDao.update(PlayerCharacteristicsEntity(1))
+            val res = playerCharacteristicsDao.update(PlayerCharacteristics(1))
             assertThat(res).isEqualTo(-1)
             assertThat(playerCharacteristicsDao.findAll()).isEmpty()
         }
@@ -225,7 +225,7 @@ class PlayerCharacteristicsDaoTest {
 
             drop(PlayerCharacteristicsTable)
 
-            val res = playerCharacteristicsDao.update(PlayerCharacteristicsEntity(1, 1))
+            val res = playerCharacteristicsDao.update(PlayerCharacteristics(1, 1))
             assertThat(res).isEqualTo(-1)
         }
     }
@@ -234,9 +234,9 @@ class PlayerCharacteristicsDaoTest {
     // region DELETE
     @Test
     fun should_delete_a_playerCharacteristic() {
-        val playerCharacteristic1 = PlayerCharacteristicsEntity(1)
-        val playerCharacteristic2 = PlayerCharacteristicsEntity(2)
-        val playerCharacteristic3 = PlayerCharacteristicsEntity(3)
+        val playerCharacteristic1 = PlayerCharacteristics(1)
+        val playerCharacteristic2 = PlayerCharacteristics(2)
+        val playerCharacteristic3 = PlayerCharacteristics(3)
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
@@ -257,7 +257,7 @@ class PlayerCharacteristicsDaoTest {
 
     @Test
     fun should_delete_a_playerCharacteristic_from_playerId() {
-        val playerCharacteristic = PlayerCharacteristicsEntity(2)
+        val playerCharacteristic = PlayerCharacteristics(2)
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
@@ -275,8 +275,8 @@ class PlayerCharacteristicsDaoTest {
 
     @Test
     fun should_delete_all_playerCharacteristics() {
-        val playerCharacteristic1 = PlayerCharacteristicsEntity(1)
-        val playerCharacteristic2 = PlayerCharacteristicsEntity(2)
+        val playerCharacteristic1 = PlayerCharacteristics(1)
+        val playerCharacteristic2 = PlayerCharacteristics(2)
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
@@ -299,7 +299,7 @@ class PlayerCharacteristicsDaoTest {
 
             assertThat(playerCharacteristicsDao.findAll().size).isEqualTo(0)
 
-            val res = playerCharacteristicsDao.delete(PlayerCharacteristicsEntity(1, 6))
+            val res = playerCharacteristicsDao.delete(PlayerCharacteristics(1, 6))
             assertThat(res).isEqualTo(0)
             assertThat(playerCharacteristicsDao.findAll()).isEmpty()
         }
@@ -312,7 +312,7 @@ class PlayerCharacteristicsDaoTest {
 
             drop(PlayerCharacteristicsTable)
 
-            val res = playerCharacteristicsDao.delete(PlayerCharacteristicsEntity(1, 1))
+            val res = playerCharacteristicsDao.delete(PlayerCharacteristics(1, 1))
             assertThat(res).isEqualTo(-1)
         }
     }

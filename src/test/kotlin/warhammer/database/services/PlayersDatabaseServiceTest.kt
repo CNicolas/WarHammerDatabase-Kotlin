@@ -8,7 +8,7 @@ import org.testng.annotations.Test
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.characteristics.Characteristic.*
 import warhammer.database.entities.player.characteristics.CharacteristicValue
-import warhammer.database.entities.player.characteristics.PlayerCharacteristics
+import warhammer.database.entities.player.characteristics.PlayerCharacteristicsMap
 import warhammer.database.entities.player.other.Race.*
 import warhammer.database.tables.PlayerCharacteristicsTable
 import warhammer.database.tables.PlayersTable
@@ -18,7 +18,7 @@ class PlayersDatabaseServiceTest {
     private val playerName = "SampleName"
     private val samplePlayer
         get() = {
-            val characteristics = PlayerCharacteristics(
+            val characteristics = PlayerCharacteristicsMap(
                     strengthValue = CharacteristicValue(3),
                     toughnessValue = CharacteristicValue(2, 1)
             )
@@ -53,9 +53,9 @@ class PlayersDatabaseServiceTest {
     @Test
     fun should_add_all_players() {
         val playersToAdd = listOf(
-                Player("Player1", characteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(1))),
-                Player("Player2", characteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(2))),
-                Player("Player3", characteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(3))))
+                Player("Player1", characteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(1))),
+                Player("Player2", characteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(2))),
+                Player("Player3", characteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(3))))
 
         val addAllResult = playersService.addAll(playersToAdd)
         assertThat(addAllResult.size).isEqualTo(playersToAdd.size)
@@ -137,7 +137,7 @@ class PlayersDatabaseServiceTest {
         // UPDATE
         val playerToUpdate = player.copy(name = newPlayerName,
                 race = WOOD_ELF,
-                characteristics = PlayerCharacteristics(
+                characteristics = PlayerCharacteristicsMap(
                         agilityValue = CharacteristicValue(5, 2)
                 ))
         val newPlayer = playersService.update(playerToUpdate)
@@ -186,9 +186,9 @@ class PlayersDatabaseServiceTest {
     // region DELETE
     @Test
     fun should_delete_a_player() {
-        val player1 = Player("Player1", characteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(1)))
-        val player2 = Player("Player2", characteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(2)))
-        val player3 = Player("Player3", characteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(3)))
+        val player1 = Player("Player1", characteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(1)))
+        val player2 = Player("Player2", characteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(2)))
+        val player3 = Player("Player3", characteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(3)))
 
         val addAllResult = playersService.addAll(listOf(player1, player2, player3))
         assertThat(addAllResult.size).isEqualTo(3)
@@ -208,7 +208,7 @@ class PlayersDatabaseServiceTest {
     @Test
     fun should_delete_all_players() {
         val player1 = Player("Player1")
-        val player2 = Player("Player2", characteristics = PlayerCharacteristics(toughnessValue = CharacteristicValue(2)))
+        val player2 = Player("Player2", characteristics = PlayerCharacteristicsMap(toughnessValue = CharacteristicValue(2)))
 
         playersService.add(player1)
         playersService.add(player2)
