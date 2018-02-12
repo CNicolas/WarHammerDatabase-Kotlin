@@ -1,6 +1,7 @@
-package warhammer.database.tables
+package warhammer.database.tables.player
 
 import org.jetbrains.exposed.dao.IntIdTable
+import warhammer.database.tables.PlayersTable
 
 object PlayerCharacteristicsTable : IntIdTable() {
     val playerId = reference("characteristics", PlayersTable).uniqueIndex()

@@ -9,7 +9,7 @@ import warhammer.database.daos.AbstractDao
 import warhammer.database.entities.mapping.mapFieldsOfEntity
 import warhammer.database.entities.mapping.mapToStance
 import warhammer.database.entities.player.state.Stance
-import warhammer.database.tables.StanceTable
+import warhammer.database.tables.player.state.StanceTable
 import java.lang.Exception
 
 class StanceDao : AbstractDao<Stance>(), PlayerStateLinkedDao<Stance> {

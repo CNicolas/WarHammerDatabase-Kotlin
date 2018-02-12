@@ -9,7 +9,7 @@ import warhammer.database.daos.AbstractDao
 import warhammer.database.entities.mapping.mapFieldsOfEntity
 import warhammer.database.entities.mapping.mapToPlayerCharacteristicsEntity
 import warhammer.database.entities.player.PlayerCharacteristics
-import warhammer.database.tables.PlayerCharacteristicsTable
+import warhammer.database.tables.player.PlayerCharacteristicsTable
 import java.lang.Exception
 
 class PlayerCharacteristicsDao : AbstractDao<PlayerCharacteristics>(), PlayerLinkedDao<PlayerCharacteristics> {

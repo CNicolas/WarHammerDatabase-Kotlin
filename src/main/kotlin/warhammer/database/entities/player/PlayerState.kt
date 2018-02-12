@@ -1,6 +1,8 @@
-package warhammer.database.entities.player.state
+package warhammer.database.entities.player
 
 import warhammer.database.entities.WarHammerEntity
+import warhammer.database.entities.player.state.Career
+import warhammer.database.entities.player.state.Stance
 
 data class PlayerState(val playerId: Int,
                        override val id: Int = -1,

@@ -9,7 +9,7 @@ import warhammer.database.daos.AbstractDao
 import warhammer.database.entities.mapping.mapFieldsOfEntity
 import warhammer.database.entities.mapping.mapToCareer
 import warhammer.database.entities.player.state.Career
-import warhammer.database.tables.CareerTable
+import warhammer.database.tables.player.state.CareerTable
 import java.lang.Exception
 
 class CareerDao : AbstractDao<Career>(), PlayerStateLinkedDao<Career> {

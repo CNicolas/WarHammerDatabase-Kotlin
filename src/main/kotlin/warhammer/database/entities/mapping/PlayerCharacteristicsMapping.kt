@@ -7,8 +7,8 @@ import warhammer.database.entities.player.PlayerCharacteristics
 import warhammer.database.entities.player.characteristics.Characteristic.*
 import warhammer.database.entities.player.characteristics.CharacteristicValue
 import warhammer.database.entities.player.characteristics.PlayerCharacteristicsMap
-import warhammer.database.tables.PlayerCharacteristicsTable
 import warhammer.database.tables.PlayersTable
+import warhammer.database.tables.player.PlayerCharacteristicsTable
 
 internal fun ResultRow?.mapToPlayerCharacteristicsEntity(): PlayerCharacteristics? = when (this) {
     null -> null

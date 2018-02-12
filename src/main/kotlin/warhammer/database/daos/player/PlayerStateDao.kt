@@ -8,8 +8,8 @@ import org.jetbrains.exposed.sql.statements.UpdateStatement
 import warhammer.database.daos.AbstractDao
 import warhammer.database.entities.mapping.mapFieldsOfEntity
 import warhammer.database.entities.mapping.mapToPlayerStateEntity
-import warhammer.database.entities.player.state.PlayerState
-import warhammer.database.tables.PlayerStateTable
+import warhammer.database.entities.player.PlayerState
+import warhammer.database.tables.player.PlayerStateTable
 import java.lang.Exception
 
 class PlayerStateDao : AbstractDao<PlayerState>(), PlayerLinkedDao<PlayerState> {

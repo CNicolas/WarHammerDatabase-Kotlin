@@ -1,13 +1,13 @@
 package warhammer.database.services
 
 import org.jetbrains.exposed.sql.transactions.transaction
-import warhammer.database.daos.player.PlayerCharacteristicsDao
 import warhammer.database.daos.PlayersDao
+import warhammer.database.daos.player.PlayerCharacteristicsDao
 import warhammer.database.entities.mapping.mapToEntity
 import warhammer.database.entities.mapping.mapToPlayerCharacteristics
 import warhammer.database.entities.player.Player
-import warhammer.database.tables.PlayerCharacteristicsTable
 import warhammer.database.tables.PlayersTable
+import warhammer.database.tables.player.PlayerCharacteristicsTable
 
 class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractDatabaseNamedService<Player>(databaseUrl, driver) {
     override val tables = listOf(PlayersTable, PlayerCharacteristicsTable)

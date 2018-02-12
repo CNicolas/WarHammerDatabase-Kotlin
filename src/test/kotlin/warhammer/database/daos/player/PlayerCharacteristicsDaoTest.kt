@@ -1,4 +1,4 @@
-package warhammer.database.daos
+package warhammer.database.daos.player
 
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.exposed.sql.Database
@@ -10,10 +10,10 @@ import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
-import warhammer.database.daos.player.PlayerCharacteristicsDao
+import warhammer.database.daos.PlayersDao
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.PlayerCharacteristics
-import warhammer.database.tables.PlayerCharacteristicsTable
+import warhammer.database.tables.player.PlayerCharacteristicsTable
 import warhammer.database.tables.PlayersTable
 import java.sql.Connection
 

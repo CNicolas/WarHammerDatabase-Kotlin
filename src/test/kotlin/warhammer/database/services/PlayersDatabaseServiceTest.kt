@@ -10,7 +10,7 @@ import warhammer.database.entities.player.characteristics.Characteristic.*
 import warhammer.database.entities.player.characteristics.CharacteristicValue
 import warhammer.database.entities.player.characteristics.PlayerCharacteristicsMap
 import warhammer.database.entities.player.other.Race.*
-import warhammer.database.tables.PlayerCharacteristicsTable
+import warhammer.database.tables.player.PlayerCharacteristicsTable
 import warhammer.database.tables.PlayersTable
 
 class PlayersDatabaseServiceTest {

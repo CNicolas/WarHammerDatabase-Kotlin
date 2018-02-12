@@ -4,8 +4,8 @@ import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import warhammer.database.entities.player.state.Career
-import warhammer.database.tables.CareerTable
-import warhammer.database.tables.PlayerStateTable
+import warhammer.database.tables.player.state.CareerTable
+import warhammer.database.tables.player.PlayerStateTable
 
 internal fun ResultRow?.mapToCareer(): Career? = when (this) {
     null -> null
