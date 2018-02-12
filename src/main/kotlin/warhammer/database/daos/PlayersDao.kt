@@ -13,19 +13,6 @@ import java.lang.Exception
 class PlayersDao : AbstractDao<Player>(), NamedDao<Player> {
     override val table = PlayersTable
 
-    override fun add(entity: Player): Int {
-        return try {
-            val id = PlayersTable.insertAndGetId {
-                mapFieldsOfEntityToTable(it, entity)
-            }
-
-            id?.value ?: -1
-        } catch (e: Exception) {
-            e.printStackTrace()
-            -1
-        }
-    }
-
     override fun findByName(name: String): Player? {
         val result = PlayersTable.select { PlayersTable.name eq name }
                 .firstOrNull()

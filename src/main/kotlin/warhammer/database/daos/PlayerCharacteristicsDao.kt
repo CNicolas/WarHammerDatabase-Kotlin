@@ -14,19 +14,6 @@ import java.lang.Exception
 class PlayerCharacteristicsDao : AbstractDao<PlayerCharacteristics>() {
     override val table: IntIdTable = PlayerCharacteristicsTable
 
-    override fun add(entity: PlayerCharacteristics): Int {
-        return try {
-            val id = PlayerCharacteristicsTable.insertAndGetId {
-                mapFieldsOfEntityToTable(it, entity)
-            }
-
-            id?.value ?: -1
-        } catch (e: Exception) {
-            e.printStackTrace()
-            -1
-        }
-    }
-
     fun findByPlayerId(playerId: Int): PlayerCharacteristics? {
         val result = PlayerCharacteristicsTable.select { PlayerCharacteristicsTable.playerId eq playerId }
                 .firstOrNull()

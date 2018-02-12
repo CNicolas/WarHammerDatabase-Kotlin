@@ -14,19 +14,6 @@ import java.lang.Exception
 class HandsDao : AbstractDao<Hand>(), NamedDao<Hand> {
     override val table: IntIdTable = HandsTable
 
-    override fun add(entity: Hand): Int {
-        return try {
-            val id = HandsTable.insertAndGetId {
-                mapFieldsOfEntityToTable(it, entity)
-            }
-
-            id?.value ?: -1
-        } catch (e: Exception) {
-            e.printStackTrace()
-            -1
-        }
-    }
-
     override fun findByName(name: String): Hand? {
         val result = HandsTable.select { HandsTable.name eq name }
                 .firstOrNull()

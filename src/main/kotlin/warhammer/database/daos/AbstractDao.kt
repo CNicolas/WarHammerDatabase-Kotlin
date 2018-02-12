@@ -1,16 +1,27 @@
 package warhammer.database.daos
 
 import org.jetbrains.exposed.dao.IntIdTable
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.deleteAll
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
 import warhammer.database.entities.WarHammerEntity
+import java.lang.Exception
 
 abstract class AbstractDao<E : WarHammerEntity> : Dao<E> {
     abstract val table: IntIdTable
+
+    override fun add(entity: E): Int {
+        return try {
+            val id = table.insertAndGetId {
+                mapFieldsOfEntityToTable(it, entity)
+            }
+
+            id?.value ?: -1
+        } catch (e: Exception) {
+            e.printStackTrace()
+            -1
+        }
+    }
 
     override fun addAll(entities: List<E>): List<Int> {
         val addedIds = mutableListOf<Int>()
