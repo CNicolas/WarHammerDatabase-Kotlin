@@ -15,7 +15,7 @@ class PlayerCharacteristicsDao : AbstractDao<PlayerCharacteristics>() {
     override val table: IntIdTable = PlayerCharacteristicsTable
 
     fun findByPlayerId(playerId: Int): PlayerCharacteristics? {
-        val result = PlayerCharacteristicsTable.select { PlayerCharacteristicsTable.playerId eq playerId }
+        val result = table.select { PlayerCharacteristicsTable.playerId eq playerId }
                 .firstOrNull()
 
         return mapResultRowToEntity(result)
@@ -23,8 +23,8 @@ class PlayerCharacteristicsDao : AbstractDao<PlayerCharacteristics>() {
 
     override fun update(entity: PlayerCharacteristics): Int {
         return try {
-            PlayerCharacteristicsTable.update({
-                (PlayerCharacteristicsTable.id eq entity.id) or (PlayerCharacteristicsTable.playerId eq entity.playerId)
+            table.update({
+                (table.id eq entity.id) or (PlayerCharacteristicsTable.playerId eq entity.playerId)
             }) {
                 mapEntityToTable(it, entity)
             }
@@ -38,8 +38,8 @@ class PlayerCharacteristicsDao : AbstractDao<PlayerCharacteristics>() {
 
     override fun delete(entity: PlayerCharacteristics): Int {
         return try {
-            PlayerCharacteristicsTable.deleteWhere {
-                (PlayerCharacteristicsTable.id eq entity.id) or (PlayerCharacteristicsTable.playerId eq entity.playerId)
+            table.deleteWhere {
+                (table.id eq entity.id) or (PlayerCharacteristicsTable.playerId eq entity.playerId)
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -49,7 +49,7 @@ class PlayerCharacteristicsDao : AbstractDao<PlayerCharacteristics>() {
 
     fun deleteByPlayerId(playerId: Int): Int {
         return try {
-            PlayerCharacteristicsTable.deleteWhere { PlayerCharacteristicsTable.playerId eq playerId }
+            table.deleteWhere { PlayerCharacteristicsTable.playerId eq playerId }
         } catch (e: Exception) {
             e.printStackTrace()
             -1
@@ -60,7 +60,7 @@ class PlayerCharacteristicsDao : AbstractDao<PlayerCharacteristics>() {
             result.mapToPlayerCharacteristicsEntity()
 
     override fun mapEntityToTable(it: UpdateStatement, entity: PlayerCharacteristics) {
-        it[PlayerCharacteristicsTable.id] = EntityID(entity.id, PlayerCharacteristicsTable)
+        it[table.id] = EntityID(entity.id, PlayerCharacteristicsTable)
 
         mapFieldsOfEntityToTable(it, entity)
     }

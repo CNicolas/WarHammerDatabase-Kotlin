@@ -15,7 +15,7 @@ class HandsDao : AbstractDao<Hand>(), NamedDao<Hand> {
     override val table: IntIdTable = HandsTable
 
     override fun findByName(name: String): Hand? {
-        val result = HandsTable.select { HandsTable.name eq name }
+        val result = table.select { HandsTable.name eq name }
                 .firstOrNull()
 
         return mapResultRowToEntity(result)
@@ -23,7 +23,7 @@ class HandsDao : AbstractDao<Hand>(), NamedDao<Hand> {
 
     override fun update(entity: Hand): Int {
         return try {
-            HandsTable.update({ (HandsTable.id eq entity.id) or (HandsTable.name eq entity.name) }) {
+            table.update({ (table.id eq entity.id) or (HandsTable.name eq entity.name) }) {
                 mapEntityToTable(it, entity)
             }
 
@@ -36,7 +36,7 @@ class HandsDao : AbstractDao<Hand>(), NamedDao<Hand> {
 
     override fun delete(entity: Hand): Int {
         return try {
-            HandsTable.deleteWhere { HandsTable.name eq entity.name }
+            table.deleteWhere { HandsTable.name eq entity.name }
         } catch (e: Exception) {
             e.printStackTrace()
             -1
@@ -46,7 +46,7 @@ class HandsDao : AbstractDao<Hand>(), NamedDao<Hand> {
     override fun mapResultRowToEntity(result: ResultRow?): Hand? = result.mapToHand()
 
     override fun mapEntityToTable(it: UpdateStatement, entity: Hand) {
-        it[HandsTable.id] = EntityID(entity.id, HandsTable)
+        it[table.id] = EntityID(entity.id, HandsTable)
 
         mapFieldsOfEntityToTable(it, entity)
     }

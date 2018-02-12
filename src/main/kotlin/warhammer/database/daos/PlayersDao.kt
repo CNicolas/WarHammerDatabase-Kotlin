@@ -14,7 +14,7 @@ class PlayersDao : AbstractDao<Player>(), NamedDao<Player> {
     override val table = PlayersTable
 
     override fun findByName(name: String): Player? {
-        val result = PlayersTable.select { PlayersTable.name eq name }
+        val result = table.select { PlayersTable.name eq name }
                 .firstOrNull()
 
         return mapResultRowToEntity(result)
@@ -22,7 +22,7 @@ class PlayersDao : AbstractDao<Player>(), NamedDao<Player> {
 
     override fun update(entity: Player): Int {
         return try {
-            PlayersTable.update({ (PlayersTable.id eq entity.id) or (PlayersTable.name eq entity.name) }) {
+            table.update({ (table.id eq entity.id) or (PlayersTable.name eq entity.name) }) {
                 mapEntityToTable(it, entity)
             }
 
@@ -35,21 +35,17 @@ class PlayersDao : AbstractDao<Player>(), NamedDao<Player> {
 
     override fun delete(entity: Player): Int {
         return try {
-            PlayersTable.deleteWhere { (PlayersTable.id eq entity.id) or (PlayersTable.name eq entity.name) }
+            table.deleteWhere { (table.id eq entity.id) or (PlayersTable.name eq entity.name) }
         } catch (e: Exception) {
             e.printStackTrace()
             -1
         }
     }
 
-    override fun deleteAll() {
-        PlayersTable.deleteAll()
-    }
-
     override fun mapResultRowToEntity(result: ResultRow?): Player? = result.mapToPlayer()
 
     override fun mapEntityToTable(it: UpdateStatement, entity: Player) {
-        it[PlayersTable.id] = EntityID(entity.id, PlayersTable)
+        it[table.id] = EntityID(entity.id, PlayersTable)
 
         mapFieldsOfEntityToTable(it, entity)
     }
