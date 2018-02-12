@@ -10,6 +10,7 @@ import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
+import warhammer.database.daos.player.PlayerCharacteristicsDao
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.PlayerCharacteristics
 import warhammer.database.tables.PlayerCharacteristicsTable
@@ -313,6 +314,16 @@ class PlayerCharacteristicsDaoTest {
             drop(PlayerCharacteristicsTable)
 
             val res = playerCharacteristicsDao.delete(PlayerCharacteristics(1, 1))
+            assertThat(res).isEqualTo(-1)
+        }
+    }
+
+    @Test
+    fun should_return_false_when_delete_on_player_id_but_inexistant_table() {
+        transaction {
+            drop(PlayerCharacteristicsTable)
+
+            val res = playerCharacteristicsDao.deleteByPlayerId(1)
             assertThat(res).isEqualTo(-1)
         }
     }

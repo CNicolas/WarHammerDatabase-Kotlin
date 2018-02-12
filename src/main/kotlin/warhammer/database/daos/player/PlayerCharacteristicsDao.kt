@@ -1,20 +1,21 @@
-package warhammer.database.daos
+package warhammer.database.daos.player
 
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
+import warhammer.database.daos.AbstractDao
 import warhammer.database.entities.mapping.mapFieldsOfEntity
 import warhammer.database.entities.mapping.mapToPlayerCharacteristicsEntity
 import warhammer.database.entities.player.PlayerCharacteristics
 import warhammer.database.tables.PlayerCharacteristicsTable
 import java.lang.Exception
 
-class PlayerCharacteristicsDao : AbstractDao<PlayerCharacteristics>() {
+class PlayerCharacteristicsDao : AbstractDao<PlayerCharacteristics>(), PlayerLinkedDao<PlayerCharacteristics> {
     override val table: IntIdTable = PlayerCharacteristicsTable
 
-    fun findByPlayerId(playerId: Int): PlayerCharacteristics? {
+    override fun findByPlayerId(playerId: Int): PlayerCharacteristics? {
         val result = table.select { PlayerCharacteristicsTable.playerId eq playerId }
                 .firstOrNull()
 
@@ -47,7 +48,7 @@ class PlayerCharacteristicsDao : AbstractDao<PlayerCharacteristics>() {
         }
     }
 
-    fun deleteByPlayerId(playerId: Int): Int {
+    override fun deleteByPlayerId(playerId: Int): Int {
         return try {
             table.deleteWhere { PlayerCharacteristicsTable.playerId eq playerId }
         } catch (e: Exception) {

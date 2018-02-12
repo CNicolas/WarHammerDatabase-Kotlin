@@ -1,7 +1,7 @@
 package warhammer.database.services
 
 import org.jetbrains.exposed.sql.transactions.transaction
-import warhammer.database.daos.PlayerCharacteristicsDao
+import warhammer.database.daos.player.PlayerCharacteristicsDao
 import warhammer.database.daos.PlayersDao
 import warhammer.database.entities.mapping.mapToEntity
 import warhammer.database.entities.mapping.mapToPlayerCharacteristics
