@@ -10,7 +10,7 @@ import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.PlayerState
 import warhammer.database.entities.player.characteristics.Characteristic.*
 import warhammer.database.entities.player.characteristics.CharacteristicValue
-import warhammer.database.entities.player.characteristics.PlayerCharacteristicsMap
+import warhammer.database.entities.player.characteristics.PlayerCharacteristics
 import warhammer.database.entities.player.other.Race.*
 import warhammer.database.entities.player.state.Career
 import warhammer.database.entities.player.state.Stance
@@ -23,7 +23,7 @@ class PlayersDatabaseServiceTest {
     private val playerName = "SampleName"
     private val samplePlayer
         get() = {
-            val characteristics = PlayerCharacteristicsMap(
+            val characteristics = PlayerCharacteristics(
                     strengthValue = CharacteristicValue(3),
                     toughnessValue = CharacteristicValue(2, 1)
             )
@@ -69,14 +69,14 @@ class PlayersDatabaseServiceTest {
     fun should_add_all_players() {
         val playersToAdd = listOf(
                 Player("Player1",
-                        characteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(1)),
+                        characteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(1)),
                         state = PlayerState(maxCorruption = 3)
                 ),
                 Player("Player2",
-                        characteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(2)),
+                        characteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(2)),
                         state = PlayerState(stress = 1, stance = Stance(conservative = 0))),
                 Player("Player3",
-                        characteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(3)),
+                        characteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(3)),
                         state = PlayerState(maxExhaustion = 4, career = Career(rank = 1))
                 )
         )
@@ -221,13 +221,13 @@ class PlayersDatabaseServiceTest {
     // region DELETE
     @Test
     fun should_delete_a_player() {
-        val player1 = Player("Player1", characteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(1)))
+        val player1 = Player("Player1", characteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(1)))
         val player2 = Player("Player2",
-                characteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(2)),
+                characteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(2)),
                 state = PlayerState(stance = Stance(maxReckless = 2))
         )
         val player3 = Player("Player3",
-                characteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(3)),
+                characteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(3)),
                 state = PlayerState(career = Career(totalExperience = 3))
         )
 
@@ -240,10 +240,13 @@ class PlayersDatabaseServiceTest {
         assertThat(isDeleted).isTrue()
         assertThat(playersService.countAll()).isEqualTo(2)
         assertThat(playersService.findByName("Player1")).isNotNull()
+        assertThat(playersService.findById(1)).isNotNull()
         assertThat(playersService.findByName("Player1")?.characteristics!![STRENGTH].value).isEqualTo(1)
         assertThat(playersService.findByName("Player1")?.state?.stance?.reckless).isEqualTo(0)
         assertThat(playersService.findByName("Player2")).isNull()
+        assertThat(playersService.findById(2)).isNull()
         assertThat(playersService.findByName("Player3")).isNotNull()
+        assertThat(playersService.findById(3)).isNotNull()
         assertThat(playersService.findByName("Player3")?.characteristics!![STRENGTH].value).isEqualTo(3)
         assertThat(playersService.findByName("Player3")?.state?.career?.totalExperience).isEqualTo(3)
 
@@ -257,7 +260,7 @@ class PlayersDatabaseServiceTest {
     fun should_delete_all_players() {
         val player1 = Player("Player1")
         val player2 = Player("Player2",
-                characteristics = PlayerCharacteristicsMap(toughnessValue = CharacteristicValue(2)),
+                characteristics = PlayerCharacteristics(toughnessValue = CharacteristicValue(2)),
                 state = PlayerState(wounds = 2)
         )
 

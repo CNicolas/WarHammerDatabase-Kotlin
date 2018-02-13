@@ -8,21 +8,21 @@ import org.jetbrains.exposed.sql.statements.UpdateStatement
 import warhammer.database.daos.AbstractDao
 import warhammer.database.entities.mapping.mapFieldsOfEntity
 import warhammer.database.entities.mapping.mapToPlayerCharacteristicsEntity
-import warhammer.database.entities.player.PlayerCharacteristics
+import warhammer.database.entities.player.PlayerCharacteristicsEntity
 import warhammer.database.tables.player.PlayerCharacteristicsTable
 import java.lang.Exception
 
-class PlayerCharacteristicsDao : AbstractDao<PlayerCharacteristics>(), PlayerLinkedDao<PlayerCharacteristics> {
+class PlayerCharacteristicsDao : AbstractDao<PlayerCharacteristicsEntity>(), PlayerLinkedDao<PlayerCharacteristicsEntity> {
     override val table: IntIdTable = PlayerCharacteristicsTable
 
-    override fun findByPlayerId(playerId: Int): PlayerCharacteristics? {
+    override fun findByPlayerId(playerId: Int): PlayerCharacteristicsEntity? {
         val result = table.select { PlayerCharacteristicsTable.playerId eq playerId }
                 .firstOrNull()
 
         return mapResultRowToEntity(result)
     }
 
-    override fun update(entity: PlayerCharacteristics): Int {
+    override fun update(entity: PlayerCharacteristicsEntity): Int {
         return try {
             table.update({
                 (table.id eq entity.id) or (PlayerCharacteristicsTable.playerId eq entity.playerId)
@@ -37,7 +37,7 @@ class PlayerCharacteristicsDao : AbstractDao<PlayerCharacteristics>(), PlayerLin
         }
     }
 
-    override fun delete(entity: PlayerCharacteristics): Int {
+    override fun delete(entity: PlayerCharacteristicsEntity): Int {
         return try {
             table.deleteWhere {
                 (table.id eq entity.id) or (PlayerCharacteristicsTable.playerId eq entity.playerId)
@@ -57,15 +57,15 @@ class PlayerCharacteristicsDao : AbstractDao<PlayerCharacteristics>(), PlayerLin
         }
     }
 
-    override fun mapResultRowToEntity(result: ResultRow?): PlayerCharacteristics? =
+    override fun mapResultRowToEntity(result: ResultRow?): PlayerCharacteristicsEntity? =
             result.mapToPlayerCharacteristicsEntity()
 
-    override fun mapEntityToTable(it: UpdateStatement, entity: PlayerCharacteristics) {
+    override fun mapEntityToTable(it: UpdateStatement, entity: PlayerCharacteristicsEntity) {
         it[table.id] = EntityID(entity.id, PlayerCharacteristicsTable)
 
         mapFieldsOfEntityToTable(it, entity)
     }
 
-    override fun mapFieldsOfEntityToTable(it: UpdateBuilder<Int>, entity: PlayerCharacteristics) =
+    override fun mapFieldsOfEntityToTable(it: UpdateBuilder<Int>, entity: PlayerCharacteristicsEntity) =
             it.mapFieldsOfEntity(entity)
 }

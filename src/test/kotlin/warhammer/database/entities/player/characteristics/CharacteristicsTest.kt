@@ -8,7 +8,7 @@ import warhammer.database.entities.player.characteristics.Characteristic.STRENGT
 class CharacteristicsTest {
     @Test
     fun should_set_strength() {
-        val playerCharacteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(4, 1))
+        val playerCharacteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(4, 1))
         assertThat(playerCharacteristics[STRENGTH].value).isEqualTo(4)
         assertThat(playerCharacteristics[STRENGTH].fortuneValue).isEqualTo(1)
 
@@ -31,7 +31,7 @@ class CharacteristicsTest {
 
     @Test
     fun should_create_hand_from_player_strength() {
-        val playerCharacteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(4, 1))
+        val playerCharacteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(4, 1))
         val player = Player("SamplePlayer", characteristics = playerCharacteristics)
         val hand = player.characteristics[STRENGTH].getHand("SampleHand")
 

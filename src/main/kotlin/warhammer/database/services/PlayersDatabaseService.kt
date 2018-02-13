@@ -7,7 +7,7 @@ import warhammer.database.daos.player.PlayerStateDao
 import warhammer.database.daos.player.state.CareerDao
 import warhammer.database.daos.player.state.StanceDao
 import warhammer.database.entities.mapping.mapToEntity
-import warhammer.database.entities.mapping.mapToPlayerCharacteristicsMap
+import warhammer.database.entities.mapping.mapToPlayerCharacteristics
 import warhammer.database.entities.player.Player
 import warhammer.database.tables.PlayersTable
 import warhammer.database.tables.player.PlayerCharacteristicsTable
@@ -81,7 +81,7 @@ class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractData
                     val stance = stanceDao.findByStateId(playerState.id)
 
                     player.copy(
-                            characteristics = playerCharacteristics.mapToPlayerCharacteristicsMap(),
+                            characteristics = playerCharacteristics.mapToPlayerCharacteristics(),
                             state = playerState.copy(career = career!!, stance = stance!!)
                     )
                 }
@@ -107,15 +107,21 @@ class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractData
         val playerCharacteristics = playerCharacteristicsDao.findByPlayerId(playerId)
 
         val playerState = playerStateDao.findByPlayerId(playerId)
-        val career = careerDao.findByStateId(playerState?.id!!)
-        val stance = stanceDao.findByStateId(playerState.id)
 
-        val player = dao.findById(playerId)
+        return when {
+            playerState != null -> {
+                val career = careerDao.findByStateId(playerState.id)
+                val stance = stanceDao.findByStateId(playerState.id)
 
-        return player?.copy(
-                characteristics = playerCharacteristics.mapToPlayerCharacteristicsMap(),
-                state = playerState.copy(career = career!!, stance = stance!!)
-        )
+                val player = dao.findById(playerId)
+
+                player?.copy(
+                        characteristics = playerCharacteristics.mapToPlayerCharacteristics(),
+                        state = playerState.copy(career = career!!, stance = stance!!)
+                )
+            }
+            else -> null
+        }
     }
     // endregion
 
