@@ -2,16 +2,21 @@ package warhammer.database.services
 
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.exposed.sql.exists
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 import warhammer.database.entities.player.Player
+import warhammer.database.entities.player.PlayerState
 import warhammer.database.entities.player.characteristics.Characteristic.*
 import warhammer.database.entities.player.characteristics.CharacteristicValue
 import warhammer.database.entities.player.characteristics.PlayerCharacteristicsMap
 import warhammer.database.entities.player.other.Race.*
-import warhammer.database.tables.player.PlayerCharacteristicsTable
+import warhammer.database.entities.player.state.Career
+import warhammer.database.entities.player.state.Stance
 import warhammer.database.tables.PlayersTable
+import warhammer.database.tables.player.PlayerCharacteristicsTable
+import warhammer.database.tables.player.PlayerStateTable
 
 class PlayersDatabaseServiceTest {
     private val playersService = PlayersDatabaseService(databaseUrl = "jdbc:sqlite:testSqlite:?mode=memory&cache=shared", driver = "org.sqlite.JDBC")
@@ -22,7 +27,15 @@ class PlayersDatabaseServiceTest {
                     strengthValue = CharacteristicValue(3),
                     toughnessValue = CharacteristicValue(2, 1)
             )
-            Player(playerName, DWARF, 110, 89, characteristics)
+            val state = PlayerState(career = Career(careerName = "Librelame"), maxWounds = 10)
+            Player(
+                    playerName,
+                    race = DWARF,
+                    age = 110,
+                    size = 89,
+                    characteristics = characteristics,
+                    state = state
+            )
         }
 
     @BeforeMethod
@@ -48,14 +61,25 @@ class PlayersDatabaseServiceTest {
         assertThat(addedPlayer?.characteristics!![STRENGTH].value).isEqualTo(3)
         assertThat(addedPlayer.characteristics[TOUGHNESS].value).isEqualTo(2)
         assertThat(addedPlayer.characteristics[TOUGHNESS].fortuneValue).isEqualTo(1)
+        assertThat(addedPlayer.state.career.careerName).isEqualTo("Librelame")
+        assertThat(addedPlayer.state.maxWounds).isEqualTo(10)
     }
 
     @Test
     fun should_add_all_players() {
         val playersToAdd = listOf(
-                Player("Player1", characteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(1))),
-                Player("Player2", characteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(2))),
-                Player("Player3", characteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(3))))
+                Player("Player1",
+                        characteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(1)),
+                        state = PlayerState(maxCorruption = 3)
+                ),
+                Player("Player2",
+                        characteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(2)),
+                        state = PlayerState(stress = 1, stance = Stance(conservative = 0))),
+                Player("Player3",
+                        characteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(3)),
+                        state = PlayerState(maxExhaustion = 4, career = Career(rank = 1))
+                )
+        )
 
         val addAllResult = playersService.addAll(playersToAdd)
         assertThat(addAllResult.size).isEqualTo(playersToAdd.size)
@@ -63,8 +87,13 @@ class PlayersDatabaseServiceTest {
 
         assertThat(addAllResult.map { it?.name }).containsExactly("Player1", "Player2", "Player3")
         assertThat(addAllResult[0]?.characteristics!![STRENGTH].value).isEqualTo(1)
+        assertThat(addAllResult[0]?.state?.maxCorruption).isEqualTo(3)
         assertThat(addAllResult[1]?.characteristics!![STRENGTH].value).isEqualTo(2)
+        assertThat(addAllResult[1]?.state?.stress).isEqualTo(1)
+        assertThat(addAllResult[1]?.state?.stance?.conservative).isEqualTo(0)
         assertThat(addAllResult[2]?.characteristics!![STRENGTH].value).isEqualTo(3)
+        assertThat(addAllResult[2]?.state?.maxExhaustion).isEqualTo(4)
+        assertThat(addAllResult[2]?.state?.career?.rank).isEqualTo(1)
     }
 
     @Test
@@ -101,6 +130,8 @@ class PlayersDatabaseServiceTest {
         assertThat(player?.characteristics!![STRENGTH].value).isEqualTo(3)
         assertThat(player.characteristics[TOUGHNESS].value).isEqualTo(2)
         assertThat(player.characteristics[TOUGHNESS].fortuneValue).isEqualTo(1)
+        assertThat(player.state.career.careerName).isEqualTo("Librelame")
+        assertThat(player.state.maxWounds).isEqualTo(10)
     }
 
     @Test
@@ -131,15 +162,17 @@ class PlayersDatabaseServiceTest {
         assertThat(player).isNotNull()
         assertThat(player?.name).isEqualTo(playerName)
         assertThat(player?.race).isEqualTo(DWARF)
-        assertThat(player?.characteristics!![AGILITY].value).isEqualTo(0)
+        assertThat(player?.characteristics!![STRENGTH].value).isEqualTo(3)
+        assertThat(player.characteristics[AGILITY].value).isEqualTo(0)
         assertThat(player.characteristics[AGILITY].fortuneValue).isEqualTo(0)
+        assertThat(player.state.career.availableExperience).isEqualTo(0)
 
         // UPDATE
         val playerToUpdate = player.copy(name = newPlayerName,
                 race = WOOD_ELF,
-                characteristics = PlayerCharacteristicsMap(
-                        agilityValue = CharacteristicValue(5, 2)
-                ))
+                characteristics = player.characteristics.copy(agilityValue = CharacteristicValue(5, 2)),
+                state = player.state.copy(career = player.state.career.copy(availableExperience = 1))
+        )
         val newPlayer = playersService.update(playerToUpdate)
 
         // VERIFY
@@ -147,15 +180,17 @@ class PlayersDatabaseServiceTest {
         assertThat(newPlayer).isNotNull()
         assertThat(newPlayer?.name).isEqualTo(newPlayerName)
         assertThat(newPlayer?.race).isEqualTo(WOOD_ELF)
-        assertThat(newPlayer?.characteristics!![AGILITY].value).isEqualTo(5)
+        assertThat(newPlayer?.characteristics!![STRENGTH].value).isEqualTo(3)
+        assertThat(newPlayer.characteristics[AGILITY].value).isEqualTo(5)
         assertThat(newPlayer.characteristics[AGILITY].fortuneValue).isEqualTo(2)
+        assertThat(newPlayer.state.career.availableExperience).isEqualTo(1)
     }
 
     @Test
     fun should_update_all_players() {
         // ADD
-        val player1 = playersService.add(Player("Player1", HIGH_ELF))
-        val player2 = playersService.add(Player("Player2", WOOD_ELF))
+        val player1 = playersService.add(Player("Player1", race = HIGH_ELF))
+        val player2 = playersService.add(Player("Player2", race = WOOD_ELF))
         assertThat(playersService.countAll()).isEqualTo(2)
 
         // UPDATE
@@ -187,8 +222,14 @@ class PlayersDatabaseServiceTest {
     @Test
     fun should_delete_a_player() {
         val player1 = Player("Player1", characteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(1)))
-        val player2 = Player("Player2", characteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(2)))
-        val player3 = Player("Player3", characteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(3)))
+        val player2 = Player("Player2",
+                characteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(2)),
+                state = PlayerState(stance = Stance(maxReckless = 2))
+        )
+        val player3 = Player("Player3",
+                characteristics = PlayerCharacteristicsMap(strengthValue = CharacteristicValue(3)),
+                state = PlayerState(career = Career(totalExperience = 3))
+        )
 
         val addAllResult = playersService.addAll(listOf(player1, player2, player3))
         assertThat(addAllResult.size).isEqualTo(3)
@@ -200,15 +241,25 @@ class PlayersDatabaseServiceTest {
         assertThat(playersService.countAll()).isEqualTo(2)
         assertThat(playersService.findByName("Player1")).isNotNull()
         assertThat(playersService.findByName("Player1")?.characteristics!![STRENGTH].value).isEqualTo(1)
+        assertThat(playersService.findByName("Player1")?.state?.stance?.reckless).isEqualTo(0)
         assertThat(playersService.findByName("Player2")).isNull()
         assertThat(playersService.findByName("Player3")).isNotNull()
         assertThat(playersService.findByName("Player3")?.characteristics!![STRENGTH].value).isEqualTo(3)
+        assertThat(playersService.findByName("Player3")?.state?.career?.totalExperience).isEqualTo(3)
+
+        transaction {
+            assertThat(PlayerCharacteristicsTable.selectAll().count()).isEqualTo(2)
+            assertThat(PlayerStateTable.selectAll().count()).isEqualTo(2)
+        }
     }
 
     @Test
     fun should_delete_all_players() {
         val player1 = Player("Player1")
-        val player2 = Player("Player2", characteristics = PlayerCharacteristicsMap(toughnessValue = CharacteristicValue(2)))
+        val player2 = Player("Player2",
+                characteristics = PlayerCharacteristicsMap(toughnessValue = CharacteristicValue(2)),
+                state = PlayerState(wounds = 2)
+        )
 
         playersService.add(player1)
         playersService.add(player2)
@@ -216,6 +267,11 @@ class PlayersDatabaseServiceTest {
 
         playersService.deleteAll()
         assertThat(playersService.findAll()).isEmpty()
+
+        transaction {
+            assertThat(PlayerCharacteristicsTable.selectAll().count()).isEqualTo(0)
+            assertThat(PlayerStateTable.selectAll().count()).isEqualTo(0)
+        }
     }
 
     @Test

@@ -13,11 +13,11 @@ import org.testng.annotations.Test
 import warhammer.database.daos.PlayersDao
 import warhammer.database.daos.player.PlayerStateDao
 import warhammer.database.entities.player.Player
-import warhammer.database.entities.player.state.Career
 import warhammer.database.entities.player.PlayerState
-import warhammer.database.tables.player.state.CareerTable
-import warhammer.database.tables.player.PlayerStateTable
+import warhammer.database.entities.player.state.Career
 import warhammer.database.tables.PlayersTable
+import warhammer.database.tables.player.PlayerStateTable
+import warhammer.database.tables.player.state.CareerTable
 import java.sql.Connection
 
 class CareerDaoTest {
@@ -89,14 +89,15 @@ class CareerDaoTest {
     @Test
     fun should_read_a_career() {
         transaction {
-            careerDao.add(Career(1, rank = 1))
+            careerDao.add(Career(1, careerName = "Tueur de Démons", rank = 5))
 
             assertThat(careerDao.findAll().size).isEqualTo(1)
 
             val career = careerDao.findById(1)
 
             assertThat(career).isNotNull()
-            assertThat(career?.rank).isEqualTo(1)
+            assertThat(career?.careerName).isEqualTo("Tueur de Démons")
+            assertThat(career?.rank).isEqualTo(5)
         }
     }
 

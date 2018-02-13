@@ -32,21 +32,19 @@ internal fun ResultRow?.mapToPlayerCharacteristicsEntity(): PlayerCharacteristic
     }
 }
 
-fun PlayerCharacteristics?.mapToPlayerCharacteristics(): PlayerCharacteristicsMap {
-    return when (this) {
-        null -> PlayerCharacteristicsMap()
-        else -> PlayerCharacteristicsMap(
-                strengthValue = CharacteristicValue(this.strength ?: 0, this.strengthFortune ?: 0),
-                toughnessValue = CharacteristicValue(this.toughness ?: 0, this.toughnessFortune ?: 0),
-                agilityValue = CharacteristicValue(this.agility ?: 0, this.agilityFortune ?: 0),
-                intelligenceValue = CharacteristicValue(this.intelligence ?: 0, this.intelligenceFortune ?: 0),
-                willpowerValue = CharacteristicValue(this.willpower ?: 0, this.willpowerFortune ?: 0),
-                fellowShipValue = CharacteristicValue(this.fellowship ?: 0, this.fellowshipFortune ?: 0)
-        )
-    }
+fun PlayerCharacteristics?.mapToPlayerCharacteristicsMap(): PlayerCharacteristicsMap = when (this) {
+    null -> PlayerCharacteristicsMap()
+    else -> PlayerCharacteristicsMap(
+            strengthValue = CharacteristicValue(this.strength ?: 0, this.strengthFortune ?: 0),
+            toughnessValue = CharacteristicValue(this.toughness ?: 0, this.toughnessFortune ?: 0),
+            agilityValue = CharacteristicValue(this.agility ?: 0, this.agilityFortune ?: 0),
+            intelligenceValue = CharacteristicValue(this.intelligence ?: 0, this.intelligenceFortune ?: 0),
+            willpowerValue = CharacteristicValue(this.willpower ?: 0, this.willpowerFortune ?: 0),
+            fellowShipValue = CharacteristicValue(this.fellowship ?: 0, this.fellowshipFortune ?: 0)
+    )
 }
 
-fun PlayerCharacteristicsMap.mapToEntity(playerId:Int): PlayerCharacteristics =
+fun PlayerCharacteristicsMap.mapToEntity(playerId: Int): PlayerCharacteristics =
         PlayerCharacteristics(
                 playerId = playerId,
 

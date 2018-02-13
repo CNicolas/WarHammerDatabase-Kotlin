@@ -10,10 +10,10 @@ fun ResultRow?.mapToPlayer(): Player? = when (this) {
     null -> null
     else -> {
         Player(this[PlayersTable.name],
-                Race.valueOf(this[PlayersTable.race]),
-                this[PlayersTable.age],
-                this[PlayersTable.size],
-                id = this[PlayersTable.id].value)
+                id = this[PlayersTable.id].value,
+                race = Race.valueOf(this[PlayersTable.race]),
+                age = this[PlayersTable.age],
+                size = this[PlayersTable.size])
     }
 }
 
