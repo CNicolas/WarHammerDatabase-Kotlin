@@ -24,8 +24,8 @@ class PlayersDatabaseServiceTest {
     private val samplePlayer
         get() = {
             val characteristics = PlayerCharacteristics(
-                    strengthValue = CharacteristicValue(3),
-                    toughnessValue = CharacteristicValue(2, 1)
+                    strength = CharacteristicValue(3),
+                    toughness = CharacteristicValue(2, 1)
             )
             val state = PlayerState(career = Career(careerName = "Librelame"), maxWounds = 10)
             Player(
@@ -69,14 +69,14 @@ class PlayersDatabaseServiceTest {
     fun should_add_all_players() {
         val playersToAdd = listOf(
                 Player("Player1",
-                        characteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(1)),
+                        characteristics = PlayerCharacteristics(strength = CharacteristicValue(1)),
                         state = PlayerState(maxCorruption = 3)
                 ),
                 Player("Player2",
-                        characteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(2)),
+                        characteristics = PlayerCharacteristics(strength = CharacteristicValue(2)),
                         state = PlayerState(stress = 1, stance = Stance(conservative = 0))),
                 Player("Player3",
-                        characteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(3)),
+                        characteristics = PlayerCharacteristics(strength = CharacteristicValue(3)),
                         state = PlayerState(maxExhaustion = 4, career = Career(rank = 1))
                 )
         )
@@ -170,7 +170,7 @@ class PlayersDatabaseServiceTest {
         // UPDATE
         val playerToUpdate = player.copy(name = newPlayerName,
                 race = WOOD_ELF,
-                characteristics = player.characteristics.copy(agilityValue = CharacteristicValue(5, 2)),
+                characteristics = player.characteristics.copy(agility = CharacteristicValue(5, 2)),
                 state = player.state.copy(career = player.state.career.copy(availableExperience = 1))
         )
         val newPlayer = playersService.update(playerToUpdate)
@@ -221,13 +221,13 @@ class PlayersDatabaseServiceTest {
     // region DELETE
     @Test
     fun should_delete_a_player() {
-        val player1 = Player("Player1", characteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(1)))
+        val player1 = Player("Player1", characteristics = PlayerCharacteristics(strength = CharacteristicValue(1)))
         val player2 = Player("Player2",
-                characteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(2)),
+                characteristics = PlayerCharacteristics(strength = CharacteristicValue(2)),
                 state = PlayerState(stance = Stance(maxReckless = 2))
         )
         val player3 = Player("Player3",
-                characteristics = PlayerCharacteristics(strengthValue = CharacteristicValue(3)),
+                characteristics = PlayerCharacteristics(strength = CharacteristicValue(3)),
                 state = PlayerState(career = Career(totalExperience = 3))
         )
 
@@ -260,7 +260,7 @@ class PlayersDatabaseServiceTest {
     fun should_delete_all_players() {
         val player1 = Player("Player1")
         val player2 = Player("Player2",
-                characteristics = PlayerCharacteristics(toughnessValue = CharacteristicValue(2)),
+                characteristics = PlayerCharacteristics(toughness = CharacteristicValue(2)),
                 state = PlayerState(wounds = 2)
         )
 

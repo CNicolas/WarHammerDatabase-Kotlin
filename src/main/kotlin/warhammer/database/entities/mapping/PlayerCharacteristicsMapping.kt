@@ -35,12 +35,12 @@ internal fun ResultRow?.mapToPlayerCharacteristicsEntity(): PlayerCharacteristic
 fun PlayerCharacteristicsEntity?.mapToPlayerCharacteristics(): PlayerCharacteristics = when (this) {
     null -> PlayerCharacteristics()
     else -> PlayerCharacteristics(
-            strengthValue = CharacteristicValue(this.strength ?: 0, this.strengthFortune ?: 0),
-            toughnessValue = CharacteristicValue(this.toughness ?: 0, this.toughnessFortune ?: 0),
-            agilityValue = CharacteristicValue(this.agility ?: 0, this.agilityFortune ?: 0),
-            intelligenceValue = CharacteristicValue(this.intelligence ?: 0, this.intelligenceFortune ?: 0),
-            willpowerValue = CharacteristicValue(this.willpower ?: 0, this.willpowerFortune ?: 0),
-            fellowShipValue = CharacteristicValue(this.fellowship ?: 0, this.fellowshipFortune ?: 0)
+            strength = CharacteristicValue(this.strength ?: 0, this.strengthFortune ?: 0),
+            toughness = CharacteristicValue(this.toughness ?: 0, this.toughnessFortune ?: 0),
+            agility = CharacteristicValue(this.agility ?: 0, this.agilityFortune ?: 0),
+            intelligence = CharacteristicValue(this.intelligence ?: 0, this.intelligenceFortune ?: 0),
+            willpower = CharacteristicValue(this.willpower ?: 0, this.willpowerFortune ?: 0),
+            fellowShip = CharacteristicValue(this.fellowship ?: 0, this.fellowshipFortune ?: 0)
     )
 }
 
