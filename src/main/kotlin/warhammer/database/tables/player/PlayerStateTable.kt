@@ -6,15 +6,15 @@ import warhammer.database.tables.PlayersTable
 object PlayerStateTable : IntIdTable() {
     val playerId = reference("state", PlayersTable).uniqueIndex()
 
-    val wounds = integer("wounds").nullable()
-    val maxWounds = integer("maxWounds").nullable()
+    val wounds = integer("wounds")
+    val maxWounds = integer("maxWounds")
 
-    val corruption = integer("corruption").nullable()
-    val maxCorruption = integer("maxCorruption").nullable()
+    val corruption = integer("corruption")
+    val maxCorruption = integer("maxCorruption")
 
-    val stress = integer("stress").nullable()
-    val maxStress = integer("maxStress").nullable()
+    val stress = integer("stress")
+    val maxStress = integer("maxStress")
 
-    val exhaustion = integer("exhaustion").nullable()
-    val maxExhaustion = integer("maxExhaustion").nullable()
+    val exhaustion = integer("exhaustion")
+    val maxExhaustion = integer("maxExhaustion")
 }

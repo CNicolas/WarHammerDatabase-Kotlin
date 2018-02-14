@@ -152,7 +152,7 @@ class CareerDaoTest {
             val career = careerDao.findById(id)
             assertThat(career).isNotNull()
             assertThat(career?.stateId).isEqualTo(1)
-            assertThat(career?.careerName).isEqualTo("")
+            assertThat(career?.careerName).isEqualTo("Unemployed")
 
             // UPDATE
             val careerToUpdate = career?.copy(careerName = "Ratier")

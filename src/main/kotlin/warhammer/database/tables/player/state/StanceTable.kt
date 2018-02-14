@@ -6,9 +6,8 @@ import warhammer.database.tables.player.PlayerStateTable
 object StanceTable : IntIdTable() {
     val stateId = reference("state", PlayerStateTable).uniqueIndex()
 
-    val reckless = integer("reckless").nullable()
-    val maxReckless = integer("maxReckless").nullable()
-
-    val conservative = integer("conservative").nullable()
-    val maxConservative = integer("maxConservative").nullable()
+    val reckless = integer("reckless")
+    val maxReckless = integer("maxReckless")
+    val conservative = integer("conservative")
+    val maxConservative = integer("maxConservative")
 }
