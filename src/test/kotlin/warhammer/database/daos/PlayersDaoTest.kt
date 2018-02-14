@@ -36,7 +36,7 @@ class PlayersDaoTest {
     @Test
     fun should_add_a_player() {
         transaction {
-            playersDao.add(Player("PlayerName"))
+            playersDao.add(Player(name = "PlayerName"))
 
             assertThat(playersDao.findAll().size).isEqualTo(1)
         }
@@ -45,9 +45,9 @@ class PlayersDaoTest {
     @Test
     fun should_add_all_players() {
         val playersToAdd = listOf(
-                Player("Player1"),
-                Player("Player2"),
-                Player("Player3"))
+                Player(name = "Player1"),
+                Player(name = "Player2"),
+                Player(name = "Player3"))
 
         transaction {
             playersDao.addAll(playersToAdd)
@@ -61,11 +61,11 @@ class PlayersDaoTest {
         val playerName = "PlayerName"
 
         transaction {
-            var resOfInsert = playersDao.add(Player(playerName))
+            var resOfInsert = playersDao.add(Player(name = playerName))
             assertThat(resOfInsert).isEqualTo(1)
             assertThat(playersDao.findAll().size).isEqualTo(1)
 
-            resOfInsert = playersDao.add(Player(playerName))
+            resOfInsert = playersDao.add(Player(name = playerName))
             assertThat(resOfInsert).isEqualTo(-1)
             assertThat(playersDao.findAll().size).isEqualTo(1)
         }
@@ -78,7 +78,7 @@ class PlayersDaoTest {
         val playerName = "PlayerName"
 
         transaction {
-            playersDao.add(Player(playerName))
+            playersDao.add(Player(name = playerName))
             assertThat(playersDao.findAll().size).isEqualTo(1)
 
             val player = playersDao.findByName(playerName)
@@ -90,9 +90,9 @@ class PlayersDaoTest {
     @Test
     fun should_read_all_players() {
         val playersToAdd = listOf(
-                Player("Player1", race = Race.DWARF),
-                Player("Player2", size = 92),
-                Player("Player3", age = 219))
+                Player(name = "Player1", race = Race.DWARF),
+                Player(name = "Player2", size = 92),
+                Player(name = "Player3", age = 219))
 
         transaction {
             playersDao.addAll(playersToAdd)
@@ -116,7 +116,7 @@ class PlayersDaoTest {
 
         transaction {
             // ADD
-            val id = playersDao.add(Player(playerName))
+            val id = playersDao.add(Player(name = playerName))
             assertThat(playersDao.findAll().size).isEqualTo(1)
 
             // FIND
@@ -140,12 +140,12 @@ class PlayersDaoTest {
     fun should_update_all_players() {
         transaction {
             // ADD
-            val id1 = playersDao.add(Player("Player1"))
-            val id2 = playersDao.add(Player("Player2"))
+            val id1 = playersDao.add(Player(name = "Player1"))
+            val id2 = playersDao.add(Player(name = "Player2"))
             assertThat(playersDao.findAll().size).isEqualTo(2)
 
             // UPDATE
-            val updatedIds = playersDao.updateAll(listOf(Player("Player11", id = id1), Player("Player22", id = id2)))
+            val updatedIds = playersDao.updateAll(listOf(Player(id = id1, name = "Player11"), Player(id = id2, name = "Player22")))
             assertThat(updatedIds).containsExactly(id1, id2)
 
             // VERIFY
@@ -161,7 +161,7 @@ class PlayersDaoTest {
         transaction {
             assertThat(playersDao.findAll().size).isEqualTo(0)
 
-            val res = playersDao.update(Player("Inexistant"))
+            val res = playersDao.update(Player(name = "Inexistant"))
             assertThat(res).isEqualTo(-1)
             assertThat(playersDao.findAll()).isEmpty()
         }
@@ -172,7 +172,7 @@ class PlayersDaoTest {
         transaction {
             drop(PlayersTable)
 
-            val res = playersDao.update(Player("Inexistant"))
+            val res = playersDao.update(Player(name = "Inexistant"))
             assertThat(res).isEqualTo(-1)
         }
     }
@@ -181,9 +181,9 @@ class PlayersDaoTest {
     // region DELETE
     @Test
     fun should_delete_a_player() {
-        val player1 = Player("Player1")
-        val player2 = Player("Player2")
-        val player3 = Player("Player3")
+        val player1 = Player(name = "Player1")
+        val player2 = Player(name = "Player2")
+        val player3 = Player(name = "Player3")
 
         transaction {
             playersDao.add(player1)
@@ -202,8 +202,8 @@ class PlayersDaoTest {
 
     @Test
     fun should_delete_all_players() {
-        val player1 = Player("Player1")
-        val player2 = Player("Player2")
+        val player1 = Player(name = "Player1")
+        val player2 = Player(name = "Player2")
 
         transaction {
             playersDao.add(player1)
@@ -220,7 +220,7 @@ class PlayersDaoTest {
         transaction {
             assertThat(playersDao.findAll().size).isEqualTo(0)
 
-            val res = playersDao.delete(Player("Inexistant"))
+            val res = playersDao.delete(Player(name = "Inexistant"))
             assertThat(res).isEqualTo(0)
             assertThat(playersDao.findAll()).isEmpty()
         }
@@ -231,7 +231,7 @@ class PlayersDaoTest {
         transaction {
             drop(PlayersTable)
 
-            val res = playersDao.delete(Player("Inexistant"))
+            val res = playersDao.delete(Player(name = "Inexistant"))
             assertThat(res).isEqualTo(-1)
         }
     }

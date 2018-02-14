@@ -5,8 +5,8 @@ import warhammer.database.entities.player.characteristics.Characteristic.*
 import warhammer.database.entities.player.characteristics.PlayerCharacteristics
 import warhammer.database.entities.player.other.Race
 
-data class Player(override val name: String,
-                  override val id: Int = -1,
+data class Player(override val id: Int = -1,
+                  override val name: String,
                   val race: Race = Race.HUMAN,
                   val age: Int? = null,
                   val size: Int? = null,

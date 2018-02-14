@@ -2,8 +2,8 @@ package warhammer.database.entities.player
 
 import warhammer.database.entities.WarHammerEntity
 
-data class PlayerCharacteristicsEntity(val playerId: Int,
-                                       override val id: Int = -1,
+data class PlayerCharacteristicsEntity(override val id: Int = -1,
+                                       val playerId: Int,
                                        val strength: Int? = 0,
                                        val toughness: Int? = 0,
                                        val agility: Int? = 0,

@@ -4,15 +4,15 @@ import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import warhammer.database.entities.player.PlayerState
-import warhammer.database.tables.player.PlayerStateTable
 import warhammer.database.tables.PlayersTable
+import warhammer.database.tables.player.PlayerStateTable
 
 internal fun ResultRow?.mapToPlayerStateEntity(): PlayerState? = when (this) {
     null -> null
     else -> {
         PlayerState(
-                playerId = this[PlayerStateTable.playerId].value,
                 id = this[PlayerStateTable.id].value,
+                playerId = this[PlayerStateTable.playerId].value,
                 wounds = this[PlayerStateTable.wounds],
                 maxWounds = this[PlayerStateTable.maxWounds],
                 corruption = this[PlayerStateTable.corruption],

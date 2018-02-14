@@ -15,8 +15,8 @@ import warhammer.database.daos.player.PlayerStateDao
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.PlayerState
 import warhammer.database.entities.player.state.Stance
-import warhammer.database.tables.player.PlayerStateTable
 import warhammer.database.tables.PlayersTable
+import warhammer.database.tables.player.PlayerStateTable
 import warhammer.database.tables.player.state.StanceTable
 import java.sql.Connection
 
@@ -35,13 +35,13 @@ class StanceDaoTest {
             logger.addLogger(StdOutSqlLogger)
             create(PlayersTable, PlayerStateTable, StanceTable)
 
-            playersDao.add(Player("PlayerName1", id = 1))
-            playersDao.add(Player("PlayerName2", id = 2))
-            playersDao.add(Player("PlayerName3", id = 3))
+            playersDao.add(Player(id = 1, name = "PlayerName1"))
+            playersDao.add(Player(id = 2, name = "PlayerName2"))
+            playersDao.add(Player(id = 3, name = "PlayerName3"))
 
-            playerStateDao.add(PlayerState(1, id = 1))
-            playerStateDao.add(PlayerState(2, id = 2))
-            playerStateDao.add(PlayerState(3, id = 3))
+            playerStateDao.add(PlayerState(id = 1, playerId = 1))
+            playerStateDao.add(PlayerState(id = 2, playerId = 2))
+            playerStateDao.add(PlayerState(id = 3, playerId = 3))
 
             StanceTable.deleteAll()
         }

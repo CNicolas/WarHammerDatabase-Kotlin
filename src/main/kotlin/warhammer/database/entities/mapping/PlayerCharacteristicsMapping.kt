@@ -14,8 +14,8 @@ internal fun ResultRow?.mapToPlayerCharacteristicsEntity(): PlayerCharacteristic
     null -> null
     else -> {
         PlayerCharacteristicsEntity(
-                playerId = this[PlayerCharacteristicsTable.playerId].value,
                 id = this[PlayerCharacteristicsTable.id].value,
+                playerId = this[PlayerCharacteristicsTable.playerId].value,
                 strength = this[PlayerCharacteristicsTable.strength],
                 toughness = this[PlayerCharacteristicsTable.toughness],
                 agility = this[PlayerCharacteristicsTable.agility],

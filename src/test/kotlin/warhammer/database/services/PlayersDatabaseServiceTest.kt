@@ -29,7 +29,7 @@ class PlayersDatabaseServiceTest {
             )
             val state = PlayerState(career = Career(careerName = "Librelame"), maxWounds = 10)
             Player(
-                    playerName,
+                    name = playerName,
                     race = DWARF,
                     age = 110,
                     size = 89,
@@ -68,14 +68,14 @@ class PlayersDatabaseServiceTest {
     @Test
     fun should_add_all_players() {
         val playersToAdd = listOf(
-                Player("Player1",
+                Player(name = "Player1",
                         characteristics = PlayerCharacteristics(strength = CharacteristicValue(1)),
                         state = PlayerState(maxCorruption = 3)
                 ),
-                Player("Player2",
+                Player(name = "Player2",
                         characteristics = PlayerCharacteristics(strength = CharacteristicValue(2)),
                         state = PlayerState(stress = 1, stance = Stance(conservative = 0))),
-                Player("Player3",
+                Player(name = "Player3",
                         characteristics = PlayerCharacteristics(strength = CharacteristicValue(3)),
                         state = PlayerState(maxExhaustion = 4, career = Career(rank = 1))
                 )
@@ -98,11 +98,11 @@ class PlayersDatabaseServiceTest {
 
     @Test
     fun should_add_a_player_then_fail_to_add_it_again() {
-        val addedPlayer1 = playersService.add(Player(playerName))
+        val addedPlayer1 = playersService.add(Player(name = playerName))
         assertThat(playersService.countAll()).isEqualTo(1)
         assertThat(addedPlayer1?.name).isEqualTo(playerName)
 
-        val addedPlayer2 = playersService.add(Player(playerName))
+        val addedPlayer2 = playersService.add(Player(name = playerName))
         assertThat(addedPlayer2).isNull()
         assertThat(playersService.countAll()).isEqualTo(1)
     }
@@ -137,9 +137,9 @@ class PlayersDatabaseServiceTest {
     @Test
     fun should_read_all_players() {
         val playersToAdd = listOf(
-                Player("Player1"),
-                Player("Player2"),
-                Player("Player3"))
+                Player(name = "Player1"),
+                Player(name = "Player2"),
+                Player(name = "Player3"))
 
         playersService.addAll(playersToAdd)
 
@@ -189,8 +189,8 @@ class PlayersDatabaseServiceTest {
     @Test
     fun should_update_all_players() {
         // ADD
-        val player1 = playersService.add(Player("Player1", race = HIGH_ELF))
-        val player2 = playersService.add(Player("Player2", race = WOOD_ELF))
+        val player1 = playersService.add(Player(name = "Player1", race = HIGH_ELF))
+        val player2 = playersService.add(Player(name = "Player2", race = WOOD_ELF))
         assertThat(playersService.countAll()).isEqualTo(2)
 
         // UPDATE
@@ -212,7 +212,7 @@ class PlayersDatabaseServiceTest {
     fun should_return_false_when_update_a_inexistant_player() {
         assertThat(playersService.countAll()).isEqualTo(0)
 
-        val updatedPlayer = playersService.update(Player("Inexistant"))
+        val updatedPlayer = playersService.update(Player(name = "Inexistant"))
         assertThat(updatedPlayer).isNull()
         assertThat(playersService.findAll()).isEmpty()
     }
@@ -221,12 +221,12 @@ class PlayersDatabaseServiceTest {
     // region DELETE
     @Test
     fun should_delete_a_player() {
-        val player1 = Player("Player1", characteristics = PlayerCharacteristics(strength = CharacteristicValue(1)))
-        val player2 = Player("Player2",
+        val player1 = Player(name = "Player1", characteristics = PlayerCharacteristics(strength = CharacteristicValue(1)))
+        val player2 = Player(name = "Player2",
                 characteristics = PlayerCharacteristics(strength = CharacteristicValue(2)),
                 state = PlayerState(stance = Stance(maxReckless = 2))
         )
-        val player3 = Player("Player3",
+        val player3 = Player(name = "Player3",
                 characteristics = PlayerCharacteristics(strength = CharacteristicValue(3)),
                 state = PlayerState(career = Career(totalExperience = 3))
         )
@@ -258,8 +258,8 @@ class PlayersDatabaseServiceTest {
 
     @Test
     fun should_delete_all_players() {
-        val player1 = Player("Player1")
-        val player2 = Player("Player2",
+        val player1 = Player(name = "Player1")
+        val player2 = Player(name = "Player2",
                 characteristics = PlayerCharacteristics(toughness = CharacteristicValue(2)),
                 state = PlayerState(wounds = 2)
         )
@@ -281,7 +281,7 @@ class PlayersDatabaseServiceTest {
     fun should_return_false_when_delete_a_inexistant_player() {
         assertThat(playersService.countAll()).isEqualTo(0)
 
-        val res = playersService.delete(Player("Inexistant"))
+        val res = playersService.delete(Player(name = "Inexistant"))
         assertThat(res).isFalse()
         assertThat(playersService.findAll()).isEmpty()
     }

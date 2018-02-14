@@ -32,7 +32,7 @@ class CharacteristicsTest {
     @Test
     fun should_create_hand_from_player_strength() {
         val playerCharacteristics = PlayerCharacteristics(strength = CharacteristicValue(4, 1))
-        val player = Player("SamplePlayer", characteristics = playerCharacteristics)
+        val player = Player(name = "SamplePlayer", characteristics = playerCharacteristics)
         val hand = player.characteristics[STRENGTH].getHand("SampleHand")
 
         assertThat(hand).isNotNull()

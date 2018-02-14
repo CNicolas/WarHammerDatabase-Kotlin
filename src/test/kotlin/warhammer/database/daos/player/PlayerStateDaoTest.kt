@@ -13,8 +13,8 @@ import org.testng.annotations.Test
 import warhammer.database.daos.PlayersDao
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.PlayerState
-import warhammer.database.tables.player.PlayerStateTable
 import warhammer.database.tables.PlayersTable
+import warhammer.database.tables.player.PlayerStateTable
 import java.sql.Connection
 
 class PlayerStateDaoTest {
@@ -31,9 +31,9 @@ class PlayerStateDaoTest {
             logger.addLogger(StdOutSqlLogger)
             create(PlayersTable, PlayerStateTable)
 
-            playersDao.add(Player("PlayerName1", id = 1))
-            playersDao.add(Player("PlayerName2", id = 2))
-            playersDao.add(Player("PlayerName3", id = 3))
+            playersDao.add(Player(id = 1, name = "PlayerName1"))
+            playersDao.add(Player(id = 2, name = "PlayerName2"))
+            playersDao.add(Player(id = 3, name = "PlayerName3"))
 
             PlayerStateTable.deleteAll()
         }
@@ -43,7 +43,7 @@ class PlayerStateDaoTest {
     @Test
     fun should_add_a_playerState() {
         transaction {
-            playerStateDao.add(PlayerState(1))
+            playerStateDao.add(PlayerState(playerId = 1))
 
             assertThat(playerStateDao.findAll().size).isEqualTo(1)
         }
@@ -52,9 +52,9 @@ class PlayerStateDaoTest {
     @Test
     fun should_add_all_playerState() {
         val playerStateToAdd = listOf(
-                PlayerState(1),
-                PlayerState(2),
-                PlayerState(3))
+                PlayerState(playerId = 1),
+                PlayerState(playerId = 2),
+                PlayerState(playerId = 3))
 
         transaction {
             playerStateDao.addAll(playerStateToAdd)
@@ -95,7 +95,7 @@ class PlayerStateDaoTest {
     @Test
     fun should_read_a_playerState_from_playerId() {
         transaction {
-            playerStateDao.add(PlayerState(2, exhaustion = 1))
+            playerStateDao.add(PlayerState(playerId = 2, exhaustion = 1))
 
             assertThat(playerStateDao.findAll().size).isEqualTo(1)
 
@@ -109,9 +109,9 @@ class PlayerStateDaoTest {
     @Test
     fun should_read_all_playerState() {
         val playerStateToAdd = listOf(
-                PlayerState(1, maxStress = 3),
-                PlayerState(2, maxWounds = 2),
-                PlayerState(3, corruption = 4))
+                PlayerState(playerId = 1, maxStress = 3),
+                PlayerState(playerId = 2, maxWounds = 2),
+                PlayerState(playerId = 3, corruption = 4))
 
         transaction {
             playerStateDao.addAll(playerStateToAdd)
@@ -136,7 +136,7 @@ class PlayerStateDaoTest {
     fun should_update_a_playerState() {
         transaction {
             // ADD
-            val id = playerStateDao.add(PlayerState(1))
+            val id = playerStateDao.add(PlayerState(playerId = 1))
             assertThat(playerStateDao.findAll().size).isEqualTo(1)
 
             // FIND
@@ -162,8 +162,8 @@ class PlayerStateDaoTest {
     fun should_update_all_playerState() {
         transaction {
             // ADD
-            val id1 = playerStateDao.add(PlayerState(1))
-            val id2 = playerStateDao.add(PlayerState(2))
+            val id1 = playerStateDao.add(PlayerState(playerId = 1))
+            val id2 = playerStateDao.add(PlayerState(playerId = 2))
             assertThat(playerStateDao.findAll().size).isEqualTo(2)
 
             // UPDATE
@@ -191,7 +191,7 @@ class PlayerStateDaoTest {
         transaction {
             assertThat(playerStateDao.findAll().size).isEqualTo(0)
 
-            val res = playerStateDao.update(PlayerState(1))
+            val res = playerStateDao.update(PlayerState(playerId = 1))
             assertThat(res).isEqualTo(-1)
             assertThat(playerStateDao.findAll()).isEmpty()
         }
@@ -211,9 +211,9 @@ class PlayerStateDaoTest {
     // region DELETE
     @Test
     fun should_delete_a_playerState() {
-        val playerState1 = PlayerState(1)
-        val playerState2 = PlayerState(2)
-        val playerState3 = PlayerState(3)
+        val playerState1 = PlayerState(playerId = 1)
+        val playerState2 = PlayerState(playerId = 2)
+        val playerState3 = PlayerState(playerId = 3)
 
         transaction {
             val addAllResult = playerStateDao.addAll(listOf(playerState1, playerState2, playerState3))
@@ -231,7 +231,7 @@ class PlayerStateDaoTest {
 
     @Test
     fun should_delete_a_playerState_from_playerId() {
-        val playerState = PlayerState(2)
+        val playerState = PlayerState(playerId = 2)
 
         transaction {
             val addedStates = playerStateDao.add(playerState)
@@ -246,8 +246,8 @@ class PlayerStateDaoTest {
 
     @Test
     fun should_delete_all_playerState() {
-        val playerState1 = PlayerState(1)
-        val playerState2 = PlayerState(2)
+        val playerState1 = PlayerState(playerId = 1)
+        val playerState2 = PlayerState(playerId = 2)
 
         transaction {
             playerStateDao.add(playerState1)

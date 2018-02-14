@@ -9,8 +9,8 @@ import warhammer.database.tables.PlayersTable
 fun ResultRow?.mapToPlayer(): Player? = when (this) {
     null -> null
     else -> {
-        Player(this[PlayersTable.name],
-                id = this[PlayersTable.id].value,
+        Player(id = this[PlayersTable.id].value,
+                name = this[PlayersTable.name],
                 race = Race.valueOf(this[PlayersTable.race]),
                 age = this[PlayersTable.age],
                 size = this[PlayersTable.size])
