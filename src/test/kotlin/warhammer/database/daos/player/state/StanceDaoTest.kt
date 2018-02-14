@@ -51,7 +51,7 @@ class StanceDaoTest {
     @Test
     fun should_add_a_stance() {
         transaction {
-            stanceDao.add(Stance(1))
+            stanceDao.add(Stance(stateId = 1))
 
             assertThat(stanceDao.findAll().size).isEqualTo(1)
         }
@@ -60,9 +60,9 @@ class StanceDaoTest {
     @Test
     fun should_add_all_stance() {
         val stanceToAdd = listOf(
-                Stance(1),
-                Stance(2),
-                Stance(3))
+                Stance(stateId = 1),
+                Stance(stateId = 2),
+                Stance(stateId = 3))
 
         transaction {
             stanceDao.addAll(stanceToAdd)
@@ -74,11 +74,11 @@ class StanceDaoTest {
     @Test
     fun should_add_a_stance_then_fail_to_add_it_again() {
         transaction {
-            var resOfInsert = stanceDao.add(Stance(1))
+            var resOfInsert = stanceDao.add(Stance(stateId = 1))
             assertThat(resOfInsert).isEqualTo(1)
             assertThat(stanceDao.findAll().size).isEqualTo(1)
 
-            resOfInsert = stanceDao.add(Stance(1))
+            resOfInsert = stanceDao.add(Stance(stateId = 1))
             assertThat(resOfInsert).isEqualTo(-1)
             assertThat(stanceDao.findAll().size).isEqualTo(1)
         }
@@ -105,7 +105,7 @@ class StanceDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            stanceDao.add(Stance(2, conservative = 1))
+            stanceDao.add(Stance(stateId = 2, conservative = 1))
 
             assertThat(stanceDao.findAll().size).isEqualTo(1)
 
@@ -119,9 +119,9 @@ class StanceDaoTest {
     @Test
     fun should_read_all_stance() {
         val stanceToAdd = listOf(
-                Stance(1, maxReckless = 3),
-                Stance(2, conservative = 2),
-                Stance(3, maxConservative = 4))
+                Stance(stateId = 1, maxReckless = 3),
+                Stance(stateId = 2, conservative = 2),
+                Stance(stateId = 3, maxConservative = 4))
 
         transaction {
             stanceDao.addAll(stanceToAdd)
@@ -146,7 +146,7 @@ class StanceDaoTest {
     fun should_update_a_stance() {
         transaction {
             // ADD
-            val id = stanceDao.add(Stance(1))
+            val id = stanceDao.add(Stance(stateId = 1))
             assertThat(stanceDao.findAll().size).isEqualTo(1)
 
             // FIND
@@ -172,8 +172,8 @@ class StanceDaoTest {
     fun should_update_all_stance() {
         transaction {
             // ADD
-            val id1 = stanceDao.add(Stance(1))
-            val id2 = stanceDao.add(Stance(2))
+            val id1 = stanceDao.add(Stance(stateId = 1))
+            val id2 = stanceDao.add(Stance(stateId = 2))
             assertThat(stanceDao.findAll().size).isEqualTo(2)
 
             // UPDATE
@@ -201,7 +201,7 @@ class StanceDaoTest {
         transaction {
             assertThat(stanceDao.findAll().size).isEqualTo(0)
 
-            val res = stanceDao.update(Stance(1))
+            val res = stanceDao.update(Stance(stateId = 1))
             assertThat(res).isEqualTo(-1)
             assertThat(stanceDao.findAll()).isEmpty()
         }
@@ -221,9 +221,9 @@ class StanceDaoTest {
     // region DELETE
     @Test
     fun should_delete_a_stance() {
-        val stance1 = Stance(1)
-        val stance2 = Stance(2)
-        val stance3 = Stance(3)
+        val stance1 = Stance(stateId = 1)
+        val stance2 = Stance(stateId = 2)
+        val stance3 = Stance(stateId = 3)
 
         transaction {
             val addAllResult = stanceDao.addAll(listOf(stance1, stance2, stance3))
@@ -241,7 +241,7 @@ class StanceDaoTest {
 
     @Test
     fun should_delete_a_stance_from_stateId() {
-        val stance = Stance(2)
+        val stance = Stance(stateId = 2)
 
         transaction {
             val addedCharacteristics = stanceDao.add(stance)
@@ -256,8 +256,8 @@ class StanceDaoTest {
 
     @Test
     fun should_delete_all_stance() {
-        val stance1 = Stance(1)
-        val stance2 = Stance(2)
+        val stance1 = Stance(stateId = 1)
+        val stance2 = Stance(stateId = 2)
 
         transaction {
             stanceDao.add(stance1)

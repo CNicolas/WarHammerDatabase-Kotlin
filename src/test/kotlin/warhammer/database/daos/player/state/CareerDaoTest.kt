@@ -51,7 +51,7 @@ class CareerDaoTest {
     @Test
     fun should_add_a_career() {
         transaction {
-            careerDao.add(Career(1))
+            careerDao.add(Career(stateId = 1))
 
             assertThat(careerDao.findAll().size).isEqualTo(1)
         }
@@ -60,9 +60,9 @@ class CareerDaoTest {
     @Test
     fun should_add_all_career() {
         val careerToAdd = listOf(
-                Career(1),
-                Career(2),
-                Career(3))
+                Career(stateId = 1),
+                Career(stateId = 2),
+                Career(stateId = 3))
 
         transaction {
             careerDao.addAll(careerToAdd)
@@ -74,11 +74,11 @@ class CareerDaoTest {
     @Test
     fun should_add_a_career_then_fail_to_add_it_again() {
         transaction {
-            var resOfInsert = careerDao.add(Career(1))
+            var resOfInsert = careerDao.add(Career(stateId = 1))
             assertThat(resOfInsert).isEqualTo(1)
             assertThat(careerDao.findAll().size).isEqualTo(1)
 
-            resOfInsert = careerDao.add(Career(1))
+            resOfInsert = careerDao.add(Career(stateId = 1))
             assertThat(resOfInsert).isEqualTo(-1)
             assertThat(careerDao.findAll().size).isEqualTo(1)
         }
@@ -104,7 +104,7 @@ class CareerDaoTest {
     @Test
     fun should_read_a_career_from_stateId() {
         transaction {
-            careerDao.add(Career(2, availableExperience = 1))
+            careerDao.add(Career(stateId = 2, availableExperience = 1))
 
             assertThat(careerDao.findAll().size).isEqualTo(1)
 
@@ -118,9 +118,9 @@ class CareerDaoTest {
     @Test
     fun should_read_all_career() {
         val careerToAdd = listOf(
-                Career(1, totalExperience = 3),
-                Career(2, careerName = "Forestier"),
-                Career(3, rank = 4))
+                Career(stateId = 1, totalExperience = 3),
+                Career(stateId = 2, careerName = "Forestier"),
+                Career(stateId = 3, rank = 4))
 
         transaction {
             careerDao.addAll(careerToAdd)
@@ -145,7 +145,7 @@ class CareerDaoTest {
     fun should_update_a_career() {
         transaction {
             // ADD
-            val id = careerDao.add(Career(1))
+            val id = careerDao.add(Career(stateId = 1))
             assertThat(careerDao.findAll().size).isEqualTo(1)
 
             // FIND
@@ -171,8 +171,8 @@ class CareerDaoTest {
     fun should_update_all_career() {
         transaction {
             // ADD
-            val id1 = careerDao.add(Career(1))
-            val id2 = careerDao.add(Career(2))
+            val id1 = careerDao.add(Career(stateId = 1))
+            val id2 = careerDao.add(Career(stateId = 2))
             assertThat(careerDao.findAll().size).isEqualTo(2)
 
             // UPDATE
@@ -200,7 +200,7 @@ class CareerDaoTest {
         transaction {
             assertThat(careerDao.findAll().size).isEqualTo(0)
 
-            val res = careerDao.update(Career(1))
+            val res = careerDao.update(Career(stateId = 1))
             assertThat(res).isEqualTo(-1)
             assertThat(careerDao.findAll()).isEmpty()
         }
@@ -220,9 +220,9 @@ class CareerDaoTest {
     // region DELETE
     @Test
     fun should_delete_a_career() {
-        val career1 = Career(1)
-        val career2 = Career(2)
-        val career3 = Career(3)
+        val career1 = Career(stateId = 1)
+        val career2 = Career(stateId = 2)
+        val career3 = Career(stateId = 3)
 
         transaction {
             val addAllResult = careerDao.addAll(listOf(career1, career2, career3))
@@ -240,7 +240,7 @@ class CareerDaoTest {
 
     @Test
     fun should_delete_a_career_from_stateId() {
-        val career = Career(2)
+        val career = Career(stateId = 2)
 
         transaction {
             val addedCharacteristics = careerDao.add(career)
@@ -255,8 +255,8 @@ class CareerDaoTest {
 
     @Test
     fun should_delete_all_career() {
-        val career1 = Career(1)
-        val career2 = Career(2)
+        val career1 = Career(stateId = 1)
+        val career2 = Career(stateId = 2)
 
         transaction {
             careerDao.add(career1)
