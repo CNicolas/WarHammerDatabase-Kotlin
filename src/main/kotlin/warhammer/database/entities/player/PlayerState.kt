@@ -15,4 +15,14 @@ data class PlayerState(val playerId: Int = -1,
                        val maxStress: Int? = 0,
                        val exhaustion: Int? = 0,
                        val maxExhaustion: Int? = 0,
-                       val stance: Stance = Stance(id)) : WarHammerEntity
+                       val stance: Stance = Stance(id)) : WarHammerEntity {
+    val careerName = career.careerName!!
+    val rank = career.rank!!
+    val availableExperience = career.availableExperience!!
+    val totalExperience = career.totalExperience!!
+
+    val reckless = stance.reckless!!
+    val maxReckless = stance.maxReckless!!
+    val conservative = stance.conservative!!
+    val maxConservative = stance.maxConservative!!
+}
