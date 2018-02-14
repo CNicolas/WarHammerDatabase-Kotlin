@@ -1,4 +1,4 @@
-package warhammer.database.entities.mapping
+package warhammer.database.entities.mapping.state
 
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.ResultRow

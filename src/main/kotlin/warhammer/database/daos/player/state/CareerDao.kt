@@ -6,8 +6,8 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
 import warhammer.database.daos.AbstractDao
-import warhammer.database.entities.mapping.mapFieldsOfEntity
-import warhammer.database.entities.mapping.mapToCareer
+import warhammer.database.entities.mapping.state.mapFieldsOfEntity
+import warhammer.database.entities.mapping.state.mapToCareer
 import warhammer.database.entities.player.state.Career
 import warhammer.database.tables.player.state.CareerTable
 import java.lang.Exception

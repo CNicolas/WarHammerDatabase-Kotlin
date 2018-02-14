@@ -1,18 +1,18 @@
-package warhammer.database.entities.mapping
+package warhammer.database.entities.mapping.state
 
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import warhammer.database.entities.player.state.Career
-import warhammer.database.tables.player.state.CareerTable
 import warhammer.database.tables.player.PlayerStateTable
+import warhammer.database.tables.player.state.CareerTable
 
 internal fun ResultRow?.mapToCareer(): Career? = when (this) {
     null -> null
     else -> {
         Career(
-                stateId = this[CareerTable.stateId].value,
                 id = this[CareerTable.id].value,
+                stateId = this[CareerTable.stateId].value,
                 careerName = this[CareerTable.careerName],
                 rank = this[CareerTable.rank],
                 availableExperience = this[CareerTable.availableExperience],
