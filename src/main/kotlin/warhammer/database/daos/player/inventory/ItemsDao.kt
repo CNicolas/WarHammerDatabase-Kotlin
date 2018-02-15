@@ -6,15 +6,18 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.statements.UpdateStatement
 import warhammer.database.daos.AbstractDao
+import warhammer.database.daos.NamedDao
 import warhammer.database.entities.mapping.inventory.mapFieldsOfEntity
 import warhammer.database.entities.mapping.inventory.mapToItem
-import warhammer.database.entities.player.inventory.Item
+import warhammer.database.entities.player.inventory.*
+import warhammer.database.entities.player.inventory.ItemType.*
 import warhammer.database.tables.player.inventory.ItemsTable
 import java.lang.Exception
 
-class ItemsDao : AbstractDao<Item>(), PlayerInventoryLinkedDao<Item> {
+class ItemsDao : AbstractDao<Item>(), PlayerInventoryLinkedDao<Item>, NamedDao<Item> {
     override val table: IntIdTable = ItemsTable
 
+    @Deprecated("Nonsense to fetch ONE item by inventoryId")
     override fun findByInventoryId(inventoryId: Int): Item? {
         val result = ItemsTable.select { ItemsTable.inventoryId eq inventoryId }
                 .firstOrNull()
@@ -22,20 +25,78 @@ class ItemsDao : AbstractDao<Item>(), PlayerInventoryLinkedDao<Item> {
         return mapResultRowToEntity(result)
     }
 
+    // region Find one
+
+    override fun findByName(name: String): Item? {
+        val result = table.select { ItemsTable.name eq name }
+                .firstOrNull()
+
+        return mapResultRowToEntity(result)
+    }
+
+    fun findGenericItemById(id: Int): GenericItem? = findById(id) as? GenericItem
+    fun findArmorById(id: Int): Armor? = findById(id) as? Armor
+    fun findWeaponById(id: Int): Weapon? = findById(id) as? Weapon
+    fun findExpandableById(id: Int): Expandable? = findById(id) as? Expandable
+
+    // endregion
+
+    // region Find all
+
+    fun findAllGenericItemByInventoryId(inventoryId: Int): List<GenericItem> {
+        return findAllByInventoryId(inventoryId)
+                .filterNotNull()
+                .filter { it.type == ITEM }
+                .map { it as GenericItem }
+    }
+
+    fun findAllArmorsByInventoryId(inventoryId: Int): List<Armor> {
+        return findAllByInventoryId(inventoryId)
+                .filterNotNull()
+                .filter { it.type == ARMOR }
+                .map { it as Armor }
+    }
+
+    fun findAllWeaponsByInventoryId(inventoryId: Int): List<Weapon> {
+        return findAllByInventoryId(inventoryId)
+                .filterNotNull()
+                .filter { it.type == WEAPON }
+                .map { it as Weapon }
+    }
+
+    fun findAllExpandablesByInventoryId(inventoryId: Int): List<Expandable> {
+        return findAllByInventoryId(inventoryId)
+                .filterNotNull()
+                .filter { it.type == EXPANDABLE }
+                .map { it as Expandable }
+    }
+
+    fun findAllByInventoryId(inventoryId: Int): List<Item?> {
+        val result = ItemsTable.select { ItemsTable.inventoryId eq inventoryId }
+                .toList()
+
+        return result.map { mapResultRowToEntity(it) }
+    }
+    // endregion
+
     override fun update(entity: Item): Int {
         return try {
-            ItemsTable.update({
-                (ItemsTable.id eq entity.id) or (ItemsTable.inventoryId eq entity.inventoryId)
-            }) {
+            val updateCount = ItemsTable.update({ (ItemsTable.id eq entity.id) }) {
                 mapEntityToTable(it, entity)
             }
 
-            entity.id
+            if (updateCount == 0) {
+                -1
+            } else {
+                entity.id
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             -1
         }
     }
+
+    // region Delete one
 
     override fun delete(entity: Item): Int {
         return try {
@@ -56,6 +117,33 @@ class ItemsDao : AbstractDao<Item>(), PlayerInventoryLinkedDao<Item> {
             -1
         }
     }
+
+    // endregion
+
+    // region Delete all
+
+    fun deleteAllGenericItemsByInventoryId(inventoryId: Int) =
+            ItemsTable.deleteWhere {
+                (ItemsTable.inventoryId eq inventoryId) and (ItemsTable.type eq ITEM.toString())
+            }
+
+    fun deleteAllArmorsByInventoryId(inventoryId: Int) =
+            ItemsTable.deleteWhere {
+                (ItemsTable.inventoryId eq inventoryId) and (ItemsTable.type eq ARMOR.toString())
+            }
+
+    fun deleteAllWeaponsByInventoryId(inventoryId: Int) =
+            ItemsTable.deleteWhere {
+                (ItemsTable.inventoryId eq inventoryId) and (ItemsTable.type eq WEAPON.toString())
+            }
+
+    fun deleteAllExpandablesByInventoryId(inventoryId: Int) =
+            ItemsTable.deleteWhere {
+                (ItemsTable.inventoryId eq inventoryId) and (ItemsTable.type eq EXPANDABLE.toString())
+            }
+
+
+    // endregion
 
     override fun mapResultRowToEntity(result: ResultRow?): Item? = result.mapToItem()
 

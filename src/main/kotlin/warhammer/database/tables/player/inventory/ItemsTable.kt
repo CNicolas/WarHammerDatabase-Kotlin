@@ -4,7 +4,7 @@ import org.jetbrains.exposed.dao.IntIdTable
 import warhammer.database.tables.player.PlayerInventoryTable
 
 object ItemsTable : IntIdTable() {
-    val inventoryId = reference("inventory", PlayerInventoryTable).uniqueIndex()
+    val inventoryId = reference("inventory", PlayerInventoryTable)
 
     val name = varchar("name", length = 70)
     val encumbrance = integer("encumbrance")
@@ -22,4 +22,8 @@ object ItemsTable : IntIdTable() {
     val damage = integer("damage").nullable()
     val criticalLevel = integer("criticalLevel").nullable()
     val range = varchar("range", length = 20)
+
+    init {
+        uniqueIndex(name, inventoryId)
+    }
 }

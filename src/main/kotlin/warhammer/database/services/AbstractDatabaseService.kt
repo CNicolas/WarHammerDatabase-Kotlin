@@ -10,8 +10,8 @@ import warhammer.database.daos.Dao
 import warhammer.database.entities.NamedEntity
 import java.sql.Connection
 
-abstract class AbstractDatabaseService<E : NamedEntity>(private val databaseUrl: String = "jdbc:sqlite:file:warhammer",
-                                                        private val driver: String = "org.sqlite.JDBC") : DatabaseService<E> {
+abstract class AbstractDatabaseService<E : NamedEntity>(private val databaseUrl: String,
+                                                        private val driver: String) : DatabaseService<E> {
     abstract val tables: List<IntIdTable>
     protected abstract val dao: Dao<E>
 

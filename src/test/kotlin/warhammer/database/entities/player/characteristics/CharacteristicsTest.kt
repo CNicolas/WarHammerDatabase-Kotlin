@@ -2,7 +2,9 @@ package warhammer.database.entities.player.characteristics
 
 import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.Test
+import warhammer.database.entities.mapping.mapToPlayerCharacteristics
 import warhammer.database.entities.player.Player
+import warhammer.database.entities.player.PlayerCharacteristicsEntity
 import warhammer.database.entities.player.characteristics.Characteristic.STRENGTH
 
 class CharacteristicsTest {
@@ -40,5 +42,12 @@ class CharacteristicsTest {
         assertThat(hand.characteristicDicesCount).isEqualTo(4)
         assertThat(hand.fortuneDicesCount).isEqualTo(1)
         assertThat(hand.challengeDicesCount).isEqualTo(0)
+    }
+
+    @Test
+    fun should_return_empty_player_characteristics() {
+        val entity: PlayerCharacteristicsEntity? = null
+        val expected = PlayerCharacteristics()
+        assertThat(entity.mapToPlayerCharacteristics()).isEqualToComparingFieldByField(expected)
     }
 }

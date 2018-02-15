@@ -1,11 +1,10 @@
 package warhammer.database.entities.player.inventory
 
-import warhammer.database.entities.WarHammerEntity
+import warhammer.database.entities.NamedEntity
 
-interface Item : WarHammerEntity {
+interface Item : NamedEntity {
     val inventoryId: Int
 
-    val name: String
     val encumbrance: Int
     val quantity: Int
     val quality: Quality

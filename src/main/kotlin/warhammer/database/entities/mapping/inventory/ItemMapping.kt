@@ -65,10 +65,15 @@ fun UpdateBuilder<Int>.mapFieldsOfEntity(entity: Item) {
     this[ItemsTable.encumbrance] = entity.encumbrance
     this[ItemsTable.quantity] = entity.quantity
     this[ItemsTable.quality] = entity.quality.toString()
+    this[ItemsTable.type] = entity.type.toString()
+
     this[ItemsTable.uses] = entity.uses
+
     this[ItemsTable.isEquipped] = entity.isEquipped
+
     this[ItemsTable.soak] = entity.soak
     this[ItemsTable.defense] = entity.defense
+
     this[ItemsTable.damage] = entity.damage
     this[ItemsTable.criticalLevel] = entity.criticalLevel
     this[ItemsTable.range] = entity.range.toString()

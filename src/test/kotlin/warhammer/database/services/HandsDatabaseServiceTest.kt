@@ -9,7 +9,7 @@ import warhammer.database.entities.Hand
 import warhammer.database.tables.HandsTable
 
 class HandsDatabaseServiceTest {
-    private val handsService = HandsDatabaseService(databaseUrl = "jdbc:sqlite:testSqlite:?mode=memory&cache=shared", driver = "org.sqlite.JDBC")
+    private val handsService = HandsDatabaseService(databaseUrl = "jdbc:sqlite:testSqlite:?mode=memory&cache=shared")
     private val handName = "SampleName"
     private val sampleHand = Hand(handName, characteristicDicesCount = 3, challengeDicesCount = 1)
 
