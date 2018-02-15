@@ -1,6 +1,8 @@
-package warhammer.database.entities.player.inventory
+package warhammer.database.entities.player.inventory.item
 
-import warhammer.database.entities.player.inventory.ItemType.ITEM
+import warhammer.database.entities.player.inventory.item.enums.ItemType.ITEM
+import warhammer.database.entities.player.inventory.item.enums.Quality
+import warhammer.database.entities.player.inventory.item.enums.Range
 
 data class GenericItem(override val id: Int = -1,
                        override val inventoryId: Int = -1,

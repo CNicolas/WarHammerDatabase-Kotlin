@@ -3,8 +3,10 @@ package warhammer.database.entities.mapping.inventory
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
-import warhammer.database.entities.player.inventory.*
-import warhammer.database.entities.player.inventory.ItemType.*
+import warhammer.database.entities.player.inventory.item.*
+import warhammer.database.entities.player.inventory.item.enums.ItemType.*
+import warhammer.database.entities.player.inventory.item.enums.Quality
+import warhammer.database.entities.player.inventory.item.enums.Range
 import warhammer.database.tables.player.PlayerInventoryTable
 import warhammer.database.tables.player.inventory.ItemsTable
 

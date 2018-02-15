@@ -1,6 +1,8 @@
-package warhammer.database.entities.player.inventory
+package warhammer.database.entities.player.inventory.item
 
-import warhammer.database.entities.player.inventory.ItemType.ARMOR
+import warhammer.database.entities.player.inventory.item.enums.ItemType.ARMOR
+import warhammer.database.entities.player.inventory.item.enums.Quality
+import warhammer.database.entities.player.inventory.item.enums.Range
 
 data class Armor(override val id: Int = -1,
                  override val inventoryId: Int = -1,

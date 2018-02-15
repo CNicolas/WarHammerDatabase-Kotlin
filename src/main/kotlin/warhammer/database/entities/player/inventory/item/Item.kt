@@ -1,6 +1,9 @@
-package warhammer.database.entities.player.inventory
+package warhammer.database.entities.player.inventory.item
 
 import warhammer.database.entities.NamedEntity
+import warhammer.database.entities.player.inventory.item.enums.ItemType
+import warhammer.database.entities.player.inventory.item.enums.Quality
+import warhammer.database.entities.player.inventory.item.enums.Range
 
 interface Item : NamedEntity {
     val inventoryId: Int
