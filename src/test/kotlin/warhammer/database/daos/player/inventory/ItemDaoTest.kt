@@ -38,7 +38,12 @@ class ItemDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
+
             create(PlayersTable, PlayerInventoryTable, ItemsTable)
+
+            playersDao.deleteAll()
+            playerInventoryDao.deleteAll()
+            ItemsTable.deleteAll()
 
             playersDao.add(Player(id = 1, name = "PlayerName1"))
             playersDao.add(Player(id = 2, name = "PlayerName2"))
@@ -47,8 +52,6 @@ class ItemDaoTest {
             playerInventoryDao.add(PlayerInventory(id = 1, playerId = 1))
             playerInventoryDao.add(PlayerInventory(id = 2, playerId = 2))
             playerInventoryDao.add(PlayerInventory(id = 3, playerId = 3))
-
-            ItemsTable.deleteAll()
         }
     }
 
@@ -56,6 +59,8 @@ class ItemDaoTest {
     @Test
     fun should_add_an_item() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             itemsDao.add(Weapon(inventoryId = 1))
 
             assertThat(itemsDao.findAll().size).isEqualTo(1)
@@ -70,6 +75,8 @@ class ItemDaoTest {
                 GenericItem(inventoryId = 3))
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             itemsDao.addAll(itemsToAdd)
 
             assertThat(itemsDao.findAll().size).isEqualTo(3)
@@ -79,6 +86,8 @@ class ItemDaoTest {
     @Test
     fun should_add_an_item_then_fail_to_add_it_again() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             var resOfInsert = itemsDao.add(Weapon(inventoryId = 1, name = "Wea"))
             assertThat(resOfInsert).isEqualTo(1)
             assertThat(itemsDao.findAll().size).isEqualTo(1)
@@ -94,6 +103,8 @@ class ItemDaoTest {
     @Test
     fun should_read_an_item() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             itemsDao.add(Armor(1, name = "hello", soak = 2))
 
             assertThat(itemsDao.findAll().size).isEqualTo(1)
@@ -111,6 +122,8 @@ class ItemDaoTest {
     @Test
     fun should_read_an_item_from_inventoryId() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             itemsDao.add(GenericItem(inventoryId = 2, encumbrance = 1))
 
             assertThat(itemsDao.findAll().size).isEqualTo(1)
@@ -125,6 +138,8 @@ class ItemDaoTest {
     @Test
     fun should_read_an_item_of_each_type_by_id() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             itemsDao.add(Weapon(id = 1, inventoryId = 1, criticalLevel = 3))
             itemsDao.add(Expandable(id = 2, inventoryId = 1, uses = 10))
             itemsDao.add(Armor(id = 3, inventoryId = 1, defense = 2))
@@ -167,6 +182,8 @@ class ItemDaoTest {
                 Armor(inventoryId = 3, defense = 2))
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             itemsDao.addAll(itemsToAdd)
 
             val allInsertedItems = itemsDao.findAll()
@@ -194,6 +211,8 @@ class ItemDaoTest {
                 Armor(inventoryId = 3, defense = 2))
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             itemsDao.addAll(itemToAdd)
 
             val allInsertedItems = itemsDao.findAllByInventoryId(2)
@@ -213,6 +232,8 @@ class ItemDaoTest {
                 Armor(inventoryId = 1, defense = 2))
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             itemsDao.addAll(itemToAdd)
 
             val armors = itemsDao.findAllArmorsByInventoryId(1)
@@ -237,6 +258,8 @@ class ItemDaoTest {
     @Test
     fun should_update_an_item() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             // ADD
             val id = itemsDao.add(Weapon(inventoryId = 1))
             assertThat(itemsDao.findAll().size).isEqualTo(1)
@@ -269,6 +292,8 @@ class ItemDaoTest {
     @Test
     fun should_update_all_item() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             // ADD
             val id1 = itemsDao.add(Armor(inventoryId = 1))
             val id2 = itemsDao.add(Expandable(inventoryId = 2))
@@ -299,6 +324,8 @@ class ItemDaoTest {
     @Test
     fun should_return_false_when_update_a_inexistant_item() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             assertThat(itemsDao.findAll().size).isEqualTo(0)
 
             val res = itemsDao.update(Weapon(id = 5, inventoryId = 1))
@@ -310,6 +337,8 @@ class ItemDaoTest {
     @Test
     fun should_return_false_when_update_on_inexistant_table() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             drop(ItemsTable)
 
             val res = itemsDao.update(Armor(id = 1, inventoryId = 1))
@@ -326,6 +355,8 @@ class ItemDaoTest {
         val item3 = Armor(inventoryId = 3)
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             val addAllResult = itemsDao.addAll(listOf(item1, item2, item3))
             assertThat(addAllResult.size).isEqualTo(3)
             assertThat(addAllResult).containsExactly(1, 2, 3)
@@ -344,6 +375,8 @@ class ItemDaoTest {
         val item = Armor(inventoryId = 2)
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             val addedCharacteristics = itemsDao.add(item)
             assertThat(addedCharacteristics).isEqualTo(1)
             assertThat(itemsDao.findByInventoryId(2)).isNotNull()
@@ -360,6 +393,8 @@ class ItemDaoTest {
         val item2 = Armor(inventoryId = 2)
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             itemsDao.add(item1)
             itemsDao.add(item2)
             assertThat(itemsDao.findAll().size).isEqualTo(2)
@@ -376,6 +411,8 @@ class ItemDaoTest {
         val item3 = Armor(inventoryId = 2, name = "Plates")
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             itemsDao.addAll(listOf(item1, item2, item3))
             assertThat(itemsDao.findAll().size).isEqualTo(3)
             assertThat(itemsDao.findAllByInventoryId(1).size).isEqualTo(2)
@@ -395,6 +432,8 @@ class ItemDaoTest {
         val item3 = Weapon(inventoryId = 2, name = "Baton")
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             itemsDao.addAll(listOf(item1, item2, item3))
             assertThat(itemsDao.findAll().size).isEqualTo(3)
             assertThat(itemsDao.findAllByInventoryId(1).size).isEqualTo(2)
@@ -415,6 +454,8 @@ class ItemDaoTest {
         val item3 = GenericItem(inventoryId = 2, name = "Bout de bois")
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             itemsDao.addAll(listOf(item1, item2, item3))
             assertThat(itemsDao.findAll().size).isEqualTo(3)
             assertThat(itemsDao.findAllByInventoryId(1).size).isEqualTo(2)
@@ -435,6 +476,8 @@ class ItemDaoTest {
         val item3 = Expandable(inventoryId = 2, name = "Potion")
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             itemsDao.addAll(listOf(item1, item2, item3))
             assertThat(itemsDao.findAll().size).isEqualTo(3)
             assertThat(itemsDao.findAllByInventoryId(1).size).isEqualTo(2)
@@ -451,6 +494,8 @@ class ItemDaoTest {
     @Test
     fun should_return_false_when_delete_a_inexistant_item() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             assertThat(itemsDao.findAll().size).isEqualTo(0)
 
             val res = itemsDao.delete(Expandable(id = 6, inventoryId = 1))
@@ -462,6 +507,8 @@ class ItemDaoTest {
     @Test
     fun should_return_false_when_delete_on_inexistant_table() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             drop(ItemsTable)
 
             val res = itemsDao.delete(GenericItem(id = 1, inventoryId = 1))
@@ -472,6 +519,8 @@ class ItemDaoTest {
     @Test
     fun should_return_false_when_delete_on_inventory_id_but_inexistant_table() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             drop(ItemsTable)
 
             val res = itemsDao.deleteByInventoryId(1)

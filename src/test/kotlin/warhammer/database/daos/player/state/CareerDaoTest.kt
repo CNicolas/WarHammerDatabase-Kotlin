@@ -33,7 +33,12 @@ class CareerDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
+
             create(PlayersTable, PlayerStateTable, CareerTable)
+
+            playersDao.deleteAll()
+            playerStateDao.deleteAll()
+            CareerTable.deleteAll()
 
             playersDao.add(Player(id = 1, name = "PlayerName1"))
             playersDao.add(Player(id = 2, name = "PlayerName2"))
@@ -42,8 +47,6 @@ class CareerDaoTest {
             playerStateDao.add(PlayerState(id = 1, playerId = 1))
             playerStateDao.add(PlayerState(id = 2, playerId = 2))
             playerStateDao.add(PlayerState(id = 3, playerId = 3))
-
-            CareerTable.deleteAll()
         }
     }
 
@@ -51,6 +54,8 @@ class CareerDaoTest {
     @Test
     fun should_add_a_career() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             careerDao.add(Career(stateId = 1))
 
             assertThat(careerDao.findAll().size).isEqualTo(1)
@@ -65,6 +70,8 @@ class CareerDaoTest {
                 Career(stateId = 3))
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             careerDao.addAll(careerToAdd)
 
             assertThat(careerDao.findAll().size).isEqualTo(3)
@@ -74,6 +81,8 @@ class CareerDaoTest {
     @Test
     fun should_add_a_career_then_fail_to_add_it_again() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             var resOfInsert = careerDao.add(Career(stateId = 1))
             assertThat(resOfInsert).isEqualTo(1)
             assertThat(careerDao.findAll().size).isEqualTo(1)
@@ -89,6 +98,8 @@ class CareerDaoTest {
     @Test
     fun should_read_a_career() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             careerDao.add(Career(1, careerName = "Tueur de Démons", rank = 5))
 
             assertThat(careerDao.findAll().size).isEqualTo(1)
@@ -104,6 +115,8 @@ class CareerDaoTest {
     @Test
     fun should_read_a_career_from_stateId() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             careerDao.add(Career(stateId = 2, availableExperience = 1))
 
             assertThat(careerDao.findAll().size).isEqualTo(1)
@@ -123,6 +136,8 @@ class CareerDaoTest {
                 Career(stateId = 3, rank = 4))
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             careerDao.addAll(careerToAdd)
 
             val allInsertedCareer = careerDao.findAll()
@@ -144,6 +159,8 @@ class CareerDaoTest {
     @Test
     fun should_update_a_career() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             // ADD
             val id = careerDao.add(Career(stateId = 1))
             assertThat(careerDao.findAll().size).isEqualTo(1)
@@ -170,6 +187,8 @@ class CareerDaoTest {
     @Test
     fun should_update_all_career() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             // ADD
             val id1 = careerDao.add(Career(stateId = 1))
             val id2 = careerDao.add(Career(stateId = 2))
@@ -198,6 +217,8 @@ class CareerDaoTest {
     @Test
     fun should_return_false_when_update_a_inexistant_career() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             assertThat(careerDao.findAll().size).isEqualTo(0)
 
             val res = careerDao.update(Career(stateId = 1))
@@ -209,6 +230,8 @@ class CareerDaoTest {
     @Test
     fun should_return_false_when_update_on_inexistant_table() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             drop(CareerTable)
 
             val res = careerDao.update(Career(1, 1))
@@ -225,6 +248,8 @@ class CareerDaoTest {
         val career3 = Career(stateId = 3)
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             val addAllResult = careerDao.addAll(listOf(career1, career2, career3))
             assertThat(addAllResult.size).isEqualTo(3)
             assertThat(addAllResult).containsExactly(1, 2, 3)
@@ -243,6 +268,8 @@ class CareerDaoTest {
         val career = Career(stateId = 2)
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             val addedCharacteristics = careerDao.add(career)
             assertThat(addedCharacteristics).isEqualTo(1)
             assertThat(careerDao.findByStateId(2)).isNotNull()
@@ -259,6 +286,8 @@ class CareerDaoTest {
         val career2 = Career(stateId = 2)
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             careerDao.add(career1)
             careerDao.add(career2)
             assertThat(careerDao.findAll().size).isEqualTo(2)
@@ -271,6 +300,8 @@ class CareerDaoTest {
     @Test
     fun should_return_false_when_delete_a_inexistant_career() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             assertThat(careerDao.findAll().size).isEqualTo(0)
 
             val res = careerDao.delete(Career(1, 6))
@@ -282,6 +313,8 @@ class CareerDaoTest {
     @Test
     fun should_return_false_when_delete_on_inexistant_table() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             drop(CareerTable)
 
             val res = careerDao.delete(Career(1, 1))
@@ -292,6 +325,8 @@ class CareerDaoTest {
     @Test
     fun should_return_false_when_delete_on_state_id_but_inexistant_table() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             drop(CareerTable)
 
             val res = careerDao.deleteByStateId(1)

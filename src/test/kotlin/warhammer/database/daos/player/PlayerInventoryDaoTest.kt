@@ -29,13 +29,15 @@ class PlayerInventoryDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
+
             create(PlayersTable, PlayerInventoryTable)
+
+            playersDao.deleteAll()
+            PlayerInventoryTable.deleteAll()
 
             playersDao.add(Player(id = 1, name = "PlayerName1"))
             playersDao.add(Player(id = 2, name = "PlayerName2"))
             playersDao.add(Player(id = 3, name = "PlayerName3"))
-
-            PlayerInventoryTable.deleteAll()
         }
     }
 
@@ -43,6 +45,8 @@ class PlayerInventoryDaoTest {
     @Test
     fun should_add_a_playerInventory() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             playerInventoryDao.add(PlayerInventory(playerId = 1))
 
             assertThat(playerInventoryDao.findAll().size).isEqualTo(1)
@@ -57,6 +61,8 @@ class PlayerInventoryDaoTest {
                 PlayerInventory(playerId = 3))
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             playerInventoryDao.addAll(playerInventoryToAdd)
 
             assertThat(playerInventoryDao.findAll().size).isEqualTo(3)
@@ -66,6 +72,8 @@ class PlayerInventoryDaoTest {
     @Test
     fun should_add_a_playerInventory_then_fail_to_add_it_again() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             var resOfInsert = playerInventoryDao.add(PlayerInventory(1))
             assertThat(resOfInsert).isEqualTo(1)
             assertThat(playerInventoryDao.findAll().size).isEqualTo(1)
@@ -81,6 +89,8 @@ class PlayerInventoryDaoTest {
     @Test
     fun should_read_a_playerInventory() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             playerInventoryDao.add(PlayerInventory(1, maxEncumbrance = 1))
 
             assertThat(playerInventoryDao.findAll().size).isEqualTo(1)
@@ -95,6 +105,8 @@ class PlayerInventoryDaoTest {
     @Test
     fun should_read_a_playerInventory_from_playerId() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             playerInventoryDao.add(PlayerInventory(playerId = 2, encumbrance = 1))
 
             assertThat(playerInventoryDao.findAll().size).isEqualTo(1)
@@ -114,6 +126,8 @@ class PlayerInventoryDaoTest {
                 PlayerInventory(playerId = 3, encumbrance = 4))
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             playerInventoryDao.addAll(playerInventoryToAdd)
 
             val allInsertedPlayerInventory = playerInventoryDao.findAll()
@@ -135,6 +149,8 @@ class PlayerInventoryDaoTest {
     @Test
     fun should_update_a_playerInventory() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             // ADD
             val id = playerInventoryDao.add(PlayerInventory(playerId = 1))
             assertThat(playerInventoryDao.findAll().size).isEqualTo(1)
@@ -161,6 +177,8 @@ class PlayerInventoryDaoTest {
     @Test
     fun should_update_all_playerInventory() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             // ADD
             val id1 = playerInventoryDao.add(PlayerInventory(playerId = 1))
             val id2 = playerInventoryDao.add(PlayerInventory(playerId = 2))
@@ -189,6 +207,8 @@ class PlayerInventoryDaoTest {
     @Test
     fun should_return_false_when_update_a_inexistant_playerInventory() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             assertThat(playerInventoryDao.findAll().size).isEqualTo(0)
 
             val res = playerInventoryDao.update(PlayerInventory(playerId = 1))
@@ -200,6 +220,8 @@ class PlayerInventoryDaoTest {
     @Test
     fun should_return_false_when_update_on_inexistant_table() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             drop(PlayerInventoryTable)
 
             val res = playerInventoryDao.update(PlayerInventory(1, 1))
@@ -216,6 +238,8 @@ class PlayerInventoryDaoTest {
         val playerInventory3 = PlayerInventory(playerId = 3)
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             val addAllResult = playerInventoryDao.addAll(listOf(playerInventory1, playerInventory2, playerInventory3))
             assertThat(addAllResult.size).isEqualTo(3)
             assertThat(addAllResult).containsExactly(1, 2, 3)
@@ -234,6 +258,8 @@ class PlayerInventoryDaoTest {
         val playerInventory = PlayerInventory(playerId = 2)
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             val addedInventorys = playerInventoryDao.add(playerInventory)
             assertThat(addedInventorys).isEqualTo(1)
             assertThat(playerInventoryDao.findByPlayerId(2)).isNotNull()
@@ -250,6 +276,8 @@ class PlayerInventoryDaoTest {
         val playerInventory2 = PlayerInventory(playerId = 2)
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             playerInventoryDao.add(playerInventory1)
             playerInventoryDao.add(playerInventory2)
             assertThat(playerInventoryDao.findAll().size).isEqualTo(2)
@@ -262,6 +290,8 @@ class PlayerInventoryDaoTest {
     @Test
     fun should_return_false_when_delete_a_inexistant_playerInventory() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             assertThat(playerInventoryDao.findAll().size).isEqualTo(0)
 
             val res = playerInventoryDao.delete(PlayerInventory(1, 6))
@@ -273,6 +303,8 @@ class PlayerInventoryDaoTest {
     @Test
     fun should_return_false_when_delete_on_inexistant_table() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             drop(PlayerInventoryTable)
 
             val res = playerInventoryDao.delete(PlayerInventory(1, 1))
@@ -283,6 +315,8 @@ class PlayerInventoryDaoTest {
     @Test
     fun should_return_false_when_delete_on_player_id_but_inexistant_table() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             drop(PlayerInventoryTable)
 
             val res = playerInventoryDao.deleteByPlayerId(1)

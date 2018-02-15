@@ -29,13 +29,15 @@ class PlayerCharacteristicsDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
+
             create(PlayersTable, PlayerCharacteristicsTable)
+
+            playersDao.deleteAll()
+            PlayerCharacteristicsTable.deleteAll()
 
             playersDao.add(Player(id = 1, name = "PlayerName1"))
             playersDao.add(Player(id = 2, name = "PlayerName2"))
             playersDao.add(Player(id = 3, name = "PlayerName3"))
-
-            PlayerCharacteristicsTable.deleteAll()
         }
     }
 
@@ -126,8 +128,6 @@ class PlayerCharacteristicsDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            create(PlayerCharacteristicsTable)
-
             playerCharacteristicsDao.addAll(playerCharacteristicsToAdd)
 
             val allInsertedPlayerCharacteristics = playerCharacteristicsDao.findAll()
@@ -178,7 +178,6 @@ class PlayerCharacteristicsDaoTest {
     fun should_update_all_playerCharacteristics() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            create(PlayerCharacteristicsTable)
 
             // ADD
             val id1 = playerCharacteristicsDao.add(PlayerCharacteristicsEntity(playerId = 1))
@@ -209,7 +208,6 @@ class PlayerCharacteristicsDaoTest {
     fun should_return_false_when_update_a_inexistant_playerCharacteristic() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            create(PlayerCharacteristicsTable)
 
             assertThat(playerCharacteristicsDao.findAll().size).isEqualTo(0)
 
@@ -241,7 +239,6 @@ class PlayerCharacteristicsDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            create(PlayerCharacteristicsTable)
 
             val addAllResult = playerCharacteristicsDao.addAll(listOf(playerCharacteristic1, playerCharacteristic2, playerCharacteristic3))
             assertThat(addAllResult.size).isEqualTo(3)
@@ -262,7 +259,6 @@ class PlayerCharacteristicsDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            create(PlayerCharacteristicsTable)
 
             val addedCharacteristics = playerCharacteristicsDao.add(playerCharacteristic)
             assertThat(addedCharacteristics).isEqualTo(1)
@@ -281,7 +277,6 @@ class PlayerCharacteristicsDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            create(PlayerCharacteristicsTable)
 
             playerCharacteristicsDao.add(playerCharacteristic1)
             playerCharacteristicsDao.add(playerCharacteristic2)
@@ -296,7 +291,6 @@ class PlayerCharacteristicsDaoTest {
     fun should_return_false_when_delete_a_inexistant_playerCharacteristic() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            create(PlayerCharacteristicsTable)
 
             assertThat(playerCharacteristicsDao.findAll().size).isEqualTo(0)
 

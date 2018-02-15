@@ -36,6 +36,8 @@ class PlayersDaoTest {
     @Test
     fun should_add_a_player() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             playersDao.add(Player(name = "PlayerName"))
 
             assertThat(playersDao.findAll().size).isEqualTo(1)
@@ -50,6 +52,8 @@ class PlayersDaoTest {
                 Player(name = "Player3"))
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             playersDao.addAll(playersToAdd)
 
             assertThat(playersDao.findAll().size).isEqualTo(3)
@@ -61,6 +65,8 @@ class PlayersDaoTest {
         val playerName = "PlayerName"
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             var resOfInsert = playersDao.add(Player(name = playerName))
             assertThat(resOfInsert).isEqualTo(1)
             assertThat(playersDao.findAll().size).isEqualTo(1)
@@ -78,6 +84,8 @@ class PlayersDaoTest {
         val playerName = "PlayerName"
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             playersDao.add(Player(name = playerName))
             assertThat(playersDao.findAll().size).isEqualTo(1)
 
@@ -95,6 +103,8 @@ class PlayersDaoTest {
                 Player(name = "Player3", age = 219))
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             playersDao.addAll(playersToAdd)
 
             val allInsertedPlayers = playersDao.findAll()
@@ -115,6 +125,8 @@ class PlayersDaoTest {
         val newPlayerName = "TheLegend28"
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             // ADD
             val id = playersDao.add(Player(name = playerName))
             assertThat(playersDao.findAll().size).isEqualTo(1)
@@ -139,6 +151,8 @@ class PlayersDaoTest {
     @Test
     fun should_update_all_players() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             // ADD
             val id1 = playersDao.add(Player(name = "Player1"))
             val id2 = playersDao.add(Player(name = "Player2"))
@@ -159,6 +173,8 @@ class PlayersDaoTest {
     @Test
     fun should_return_false_when_update_a_inexistant_player() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             assertThat(playersDao.findAll().size).isEqualTo(0)
 
             val res = playersDao.update(Player(name = "Inexistant"))
@@ -170,6 +186,8 @@ class PlayersDaoTest {
     @Test
     fun should_return_false_when_update_on_inexistant_table() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             drop(PlayersTable)
 
             val res = playersDao.update(Player(name = "Inexistant"))
@@ -186,6 +204,8 @@ class PlayersDaoTest {
         val player3 = Player(name = "Player3")
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             playersDao.add(player1)
             playersDao.add(player2)
             playersDao.add(player3)
@@ -206,6 +226,8 @@ class PlayersDaoTest {
         val player2 = Player(name = "Player2")
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             playersDao.add(player1)
             playersDao.add(player2)
             assertThat(playersDao.findAll().size).isEqualTo(2)
@@ -218,6 +240,8 @@ class PlayersDaoTest {
     @Test
     fun should_return_false_when_delete_a_inexistant_player() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             assertThat(playersDao.findAll().size).isEqualTo(0)
 
             val res = playersDao.delete(Player(name = "Inexistant"))
@@ -229,6 +253,8 @@ class PlayersDaoTest {
     @Test
     fun should_return_false_when_delete_on_inexistant_table() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             drop(PlayersTable)
 
             val res = playersDao.delete(Player(name = "Inexistant"))

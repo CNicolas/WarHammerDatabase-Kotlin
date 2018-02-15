@@ -29,13 +29,15 @@ class PlayerStateDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
+
             create(PlayersTable, PlayerStateTable)
+
+            playersDao.deleteAll()
+            PlayerStateTable.deleteAll()
 
             playersDao.add(Player(id = 1, name = "PlayerName1"))
             playersDao.add(Player(id = 2, name = "PlayerName2"))
             playersDao.add(Player(id = 3, name = "PlayerName3"))
-
-            PlayerStateTable.deleteAll()
         }
     }
 
@@ -43,6 +45,8 @@ class PlayerStateDaoTest {
     @Test
     fun should_add_a_playerState() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             playerStateDao.add(PlayerState(playerId = 1))
 
             assertThat(playerStateDao.findAll().size).isEqualTo(1)
@@ -57,6 +61,8 @@ class PlayerStateDaoTest {
                 PlayerState(playerId = 3))
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             playerStateDao.addAll(playerStateToAdd)
 
             assertThat(playerStateDao.findAll().size).isEqualTo(3)
@@ -66,6 +72,8 @@ class PlayerStateDaoTest {
     @Test
     fun should_add_a_playerState_then_fail_to_add_it_again() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             var resOfInsert = playerStateDao.add(PlayerState(1))
             assertThat(resOfInsert).isEqualTo(1)
             assertThat(playerStateDao.findAll().size).isEqualTo(1)
@@ -81,6 +89,8 @@ class PlayerStateDaoTest {
     @Test
     fun should_read_a_playerState() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             playerStateDao.add(PlayerState(1, stress = 1))
 
             assertThat(playerStateDao.findAll().size).isEqualTo(1)
@@ -95,6 +105,8 @@ class PlayerStateDaoTest {
     @Test
     fun should_read_a_playerState_from_playerId() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             playerStateDao.add(PlayerState(playerId = 2, exhaustion = 1))
 
             assertThat(playerStateDao.findAll().size).isEqualTo(1)
@@ -114,6 +126,8 @@ class PlayerStateDaoTest {
                 PlayerState(playerId = 3, corruption = 4))
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             playerStateDao.addAll(playerStateToAdd)
 
             val allInsertedPlayerState = playerStateDao.findAll()
@@ -135,6 +149,8 @@ class PlayerStateDaoTest {
     @Test
     fun should_update_a_playerState() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             // ADD
             val id = playerStateDao.add(PlayerState(playerId = 1))
             assertThat(playerStateDao.findAll().size).isEqualTo(1)
@@ -161,6 +177,8 @@ class PlayerStateDaoTest {
     @Test
     fun should_update_all_playerState() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             // ADD
             val id1 = playerStateDao.add(PlayerState(playerId = 1))
             val id2 = playerStateDao.add(PlayerState(playerId = 2))
@@ -189,6 +207,8 @@ class PlayerStateDaoTest {
     @Test
     fun should_return_false_when_update_a_inexistant_playerState() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             assertThat(playerStateDao.findAll().size).isEqualTo(0)
 
             val res = playerStateDao.update(PlayerState(playerId = 1))
@@ -200,6 +220,8 @@ class PlayerStateDaoTest {
     @Test
     fun should_return_false_when_update_on_inexistant_table() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             drop(PlayerStateTable)
 
             val res = playerStateDao.update(PlayerState(1, 1))
@@ -216,6 +238,8 @@ class PlayerStateDaoTest {
         val playerState3 = PlayerState(playerId = 3)
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             val addAllResult = playerStateDao.addAll(listOf(playerState1, playerState2, playerState3))
             assertThat(addAllResult.size).isEqualTo(3)
             assertThat(addAllResult).containsExactly(1, 2, 3)
@@ -234,6 +258,8 @@ class PlayerStateDaoTest {
         val playerState = PlayerState(playerId = 2)
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             val addedStates = playerStateDao.add(playerState)
             assertThat(addedStates).isEqualTo(1)
             assertThat(playerStateDao.findByPlayerId(2)).isNotNull()
@@ -250,6 +276,8 @@ class PlayerStateDaoTest {
         val playerState2 = PlayerState(playerId = 2)
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             playerStateDao.add(playerState1)
             playerStateDao.add(playerState2)
             assertThat(playerStateDao.findAll().size).isEqualTo(2)
@@ -262,6 +290,8 @@ class PlayerStateDaoTest {
     @Test
     fun should_return_false_when_delete_a_inexistant_playerState() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             assertThat(playerStateDao.findAll().size).isEqualTo(0)
 
             val res = playerStateDao.delete(PlayerState(1, 6))
@@ -273,6 +303,8 @@ class PlayerStateDaoTest {
     @Test
     fun should_return_false_when_delete_on_inexistant_table() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             drop(PlayerStateTable)
 
             val res = playerStateDao.delete(PlayerState(1, 1))
@@ -283,6 +315,8 @@ class PlayerStateDaoTest {
     @Test
     fun should_return_false_when_delete_on_player_id_but_inexistant_table() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             drop(PlayerStateTable)
 
             val res = playerStateDao.deleteByPlayerId(1)

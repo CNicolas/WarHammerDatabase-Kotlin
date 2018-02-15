@@ -33,7 +33,12 @@ class MoneyDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
+
             create(PlayersTable, PlayerInventoryTable, MoneyTable)
+
+            playersDao.deleteAll()
+            playerInventoryDao.deleteAll()
+            MoneyTable.deleteAll()
 
             playersDao.add(Player(id = 1, name = "PlayerName1"))
             playersDao.add(Player(id = 2, name = "PlayerName2"))
@@ -42,8 +47,6 @@ class MoneyDaoTest {
             playerInventoryDao.add(PlayerInventory(id = 1, playerId = 1))
             playerInventoryDao.add(PlayerInventory(id = 2, playerId = 2))
             playerInventoryDao.add(PlayerInventory(id = 3, playerId = 3))
-
-            MoneyTable.deleteAll()
         }
     }
 
@@ -51,6 +54,8 @@ class MoneyDaoTest {
     @Test
     fun should_add_a_money() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             moneyDao.add(Money(inventoryId = 1))
 
             assertThat(moneyDao.findAll().size).isEqualTo(1)
@@ -65,6 +70,8 @@ class MoneyDaoTest {
                 Money(inventoryId = 3))
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             moneyDao.addAll(moneyToAdd)
 
             assertThat(moneyDao.findAll().size).isEqualTo(3)
@@ -74,6 +81,8 @@ class MoneyDaoTest {
     @Test
     fun should_add_a_money_then_fail_to_add_it_again() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             var resOfInsert = moneyDao.add(Money(inventoryId = 1))
             assertThat(resOfInsert).isEqualTo(1)
             assertThat(moneyDao.findAll().size).isEqualTo(1)
@@ -89,6 +98,8 @@ class MoneyDaoTest {
     @Test
     fun should_read_a_money() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             moneyDao.add(Money(1, brass = 2))
 
             assertThat(moneyDao.findAll().size).isEqualTo(1)
@@ -103,6 +114,8 @@ class MoneyDaoTest {
     @Test
     fun should_read_a_money_from_inventoryId() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             moneyDao.add(Money(inventoryId = 2, silver = 1))
 
             assertThat(moneyDao.findAll().size).isEqualTo(1)
@@ -122,6 +135,8 @@ class MoneyDaoTest {
                 Money(inventoryId = 3, gold = 4))
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             moneyDao.addAll(moneyToAdd)
 
             val allInsertedMoney = moneyDao.findAll()
@@ -143,6 +158,8 @@ class MoneyDaoTest {
     @Test
     fun should_update_a_money() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             // ADD
             val id = moneyDao.add(Money(inventoryId = 1))
             assertThat(moneyDao.findAll().size).isEqualTo(1)
@@ -169,6 +186,8 @@ class MoneyDaoTest {
     @Test
     fun should_update_all_money() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             // ADD
             val id1 = moneyDao.add(Money(inventoryId = 1))
             val id2 = moneyDao.add(Money(inventoryId = 2))
@@ -197,6 +216,8 @@ class MoneyDaoTest {
     @Test
     fun should_return_false_when_update_a_inexistant_money() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             assertThat(moneyDao.findAll().size).isEqualTo(0)
 
             val res = moneyDao.update(Money(inventoryId = 1))
@@ -208,6 +229,8 @@ class MoneyDaoTest {
     @Test
     fun should_return_false_when_update_on_inexistant_table() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             drop(MoneyTable)
 
             val res = moneyDao.update(Money(1, 1))
@@ -224,6 +247,8 @@ class MoneyDaoTest {
         val money3 = Money(inventoryId = 3)
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             val addAllResult = moneyDao.addAll(listOf(money1, money2, money3))
             assertThat(addAllResult.size).isEqualTo(3)
             assertThat(addAllResult).containsExactly(1, 2, 3)
@@ -242,6 +267,8 @@ class MoneyDaoTest {
         val money = Money(inventoryId = 2)
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             val addedCharacteristics = moneyDao.add(money)
             assertThat(addedCharacteristics).isEqualTo(1)
             assertThat(moneyDao.findByInventoryId(2)).isNotNull()
@@ -258,6 +285,8 @@ class MoneyDaoTest {
         val money2 = Money(inventoryId = 2)
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             moneyDao.add(money1)
             moneyDao.add(money2)
             assertThat(moneyDao.findAll().size).isEqualTo(2)
@@ -270,6 +299,8 @@ class MoneyDaoTest {
     @Test
     fun should_return_false_when_delete_a_inexistant_money() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             assertThat(moneyDao.findAll().size).isEqualTo(0)
 
             val res = moneyDao.delete(Money(1, 6))
@@ -281,6 +312,8 @@ class MoneyDaoTest {
     @Test
     fun should_return_false_when_delete_on_inexistant_table() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             drop(MoneyTable)
 
             val res = moneyDao.delete(Money(1, 1))
@@ -291,6 +324,8 @@ class MoneyDaoTest {
     @Test
     fun should_return_false_when_delete_on_inventory_id_but_inexistant_table() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             drop(MoneyTable)
 
             val res = moneyDao.deleteByInventoryId(1)

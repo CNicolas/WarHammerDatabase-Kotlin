@@ -33,7 +33,12 @@ class StanceDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
+
             create(PlayersTable, PlayerStateTable, StanceTable)
+
+            playersDao.deleteAll()
+            playerStateDao.deleteAll()
+            StanceTable.deleteAll()
 
             playersDao.add(Player(id = 1, name = "PlayerName1"))
             playersDao.add(Player(id = 2, name = "PlayerName2"))
@@ -42,8 +47,6 @@ class StanceDaoTest {
             playerStateDao.add(PlayerState(id = 1, playerId = 1))
             playerStateDao.add(PlayerState(id = 2, playerId = 2))
             playerStateDao.add(PlayerState(id = 3, playerId = 3))
-
-            StanceTable.deleteAll()
         }
     }
 
@@ -51,6 +54,8 @@ class StanceDaoTest {
     @Test
     fun should_add_a_stance() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             stanceDao.add(Stance(stateId = 1))
 
             assertThat(stanceDao.findAll().size).isEqualTo(1)
@@ -65,6 +70,8 @@ class StanceDaoTest {
                 Stance(stateId = 3))
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             stanceDao.addAll(stanceToAdd)
 
             assertThat(stanceDao.findAll().size).isEqualTo(3)
@@ -74,6 +81,8 @@ class StanceDaoTest {
     @Test
     fun should_add_a_stance_then_fail_to_add_it_again() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             var resOfInsert = stanceDao.add(Stance(stateId = 1))
             assertThat(resOfInsert).isEqualTo(1)
             assertThat(stanceDao.findAll().size).isEqualTo(1)
@@ -89,6 +98,8 @@ class StanceDaoTest {
     @Test
     fun should_read_a_stance() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             stanceDao.add(Stance(1, reckless = 1))
 
             assertThat(stanceDao.findAll().size).isEqualTo(1)
@@ -103,6 +114,8 @@ class StanceDaoTest {
     @Test
     fun should_read_a_stance_from_stateId() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             logger.addLogger(StdOutSqlLogger)
 
             stanceDao.add(Stance(stateId = 2, conservative = 1))
@@ -124,6 +137,8 @@ class StanceDaoTest {
                 Stance(stateId = 3, maxConservative = 4))
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             stanceDao.addAll(stanceToAdd)
 
             val allInsertedStance = stanceDao.findAll()
@@ -145,6 +160,8 @@ class StanceDaoTest {
     @Test
     fun should_update_a_stance() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             // ADD
             val id = stanceDao.add(Stance(stateId = 1))
             assertThat(stanceDao.findAll().size).isEqualTo(1)
@@ -171,6 +188,8 @@ class StanceDaoTest {
     @Test
     fun should_update_all_stance() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             // ADD
             val id1 = stanceDao.add(Stance(stateId = 1))
             val id2 = stanceDao.add(Stance(stateId = 2))
@@ -199,6 +218,8 @@ class StanceDaoTest {
     @Test
     fun should_return_false_when_update_a_inexistant_stance() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             assertThat(stanceDao.findAll().size).isEqualTo(0)
 
             val res = stanceDao.update(Stance(stateId = 1))
@@ -210,6 +231,8 @@ class StanceDaoTest {
     @Test
     fun should_return_false_when_update_on_inexistant_table() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             drop(StanceTable)
 
             val res = stanceDao.update(Stance(1, 1))
@@ -226,6 +249,8 @@ class StanceDaoTest {
         val stance3 = Stance(stateId = 3)
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             val addAllResult = stanceDao.addAll(listOf(stance1, stance2, stance3))
             assertThat(addAllResult.size).isEqualTo(3)
             assertThat(addAllResult).containsExactly(1, 2, 3)
@@ -244,6 +269,8 @@ class StanceDaoTest {
         val stance = Stance(stateId = 2)
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             val addedCharacteristics = stanceDao.add(stance)
             assertThat(addedCharacteristics).isEqualTo(1)
             assertThat(stanceDao.findByStateId(2)).isNotNull()
@@ -260,6 +287,8 @@ class StanceDaoTest {
         val stance2 = Stance(stateId = 2)
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             stanceDao.add(stance1)
             stanceDao.add(stance2)
             assertThat(stanceDao.findAll().size).isEqualTo(2)
@@ -272,6 +301,8 @@ class StanceDaoTest {
     @Test
     fun should_return_false_when_delete_a_inexistant_stance() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             assertThat(stanceDao.findAll().size).isEqualTo(0)
 
             val res = stanceDao.delete(Stance(1, 6))
@@ -283,6 +314,8 @@ class StanceDaoTest {
     @Test
     fun should_return_false_when_delete_on_inexistant_table() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             drop(StanceTable)
 
             val res = stanceDao.delete(Stance(1, 1))
@@ -293,6 +326,8 @@ class StanceDaoTest {
     @Test
     fun should_return_false_when_delete_on_state_id_but_inexistant_table() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+
             drop(StanceTable)
 
             val res = stanceDao.deleteByStateId(1)

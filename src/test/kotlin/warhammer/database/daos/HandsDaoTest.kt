@@ -35,6 +35,8 @@ class HandsDaoTest {
     @Test
     fun should_add_a_hand() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             handsDao.add(Hand("HandName"))
 
             assertThat(handsDao.findAll().size).isEqualTo(1)
@@ -49,6 +51,8 @@ class HandsDaoTest {
                 Hand("Hand3"))
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             handsDao.addAll(handsToAdd)
 
             assertThat(handsDao.findAll().size).isEqualTo(3)
@@ -60,6 +64,8 @@ class HandsDaoTest {
         val handName = "PlayerName"
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             var resOfInsert = handsDao.add(Hand(handName))
             assertThat(resOfInsert).isEqualTo(1)
             assertThat(handsDao.findAll().size).isEqualTo(1)
@@ -77,6 +83,8 @@ class HandsDaoTest {
         val handName = "PlayerName"
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             handsDao.add(Hand(handName))
             assertThat(handsDao.findAll().size).isEqualTo(1)
 
@@ -94,6 +102,8 @@ class HandsDaoTest {
                 Hand(name = "Hand3"))
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             handsDao.addAll(handsToAdd)
 
             val allInsertedHands = handsDao.findAll()
@@ -110,6 +120,8 @@ class HandsDaoTest {
         val newHandName = "HandName2"
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             // ADD
             val id = handsDao.add(Hand(handName))
             assertThat(handsDao.findAll().size).isEqualTo(1)
@@ -134,6 +146,8 @@ class HandsDaoTest {
     @Test
     fun should_update_all_hands() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             // ADD
             val id1 = handsDao.add(Hand("Hand1"))
             val id2 = handsDao.add(Hand("Hand2"))
@@ -154,6 +168,8 @@ class HandsDaoTest {
     @Test
     fun should_return_false_when_update_a_inexistant_hand() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             assertThat(handsDao.findAll().size).isEqualTo(0)
 
             val res = handsDao.update(Hand("Inexistant"))
@@ -165,6 +181,8 @@ class HandsDaoTest {
     @Test
     fun should_return_false_when_update_on_inexistant_table() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             drop(HandsTable)
 
             val res = handsDao.update(Hand("Inexistant"))
@@ -181,6 +199,8 @@ class HandsDaoTest {
         val hand3 = Hand("Hand3")
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             val addAllResult = handsDao.addAll(listOf(hand1, hand2, hand3))
             assertThat(addAllResult.size).isEqualTo(3)
             assertThat(addAllResult).containsExactly(1, 2, 3)
@@ -200,6 +220,8 @@ class HandsDaoTest {
         val hand2 = Hand("Hand2")
 
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             handsDao.add(hand1)
             handsDao.add(hand2)
             assertThat(handsDao.findAll().size).isEqualTo(2)
@@ -212,6 +234,8 @@ class HandsDaoTest {
     @Test
     fun should_return_false_when_delete_a_inexistant_hand() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             HandsTable.deleteAll()
             assertThat(handsDao.findAll().size).isEqualTo(0)
 
@@ -224,6 +248,8 @@ class HandsDaoTest {
     @Test
     fun should_return_false_when_delete_on_inexistant_table() {
         transaction {
+            logger.addLogger(StdOutSqlLogger)
+            
             drop(HandsTable)
 
             val res = handsDao.delete(Hand("Inexistant"))
