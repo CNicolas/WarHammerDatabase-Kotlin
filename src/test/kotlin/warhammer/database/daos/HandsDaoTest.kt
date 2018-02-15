@@ -78,11 +78,9 @@ class HandsDaoTest {
 
         transaction {
             handsDao.add(Hand(handName))
-
             assertThat(handsDao.findAll().size).isEqualTo(1)
 
             val hand = handsDao.findByName(handName)
-
             assertThat(hand).isNotNull()
             assertThat(hand?.name).isEqualTo(handName)
         }
@@ -91,17 +89,11 @@ class HandsDaoTest {
     @Test
     fun should_read_all_hands() {
         val handsToAdd = listOf(
-                Hand("Hand1"),
-                Hand("Hand2"),
-                Hand("Hand3"))
-
-        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+                Hand(name = "Hand1"),
+                Hand(name = "Hand2"),
+                Hand(name = "Hand3"))
 
         transaction {
-            logger.addLogger(StdOutSqlLogger)
-
-            create(HandsTable)
-
             handsDao.addAll(handsToAdd)
 
             val allInsertedHands = handsDao.findAll()
