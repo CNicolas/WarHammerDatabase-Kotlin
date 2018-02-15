@@ -7,6 +7,7 @@ object ItemsTable : IntIdTable() {
     val inventoryId = reference("inventory", PlayerInventoryTable)
 
     val name = varchar("name", length = 70)
+    val description = varchar("description", length = 300).nullable()
     val encumbrance = integer("encumbrance")
     val quantity = integer("quantity")
     val quality = varchar("quality", 20)

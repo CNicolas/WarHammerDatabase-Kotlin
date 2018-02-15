@@ -5,6 +5,7 @@ import warhammer.database.entities.NamedEntity
 interface Item : NamedEntity {
     val inventoryId: Int
 
+    val description: String?
     val encumbrance: Int
     val quantity: Int
     val quality: Quality

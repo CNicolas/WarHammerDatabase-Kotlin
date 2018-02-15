@@ -5,6 +5,7 @@ import warhammer.database.entities.player.inventory.ItemType.ARMOR
 data class Armor(override val id: Int = -1,
                  override val inventoryId: Int = -1,
                  override val name: String = "Armor",
+                 override val description: String? = null,
                  override val encumbrance: Int = 0,
                  override val quantity: Int = 1,
                  override val quality: Quality = Quality.NORMAL,

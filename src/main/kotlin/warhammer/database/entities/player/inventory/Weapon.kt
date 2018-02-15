@@ -5,6 +5,7 @@ import warhammer.database.entities.player.inventory.ItemType.WEAPON
 data class Weapon(override val id: Int = -1,
                   override val inventoryId: Int = -1,
                   override val name: String = "Weapon",
+                  override val description: String? = null,
                   override val encumbrance: Int = 0,
                   override val quantity: Int = 1,
                   override val quality: Quality = Quality.NORMAL,

@@ -140,7 +140,7 @@ class ItemDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            itemsDao.add(Weapon(id = 1, inventoryId = 1, criticalLevel = 3))
+            itemsDao.add(Weapon(id = 1, inventoryId = 1, criticalLevel = 3, description = "Rien"))
             itemsDao.add(Expandable(id = 2, inventoryId = 1, uses = 10))
             itemsDao.add(Armor(id = 3, inventoryId = 1, defense = 2))
             itemsDao.add(GenericItem(id = 4, inventoryId = 1, quality = MAGIC))
@@ -153,11 +153,13 @@ class ItemDaoTest {
             assertThat(weapon is Weapon).isTrue()
             assertThat(weapon?.criticalLevel).isEqualTo(3)
             assertThat(weapon?.range).isEqualTo(ENGAGED)
+            assertThat(weapon?.description).isEqualTo("Rien")
 
             val expandable = itemsDao.findExpandableById(2)
             assertThat(expandable).isNotNull()
             assertThat(expandable is Expandable).isTrue()
             assertThat(expandable?.uses).isEqualTo(10)
+            assertThat(expandable?.description).isNull()
 
             val armor = itemsDao.findArmorById(3)
             assertThat(armor).isNotNull()

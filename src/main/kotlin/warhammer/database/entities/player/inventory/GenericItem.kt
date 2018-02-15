@@ -5,6 +5,7 @@ import warhammer.database.entities.player.inventory.ItemType.ITEM
 data class GenericItem(override val id: Int = -1,
                        override val inventoryId: Int = -1,
                        override val name: String = "Item",
+                       override val description: String? = null,
                        override val encumbrance: Int = 0,
                        override val quantity: Int = 1,
                        override val quality: Quality = Quality.NORMAL) : Item {
