@@ -115,13 +115,13 @@ class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractData
         }
     }
 
-    override fun findAll(): List<Player?> {
+    override fun findAll(): List<Player> {
         connectToDatabase()
 
         return transaction {
             val entities = dao.findAll()
-            entities.map {
-                findByIdInsideTransaction(it?.id!!)
+            entities.mapNotNull {
+                findByIdInsideTransaction(it.id)
             }
         }
     }

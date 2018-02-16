@@ -43,8 +43,8 @@ abstract class AbstractDao<E : WarHammerEntity> : Dao<E> {
         return mapResultRowToEntity(result)
     }
 
-    override fun findAll(): List<E?> {
-        return table.selectAll().map { mapResultRowToEntity(it) }
+    override fun findAll(): List<E> {
+        return table.selectAll().mapNotNull { mapResultRowToEntity(it) }
     }
 
     override fun updateAll(entities: List<E>): List<Int> {

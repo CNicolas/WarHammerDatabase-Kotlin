@@ -7,7 +7,7 @@ interface Dao<E : WarHammerEntity> {
     fun addAll(entities: List<E>): List<Int>
 
     fun findById(id: Int): E?
-    fun findAll(): List<E?>
+    fun findAll(): List<E>
 
     fun update(entity: E): Int
     fun updateAll(entities: List<E>): List<Int>

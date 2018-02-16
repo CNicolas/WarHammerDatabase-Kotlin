@@ -36,7 +36,7 @@ abstract class AbstractDatabaseService<E : NamedEntity>(private val databaseUrl:
     // endregion
 
     // region READ
-    override fun findAll(): List<E?> {
+    override fun findAll(): List<E> {
         connectToDatabase()
 
         return transaction { dao.findAll() }

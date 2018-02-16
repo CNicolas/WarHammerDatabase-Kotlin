@@ -1,7 +1,7 @@
 package warhammer.database.entities
 
-data class Hand(override val name: String,
-                override val id: Int = -1,
+data class Hand(override val id: Int = -1,
+                override val name: String,
                 val characteristicDicesCount: Int = 0,
                 val expertiseDicesCount: Int = 0,
                 val fortuneDicesCount: Int = 0,

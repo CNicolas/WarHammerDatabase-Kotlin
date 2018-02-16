@@ -100,14 +100,14 @@ class CareerDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            careerDao.add(Career(1, careerName = "Tueur de Démons", rank = 5))
+            careerDao.add(Career(1, name = "Tueur de Démons", rank = 5))
 
             assertThat(careerDao.findAll().size).isEqualTo(1)
 
             val career = careerDao.findById(1)
 
             assertThat(career).isNotNull()
-            assertThat(career?.careerName).isEqualTo("Tueur de Démons")
+            assertThat(career?.name).isEqualTo("Tueur de Démons")
             assertThat(career?.rank).isEqualTo(5)
         }
     }
@@ -132,7 +132,7 @@ class CareerDaoTest {
     fun should_read_all_career() {
         val careerToAdd = listOf(
                 Career(stateId = 1, totalExperience = 3),
-                Career(stateId = 2, careerName = "Forestier"),
+                Career(stateId = 2, name = "Forestier"),
                 Career(stateId = 3, rank = 4))
 
         transaction {
@@ -143,14 +143,14 @@ class CareerDaoTest {
             val allInsertedCareer = careerDao.findAll()
             assertThat(allInsertedCareer.size).isEqualTo(3)
 
-            assertThat(allInsertedCareer[0]?.stateId).isEqualTo(1)
-            assertThat(allInsertedCareer[0]?.totalExperience).isEqualTo(3)
+            assertThat(allInsertedCareer[0].stateId).isEqualTo(1)
+            assertThat(allInsertedCareer[0].totalExperience).isEqualTo(3)
 
-            assertThat(allInsertedCareer[1]?.stateId).isEqualTo(2)
-            assertThat(allInsertedCareer[1]?.careerName).isEqualTo("Forestier")
+            assertThat(allInsertedCareer[1].stateId).isEqualTo(2)
+            assertThat(allInsertedCareer[1].name).isEqualTo("Forestier")
 
-            assertThat(allInsertedCareer[2]?.stateId).isEqualTo(3)
-            assertThat(allInsertedCareer[2]?.rank).isEqualTo(4)
+            assertThat(allInsertedCareer[2].stateId).isEqualTo(3)
+            assertThat(allInsertedCareer[2].rank).isEqualTo(4)
         }
     }
     // endregion
@@ -169,10 +169,10 @@ class CareerDaoTest {
             val career = careerDao.findById(id)
             assertThat(career).isNotNull()
             assertThat(career?.stateId).isEqualTo(1)
-            assertThat(career?.careerName).isEqualTo("Unemployed")
+            assertThat(career?.name).isEqualTo("Unemployed")
 
             // UPDATE
-            val careerToUpdate = career?.copy(careerName = "Ratier")
+            val careerToUpdate = career?.copy(name = "Ratier")
             careerDao.update(careerToUpdate!!)
             assertThat(careerDao.findAll().size).isEqualTo(1)
 
@@ -180,7 +180,7 @@ class CareerDaoTest {
             val newCareer = careerDao.findById(id)
             assertThat(newCareer).isNotNull()
             assertThat(newCareer?.stateId).isEqualTo(1)
-            assertThat(newCareer?.careerName).isEqualTo("Ratier")
+            assertThat(newCareer?.name).isEqualTo("Ratier")
         }
     }
 
@@ -204,13 +204,13 @@ class CareerDaoTest {
             // VERIFY
             val allInsertedCareer = careerDao.findAll()
             assertThat(allInsertedCareer.size).isEqualTo(2)
-            assertThat(allInsertedCareer.map { it?.id }).containsExactly(id1, id2)
+            assertThat(allInsertedCareer.map { it.id }).containsExactly(id1, id2)
 
-            assertThat(allInsertedCareer[0]?.stateId).isEqualTo(1)
-            assertThat(allInsertedCareer[0]?.rank).isEqualTo(2)
+            assertThat(allInsertedCareer[0].stateId).isEqualTo(1)
+            assertThat(allInsertedCareer[0].rank).isEqualTo(2)
 
-            assertThat(allInsertedCareer[1]?.stateId).isEqualTo(2)
-            assertThat(allInsertedCareer[1]?.totalExperience).isEqualTo(2)
+            assertThat(allInsertedCareer[1].stateId).isEqualTo(2)
+            assertThat(allInsertedCareer[1].totalExperience).isEqualTo(2)
         }
     }
 

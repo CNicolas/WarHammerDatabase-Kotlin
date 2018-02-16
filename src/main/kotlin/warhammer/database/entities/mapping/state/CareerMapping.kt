@@ -13,7 +13,7 @@ internal fun ResultRow?.mapToCareer(): Career? = when (this) {
         Career(
                 id = this[CareerTable.id].value,
                 stateId = this[CareerTable.stateId].value,
-                careerName = this[CareerTable.careerName],
+                name = this[CareerTable.name],
                 rank = this[CareerTable.rank],
                 availableExperience = this[CareerTable.availableExperience],
                 totalExperience = this[CareerTable.totalExperience]
@@ -24,7 +24,7 @@ internal fun ResultRow?.mapToCareer(): Career? = when (this) {
 fun UpdateBuilder<Int>.mapFieldsOfEntity(entity: Career) {
     this[CareerTable.stateId] = EntityID(entity.stateId, PlayerStateTable)
 
-    this[CareerTable.careerName] = entity.careerName
+    this[CareerTable.name] = entity.name
     this[CareerTable.rank] = entity.rank
     this[CareerTable.availableExperience] = entity.availableExperience
     this[CareerTable.totalExperience] = entity.totalExperience

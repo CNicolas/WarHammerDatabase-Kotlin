@@ -39,7 +39,7 @@ class PlayersDatabaseServiceTest {
                     strength = CharacteristicValue(3),
                     toughness = CharacteristicValue(2, 1)
             )
-            val state = PlayerState(career = Career(careerName = "Librelame"), maxWounds = 10)
+            val state = PlayerState(career = Career(name = "Librelame"), maxWounds = 10)
             val inventory = PlayerInventory(
                     maxEncumbrance = 15,
                     encumbrance = 14,
@@ -180,7 +180,7 @@ class PlayersDatabaseServiceTest {
 
         val allInsertedPlayers = playersService.findAll()
         assertThat(allInsertedPlayers.size).isEqualTo(3)
-        assertThat(allInsertedPlayers.map { it?.name }).containsExactly("Player1", "Player2", "Player3")
+        assertThat(allInsertedPlayers.map { it.name }).containsExactly("Player1", "Player2", "Player3")
     }
     // endregion
 

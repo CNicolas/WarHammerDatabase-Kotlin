@@ -9,8 +9,8 @@ fun ResultRow?.mapToHand(): Hand? = when (this) {
     null -> null
     else -> {
         Hand(
-                this[HandsTable.name],
-                this[HandsTable.id].value,
+                id = this[HandsTable.id].value,
+                name = this[HandsTable.name],
                 characteristicDicesCount = this[HandsTable.characteristicDicesCount],
                 expertiseDicesCount = this[HandsTable.expertiseDicesCount],
                 fortuneDicesCount = this[HandsTable.fortuneDicesCount],

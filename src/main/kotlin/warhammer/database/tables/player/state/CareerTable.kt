@@ -6,7 +6,7 @@ import warhammer.database.tables.player.PlayerStateTable
 object CareerTable : IntIdTable() {
     val stateId = reference("state", PlayerStateTable).uniqueIndex()
 
-    val careerName = varchar("careerName", length = 70)
+    val name = varchar("name", length = 70)
     val rank = integer("rank")
     val availableExperience = integer("availableExperience")
     val totalExperience = integer("totalExperience")
