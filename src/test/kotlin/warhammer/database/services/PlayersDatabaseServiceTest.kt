@@ -7,19 +7,31 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 import warhammer.database.entities.player.Player
+import warhammer.database.entities.player.PlayerInventory
 import warhammer.database.entities.player.PlayerState
-import warhammer.database.entities.player.characteristics.Characteristic.*
+import warhammer.database.entities.player.characteristics.Characteristic.STRENGTH
 import warhammer.database.entities.player.characteristics.CharacteristicValue
 import warhammer.database.entities.player.characteristics.PlayerCharacteristics
+import warhammer.database.entities.player.inventory.Money
+import warhammer.database.entities.player.inventory.item.Armor
+import warhammer.database.entities.player.inventory.item.Expandable
+import warhammer.database.entities.player.inventory.item.GenericItem
+import warhammer.database.entities.player.inventory.item.Weapon
+import warhammer.database.entities.player.inventory.item.enums.Quality.*
+import warhammer.database.entities.player.inventory.item.enums.Range
 import warhammer.database.entities.player.other.Race.*
 import warhammer.database.entities.player.state.Career
 import warhammer.database.entities.player.state.Stance
 import warhammer.database.tables.PlayersTable
 import warhammer.database.tables.player.PlayerCharacteristicsTable
+import warhammer.database.tables.player.PlayerInventoryTable
 import warhammer.database.tables.player.PlayerStateTable
 
 class PlayersDatabaseServiceTest {
-    private val playersService = PlayersDatabaseService(databaseUrl = "jdbc:sqlite:testSqlite:?mode=memory&cache=shared", driver = "org.sqlite.JDBC")
+    private val playersService = PlayersDatabaseService(
+            databaseUrl = "jdbc:sqlite:testSqlite:?mode=memory&cache=shared",
+            driver = "org.sqlite.JDBC"
+    )
     private val playerName = "SampleName"
     private val samplePlayer
         get() = {
@@ -28,13 +40,27 @@ class PlayersDatabaseServiceTest {
                     toughness = CharacteristicValue(2, 1)
             )
             val state = PlayerState(career = Career(careerName = "Librelame"), maxWounds = 10)
+            val inventory = PlayerInventory(
+                    maxEncumbrance = 15,
+                    encumbrance = 14,
+                    money = Money(brass = 2, silver = 3, gold = 4),
+                    items = listOf(
+                            GenericItem(name = "Corde 1m", quality = LOW),
+                            Expandable(name = "Potion", uses = 1, quantity = 2),
+                            Weapon(name = "Lamedor", quality = SUPERIOR, damage = 5, criticalLevel = 2, encumbrance = 3),
+                            Armor(name = "Heaume de la foi", quality = MAGIC, soak = 3, defense = 1, encumbrance = 4),
+                            Armor(name = "Armure de la loi", quality = MAGIC, defense = 2, soak = 5, encumbrance = 7)
+                    )
+            )
+
             Player(
                     name = playerName,
                     race = DWARF,
                     age = 110,
                     size = 89,
                     characteristics = characteristics,
-                    state = state
+                    state = state,
+                    inventory = inventory
             )
         }
 
@@ -48,6 +74,8 @@ class PlayersDatabaseServiceTest {
         transaction {
             assertThat(PlayersTable.exists()).isTrue()
             assertThat(PlayerCharacteristicsTable.exists()).isTrue()
+            assertThat(PlayerStateTable.exists()).isTrue()
+            assertThat(PlayerInventoryTable.exists()).isTrue()
         }
     }
 
@@ -57,12 +85,7 @@ class PlayersDatabaseServiceTest {
         val addedPlayer = playersService.add(samplePlayer())
 
         assertThat(playersService.countAll()).isEqualTo(1)
-        assertThat(addedPlayer?.name).isEqualTo(playerName)
-        assertThat(addedPlayer?.characteristics!![STRENGTH].value).isEqualTo(3)
-        assertThat(addedPlayer.characteristics[TOUGHNESS].value).isEqualTo(2)
-        assertThat(addedPlayer.characteristics[TOUGHNESS].fortuneValue).isEqualTo(1)
-        assertThat(addedPlayer.state.career.careerName).isEqualTo("Librelame")
-        assertThat(addedPlayer.state.maxWounds).isEqualTo(10)
+        assertSamplePlayer(addedPlayer)
     }
 
     @Test
@@ -70,14 +93,20 @@ class PlayersDatabaseServiceTest {
         val playersToAdd = listOf(
                 Player(name = "Player1",
                         characteristics = PlayerCharacteristics(strength = CharacteristicValue(1)),
-                        state = PlayerState(maxCorruption = 3)
+                        state = PlayerState(maxCorruption = 3),
+                        inventory = PlayerInventory(maxEncumbrance = 20)
                 ),
                 Player(name = "Player2",
                         characteristics = PlayerCharacteristics(strength = CharacteristicValue(2)),
-                        state = PlayerState(stress = 1, stance = Stance(conservative = 0))),
+                        state = PlayerState(stress = 1, stance = Stance(conservative = 0)),
+                        inventory = PlayerInventory(money = Money(silver = 2))
+                ),
                 Player(name = "Player3",
                         characteristics = PlayerCharacteristics(strength = CharacteristicValue(3)),
-                        state = PlayerState(maxExhaustion = 4, career = Career(rank = 1))
+                        state = PlayerState(maxExhaustion = 4, career = Career(rank = 1)),
+                        inventory = PlayerInventory(items = listOf(
+                                GenericItem(name = "Cordage", description = "48 mètres de corde, c'est bien !")
+                        ))
                 )
         )
 
@@ -86,14 +115,28 @@ class PlayersDatabaseServiceTest {
         assertThat(playersService.countAll()).isEqualTo(playersToAdd.size)
 
         assertThat(addAllResult.map { it?.name }).containsExactly("Player1", "Player2", "Player3")
-        assertThat(addAllResult[0]?.characteristics!![STRENGTH].value).isEqualTo(1)
-        assertThat(addAllResult[0]?.state?.maxCorruption).isEqualTo(3)
-        assertThat(addAllResult[1]?.characteristics!![STRENGTH].value).isEqualTo(2)
-        assertThat(addAllResult[1]?.state?.stress).isEqualTo(1)
-        assertThat(addAllResult[1]?.state?.stance?.conservative).isEqualTo(0)
-        assertThat(addAllResult[2]?.characteristics!![STRENGTH].value).isEqualTo(3)
-        assertThat(addAllResult[2]?.state?.maxExhaustion).isEqualTo(4)
-        assertThat(addAllResult[2]?.state?.career?.rank).isEqualTo(1)
+        assertThat(addAllResult[0]).isNotNull()
+        assertThat(addAllResult[0]!!.strength.value).isEqualTo(1)
+        assertThat(addAllResult[0]!!.state.maxCorruption).isEqualTo(3)
+        assertThat(addAllResult[0]!!.inventory.maxEncumbrance).isEqualTo(20)
+
+        assertThat(addAllResult[1]).isNotNull()
+        assertThat(addAllResult[1]!!.strength.value).isEqualTo(2)
+        assertThat(addAllResult[1]!!.stress).isEqualTo(1)
+        assertThat(addAllResult[1]!!.conservative).isEqualTo(0)
+        assertThat(addAllResult[1]!!.money.brass).isEqualTo(0)
+        assertThat(addAllResult[1]!!.money.silver).isEqualTo(2)
+        assertThat(addAllResult[1]!!.money.gold).isEqualTo(0)
+
+        assertThat(addAllResult[2]).isNotNull()
+        assertThat(addAllResult[2]!!.strength.value).isEqualTo(3)
+        assertThat(addAllResult[2]!!.state.maxExhaustion).isEqualTo(4)
+        assertThat(addAllResult[2]!!.state.career.rank).isEqualTo(1)
+        assertThat(addAllResult[2]!!.inventory.items.size).isEqualTo(1)
+        assertThat(addAllResult[2]!!.inventory.items[0] is GenericItem).isTrue()
+        assertThat(addAllResult[2]!!.inventory.items[0].name).isEqualTo("Cordage")
+        assertThat(addAllResult[2]!!.inventory.items[0].description).isEqualTo("48 mètres de corde, c'est bien !")
+
     }
 
     @Test
@@ -114,9 +157,7 @@ class PlayersDatabaseServiceTest {
         playersService.add(samplePlayer())
         assertThat(playersService.countAll()).isEqualTo(1)
 
-        val player = playersService.findByName(playerName)
-        assertThat(player).isNotNull()
-        assertThat(player?.name).isEqualTo(playerName)
+        assertSamplePlayer(playersService.findByName(playerName))
     }
 
     @Test
@@ -125,13 +166,7 @@ class PlayersDatabaseServiceTest {
         assertThat(playersService.countAll()).isEqualTo(1)
 
         val player = playersService.findById(1)
-        assertThat(player).isNotNull()
-        assertThat(player?.name).isEqualTo(playerName)
-        assertThat(player?.characteristics!![STRENGTH].value).isEqualTo(3)
-        assertThat(player.characteristics[TOUGHNESS].value).isEqualTo(2)
-        assertThat(player.characteristics[TOUGHNESS].fortuneValue).isEqualTo(1)
-        assertThat(player.state.career.careerName).isEqualTo("Librelame")
-        assertThat(player.state.maxWounds).isEqualTo(10)
+        assertSamplePlayer(player)
     }
 
     @Test
@@ -159,31 +194,27 @@ class PlayersDatabaseServiceTest {
         assertThat(playersService.countAll()).isEqualTo(1)
 
         // FIND
-        assertThat(player).isNotNull()
-        assertThat(player?.name).isEqualTo(playerName)
-        assertThat(player?.race).isEqualTo(DWARF)
-        assertThat(player?.characteristics!![STRENGTH].value).isEqualTo(3)
-        assertThat(player.characteristics[AGILITY].value).isEqualTo(0)
-        assertThat(player.characteristics[AGILITY].fortuneValue).isEqualTo(0)
-        assertThat(player.state.career.availableExperience).isEqualTo(0)
+        assertSamplePlayer(player)
 
         // UPDATE
-        val playerToUpdate = player.copy(name = newPlayerName,
+        val playerToUpdate = player!!.copy(name = newPlayerName,
                 race = WOOD_ELF,
                 characteristics = player.characteristics.copy(agility = CharacteristicValue(5, 2)),
-                state = player.state.copy(career = player.state.career.copy(availableExperience = 1))
+                state = player.state.copy(career = player.state.career.copy(availableExperience = 1)),
+                inventory = player.inventory.copy(money = player.money.copy(brass = 52))
         )
         val newPlayer = playersService.update(playerToUpdate)
 
         // VERIFY
         assertThat(playersService.countAll()).isEqualTo(1)
         assertThat(newPlayer).isNotNull()
-        assertThat(newPlayer?.name).isEqualTo(newPlayerName)
-        assertThat(newPlayer?.race).isEqualTo(WOOD_ELF)
-        assertThat(newPlayer?.characteristics!![STRENGTH].value).isEqualTo(3)
-        assertThat(newPlayer.characteristics[AGILITY].value).isEqualTo(5)
-        assertThat(newPlayer.characteristics[AGILITY].fortuneValue).isEqualTo(2)
-        assertThat(newPlayer.state.career.availableExperience).isEqualTo(1)
+        assertThat(newPlayer!!.name).isEqualTo(newPlayerName)
+        assertThat(newPlayer.race).isEqualTo(WOOD_ELF)
+        assertThat(newPlayer.strength.value).isEqualTo(3)
+        assertThat(newPlayer.agility.value).isEqualTo(5)
+        assertThat(newPlayer.agility.fortuneValue).isEqualTo(2)
+        assertThat(newPlayer.availableExperience).isEqualTo(1)
+        assertThat(newPlayer.money.brass).isEqualTo(52)
     }
 
     @Test
@@ -224,11 +255,13 @@ class PlayersDatabaseServiceTest {
         val player1 = Player(name = "Player1", characteristics = PlayerCharacteristics(strength = CharacteristicValue(1)))
         val player2 = Player(name = "Player2",
                 characteristics = PlayerCharacteristics(strength = CharacteristicValue(2)),
-                state = PlayerState(stance = Stance(maxReckless = 2))
+                state = PlayerState(stance = Stance(maxReckless = 2)),
+                inventory = PlayerInventory(money = Money(0, 0, 2))
         )
         val player3 = Player(name = "Player3",
                 characteristics = PlayerCharacteristics(strength = CharacteristicValue(3)),
-                state = PlayerState(career = Career(totalExperience = 3))
+                state = PlayerState(career = Career(totalExperience = 3)),
+                inventory = PlayerInventory(maxEncumbrance = 50)
         )
 
         val addAllResult = playersService.addAll(listOf(player1, player2, player3))
@@ -243,12 +276,16 @@ class PlayersDatabaseServiceTest {
         assertThat(playersService.findById(1)).isNotNull()
         assertThat(playersService.findByName("Player1")?.characteristics!![STRENGTH].value).isEqualTo(1)
         assertThat(playersService.findByName("Player1")?.state?.stance?.reckless).isEqualTo(0)
+
         assertThat(playersService.findByName("Player2")).isNull()
         assertThat(playersService.findById(2)).isNull()
-        assertThat(playersService.findByName("Player3")).isNotNull()
+
+        val foundPlayer3 = playersService.findByName("Player3")
+        assertThat(foundPlayer3).isNotNull()
         assertThat(playersService.findById(3)).isNotNull()
-        assertThat(playersService.findByName("Player3")?.characteristics!![STRENGTH].value).isEqualTo(3)
-        assertThat(playersService.findByName("Player3")?.state?.career?.totalExperience).isEqualTo(3)
+        assertThat(foundPlayer3!!.strength.value).isEqualTo(3)
+        assertThat(foundPlayer3.totalExperience).isEqualTo(3)
+        assertThat(foundPlayer3.maxEncumbrance).isEqualTo(50)
 
         transaction {
             assertThat(PlayerCharacteristicsTable.selectAll().count()).isEqualTo(2)
@@ -261,7 +298,8 @@ class PlayersDatabaseServiceTest {
         val player1 = Player(name = "Player1")
         val player2 = Player(name = "Player2",
                 characteristics = PlayerCharacteristics(toughness = CharacteristicValue(2)),
-                state = PlayerState(wounds = 2)
+                state = PlayerState(wounds = 2),
+                inventory = PlayerInventory(encumbrance = 2)
         )
 
         playersService.add(player1)
@@ -286,4 +324,65 @@ class PlayersDatabaseServiceTest {
         assertThat(playersService.findAll()).isEmpty()
     }
     // endregion
+
+    private fun assertSamplePlayer(player: Player?) {
+        assertThat(player).isNotNull()
+        assertThat(player!!.name).isEqualTo(playerName)
+        assertThat(player.race).isEqualTo(DWARF)
+        assertThat(player.age).isEqualTo(110)
+        assertThat(player.size).isEqualTo(89)
+
+        assertThat(player.characteristics).isNotNull()
+        assertThat(player.strength.value).isEqualTo(3)
+        assertThat(player.toughness.value).isEqualTo(2)
+        assertThat(player.toughness.fortuneValue).isEqualTo(1)
+
+        assertThat(player.careerName).isEqualTo("Librelame")
+        assertThat(player.maxWounds).isEqualTo(10)
+
+        assertThat(player.encumbrance).isEqualTo(14)
+        assertThat(player.maxEncumbrance).isEqualTo(15)
+        assertThat(player.money.brass).isEqualTo(2)
+        assertThat(player.money.silver).isEqualTo(3)
+        assertThat(player.money.gold).isEqualTo(4)
+
+        assertThat(player.items).isNotEmpty()
+        assertThat(player.items.size).isEqualTo(5)
+
+        assertThat(player.items[0] is GenericItem).isTrue()
+        assertThat(player.items[0].quality).isEqualTo(LOW)
+        assertThat(player.items[0].damage).isNull()
+
+        assertThat(player.items[1] is Expandable).isTrue()
+        assertThat(player.items[1].uses).isEqualTo(1)
+        assertThat(player.items[1].quantity).isEqualTo(2)
+        assertThat(player.items[1].soak).isNull()
+
+        assertThat(player.items[2] is Weapon).isTrue()
+        assertThat(player.items[2].encumbrance).isEqualTo(3)
+        assertThat(player.items[2].quantity).isEqualTo(1)
+        assertThat(player.items[2].quality).isEqualTo(SUPERIOR)
+        assertThat(player.items[2].range).isEqualTo(Range.ENGAGED)
+        assertThat(player.items[2].damage).isEqualTo(5)
+        assertThat(player.items[2].criticalLevel).isEqualTo(2)
+        assertThat(player.items[2].uses).isNull()
+
+        assertThat(player.items[3] is Armor).isTrue()
+        assertThat(player.items[3].name).isEqualTo("Heaume de la foi")
+        assertThat(player.items[3].encumbrance).isEqualTo(4)
+        assertThat(player.items[3].quantity).isEqualTo(1)
+        assertThat(player.items[3].quality).isEqualTo(MAGIC)
+        assertThat(player.items[3].defense).isEqualTo(1)
+        assertThat(player.items[3].soak).isEqualTo(3)
+        assertThat(player.items[3].range).isNull()
+
+        assertThat(player.items[4] is Armor).isTrue()
+        assertThat(player.items[4].name).isEqualTo("Armure de la loi")
+        assertThat(player.items[4].encumbrance).isEqualTo(7)
+        assertThat(player.items[4].quantity).isEqualTo(1)
+        assertThat(player.items[4].quality).isEqualTo(MAGIC)
+        assertThat(player.items[4].defense).isEqualTo(2)
+        assertThat(player.items[4].soak).isEqualTo(5)
+        assertThat(player.items[4].uses).isNull()
+    }
 }

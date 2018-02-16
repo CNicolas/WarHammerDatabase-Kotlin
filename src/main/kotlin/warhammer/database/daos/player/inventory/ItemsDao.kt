@@ -9,8 +9,8 @@ import warhammer.database.daos.AbstractDao
 import warhammer.database.daos.NamedDao
 import warhammer.database.entities.mapping.inventory.mapFieldsOfEntity
 import warhammer.database.entities.mapping.inventory.mapToItem
-import warhammer.database.entities.player.inventory.*
-import warhammer.database.entities.player.inventory.ItemType.*
+import warhammer.database.entities.player.inventory.item.*
+import warhammer.database.entities.player.inventory.item.enums.ItemType.*
 import warhammer.database.tables.player.inventory.ItemsTable
 import java.lang.Exception
 
@@ -71,11 +71,12 @@ class ItemsDao : AbstractDao<Item>(), PlayerInventoryLinkedDao<Item>, NamedDao<I
                 .map { it as Expandable }
     }
 
-    fun findAllByInventoryId(inventoryId: Int): List<Item?> {
+    fun findAllByInventoryId(inventoryId: Int): List<Item> {
         val result = ItemsTable.select { ItemsTable.inventoryId eq inventoryId }
                 .toList()
 
         return result.map { mapResultRowToEntity(it) }
+                .filterNotNull()
     }
     // endregion
 

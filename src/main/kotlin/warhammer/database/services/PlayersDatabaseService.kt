@@ -3,25 +3,48 @@ package warhammer.database.services
 import org.jetbrains.exposed.sql.transactions.transaction
 import warhammer.database.daos.PlayersDao
 import warhammer.database.daos.player.PlayerCharacteristicsDao
+import warhammer.database.daos.player.PlayerInventoryDao
 import warhammer.database.daos.player.PlayerStateDao
+import warhammer.database.daos.player.inventory.ItemsDao
+import warhammer.database.daos.player.inventory.MoneyDao
 import warhammer.database.daos.player.state.CareerDao
 import warhammer.database.daos.player.state.StanceDao
 import warhammer.database.entities.mapping.mapToEntity
 import warhammer.database.entities.mapping.mapToPlayerCharacteristics
 import warhammer.database.entities.player.Player
+import warhammer.database.entities.player.PlayerInventory
+import warhammer.database.entities.player.PlayerState
+import warhammer.database.entities.player.inventory.item.Armor
+import warhammer.database.entities.player.inventory.item.Expandable
+import warhammer.database.entities.player.inventory.item.GenericItem
+import warhammer.database.entities.player.inventory.item.Weapon
+import warhammer.database.entities.player.inventory.item.enums.ItemType.*
 import warhammer.database.tables.PlayersTable
 import warhammer.database.tables.player.PlayerCharacteristicsTable
+import warhammer.database.tables.player.PlayerInventoryTable
 import warhammer.database.tables.player.PlayerStateTable
+import warhammer.database.tables.player.inventory.ItemsTable
+import warhammer.database.tables.player.inventory.MoneyTable
 import warhammer.database.tables.player.state.CareerTable
 import warhammer.database.tables.player.state.StanceTable
 
 class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractDatabaseNamedService<Player>(databaseUrl, driver) {
-    override val tables = listOf(PlayersTable, PlayerCharacteristicsTable, PlayerStateTable, CareerTable, StanceTable)
+    override val tables = listOf(
+            PlayersTable,
+            PlayerCharacteristicsTable,
+            PlayerStateTable, CareerTable, StanceTable,
+            PlayerInventoryTable, MoneyTable, ItemsTable)
     override val dao = PlayersDao()
+
     private val playerCharacteristicsDao = PlayerCharacteristicsDao()
+
     private val playerStateDao = PlayerStateDao()
     private val careerDao = CareerDao()
     private val stanceDao = StanceDao()
+
+    private val playerInventoryDao = PlayerInventoryDao()
+    private val moneyDao = MoneyDao()
+    private val itemsDao = ItemsDao()
 
     init {
         initializeTable()
@@ -53,6 +76,17 @@ class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractData
         careerDao.add(entity.state.career.copy(stateId = stateId))
         stanceDao.add(entity.state.stance.copy(stateId = stateId))
 
+        val inventoryId = playerInventoryDao.add(entity.inventory.copy(playerId = playerId))
+        moneyDao.add(entity.inventory.money.copy(inventoryId = inventoryId))
+        entity.items.forEach {
+            when (it.type) {
+                ITEM -> itemsDao.add((it as GenericItem).copy(inventoryId = inventoryId))
+                ARMOR -> itemsDao.add((it as Armor).copy(inventoryId = inventoryId))
+                WEAPON -> itemsDao.add((it as Weapon).copy(inventoryId = inventoryId))
+                EXPANDABLE -> itemsDao.add((it as Expandable).copy(inventoryId = inventoryId))
+            }
+        }
+
         playerCharacteristicsDao.add(entity.characteristics.mapToEntity(playerId))
 
         return findByIdInsideTransaction(playerId)
@@ -74,16 +108,7 @@ class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractData
             val player = dao.findByName(name)
             when {
                 player != null -> {
-                    val playerCharacteristics = playerCharacteristicsDao.findByPlayerId(player.id)
-
-                    val playerState = playerStateDao.findByPlayerId(player.id)
-                    val career = careerDao.findByStateId(playerState?.id!!)
-                    val stance = stanceDao.findByStateId(playerState.id)
-
-                    player.copy(
-                            characteristics = playerCharacteristics.mapToPlayerCharacteristics(),
-                            state = playerState.copy(career = career!!, stance = stance!!)
-                    )
+                    findByIdInsideTransaction(player.id)
                 }
                 else -> null
             }
@@ -107,21 +132,32 @@ class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractData
         val playerCharacteristics = playerCharacteristicsDao.findByPlayerId(playerId)
 
         val playerState = playerStateDao.findByPlayerId(playerId)
-
-        return when {
+        val filledState = when {
             playerState != null -> {
                 val career = careerDao.findByStateId(playerState.id)
                 val stance = stanceDao.findByStateId(playerState.id)
-
-                val player = dao.findById(playerId)
-
-                player?.copy(
-                        characteristics = playerCharacteristics.mapToPlayerCharacteristics(),
-                        state = playerState.copy(career = career!!, stance = stance!!)
-                )
+                playerState.copy(career = career!!, stance = stance!!)
             }
-            else -> null
+            else -> PlayerState(playerId = playerId)
         }
+
+        val playerInventory = playerInventoryDao.findByPlayerId(playerId)
+        val filledInventory = when {
+            playerInventory != null -> {
+                val money = moneyDao.findByInventoryId(playerInventory.id)
+                val items = itemsDao.findAllByInventoryId(playerInventory.id)
+                playerInventory.copy(money = money!!, items = items)
+            }
+            else -> PlayerInventory(playerId = playerId)
+        }
+
+        val player = dao.findById(playerId)
+
+        return player?.copy(
+                characteristics = playerCharacteristics.mapToPlayerCharacteristics(),
+                state = filledState,
+                inventory = filledInventory
+        )
     }
     // endregion
 
@@ -133,12 +169,22 @@ class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractData
             val updatedPlayerId = dao.update(entity)
 
             if (updatedPlayerId != -1) {
-                val stateId = playerStateDao.update(entity.state.copy(playerId = updatedPlayerId))
+                playerCharacteristicsDao.update(entity.characteristics.mapToEntity(updatedPlayerId))
 
+                val stateId = playerStateDao.update(entity.state.copy(playerId = updatedPlayerId))
                 careerDao.update(entity.state.career.copy(stateId = stateId))
                 stanceDao.update(entity.state.stance.copy(stateId = stateId))
 
-                playerCharacteristicsDao.update(entity.characteristics.mapToEntity(updatedPlayerId))
+                val inventoryId = playerInventoryDao.update(entity.inventory.copy(playerId = updatedPlayerId))
+                moneyDao.update(entity.money.copy(inventoryId = inventoryId))
+                entity.items.forEach {
+                    when (it.type) {
+                        ITEM -> itemsDao.update((it as GenericItem).copy(inventoryId = inventoryId))
+                        ARMOR -> itemsDao.update((it as Armor).copy(inventoryId = inventoryId))
+                        WEAPON -> itemsDao.update((it as Weapon).copy(inventoryId = inventoryId))
+                        EXPANDABLE -> itemsDao.update((it as Expandable).copy(inventoryId = inventoryId))
+                    }
+                }
 
                 findByIdInsideTransaction(updatedPlayerId)
             } else {
@@ -164,15 +210,22 @@ class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractData
         connectToDatabase()
 
         return transaction {
+            val characteristicsDeleted = playerCharacteristicsDao.deleteByPlayerId(entity.id) == 1
+
             val careerDeleted = careerDao.deleteByStateId(entity.state.id) == 1
             val stanceDeleted = stanceDao.deleteByStateId(entity.state.id) == 1
             val stateDeleted = playerStateDao.deleteByPlayerId(entity.id) == 1
 
-            val characteristicsDeleted = playerCharacteristicsDao.deleteByPlayerId(entity.id) == 1
+            val moneyDeleted = moneyDao.deleteByInventoryId(entity.inventory.id) == 1
+            val itemsDeleted = itemsDao.deleteByInventoryId(entity.inventory.id) >= 0
+            val inventoryDeleted = playerInventoryDao.deleteByPlayerId(entity.id) == 1
 
             val playerDeleted = dao.delete(entity) == 1
 
-            playerDeleted && characteristicsDeleted && careerDeleted && stanceDeleted && stateDeleted
+            playerDeleted
+                    && characteristicsDeleted
+                    && careerDeleted && stanceDeleted && stateDeleted
+                    && moneyDeleted && itemsDeleted && inventoryDeleted
         }
     }
 
@@ -180,11 +233,15 @@ class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractData
         connectToDatabase()
 
         return transaction {
+            playerCharacteristicsDao.deleteAll()
+
             careerDao.deleteAll()
             stanceDao.deleteAll()
             playerStateDao.deleteAll()
 
-            playerCharacteristicsDao.deleteAll()
+            moneyDao.deleteAll()
+            itemsDao.deleteAll()
+            playerInventoryDao.deleteAll()
 
             dao.deleteAll()
         }

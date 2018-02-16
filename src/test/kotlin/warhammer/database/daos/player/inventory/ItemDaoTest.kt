@@ -17,9 +17,9 @@ import warhammer.database.entities.player.PlayerInventory
 import warhammer.database.entities.player.inventory.item.Armor
 import warhammer.database.entities.player.inventory.item.Expandable
 import warhammer.database.entities.player.inventory.item.GenericItem
+import warhammer.database.entities.player.inventory.item.Weapon
 import warhammer.database.entities.player.inventory.item.enums.Quality.MAGIC
 import warhammer.database.entities.player.inventory.item.enums.Range.*
-import warhammer.database.entities.player.inventory.item.Weapon
 import warhammer.database.tables.PlayersTable
 import warhammer.database.tables.player.PlayerInventoryTable
 import warhammer.database.tables.player.inventory.ItemsTable
@@ -220,9 +220,9 @@ class ItemDaoTest {
             val allInsertedItems = itemsDao.findAllByInventoryId(2)
             assertThat(allInsertedItems.size).isEqualTo(1)
 
-            assertThat(allInsertedItems[0]?.inventoryId).isEqualTo(2)
-            assertThat(allInsertedItems[0] is Expandable?).isTrue()
-            assertThat(allInsertedItems[0]?.uses).isEqualTo(10)
+            assertThat(allInsertedItems[0].inventoryId).isEqualTo(2)
+            assertThat(allInsertedItems[0] is Expandable).isTrue()
+            assertThat(allInsertedItems[0].uses).isEqualTo(10)
         }
     }
 
