@@ -216,11 +216,11 @@ class StanceDaoTest {
     }
 
     @Test
-    fun should_return_false_when_update_a_inexistant_stance() {
+    fun should_return_false_when_update_a_non_existent_stance() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            assertThat(stanceDao.findAll().size).isEqualTo(0)
+            assertThat(stanceDao.findAll()).isEmpty()
 
             val res = stanceDao.update(Stance(stateId = 1))
             assertThat(res).isEqualTo(-1)
@@ -229,7 +229,7 @@ class StanceDaoTest {
     }
 
     @Test
-    fun should_return_false_when_update_on_inexistant_table() {
+    fun should_return_false_when_update_on_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
@@ -299,11 +299,11 @@ class StanceDaoTest {
     }
 
     @Test
-    fun should_return_false_when_delete_a_inexistant_stance() {
+    fun should_return_false_when_delete_a_non_existent_stance() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            assertThat(stanceDao.findAll().size).isEqualTo(0)
+            assertThat(stanceDao.findAll()).isEmpty()
 
             val res = stanceDao.delete(Stance(1, 6))
             assertThat(res).isEqualTo(0)
@@ -312,7 +312,7 @@ class StanceDaoTest {
     }
 
     @Test
-    fun should_return_false_when_delete_on_inexistant_table() {
+    fun should_return_false_when_delete_on_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
@@ -324,7 +324,7 @@ class StanceDaoTest {
     }
 
     @Test
-    fun should_return_false_when_delete_on_state_id_but_inexistant_table() {
+    fun should_return_false_when_delete_on_state_id_but_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 

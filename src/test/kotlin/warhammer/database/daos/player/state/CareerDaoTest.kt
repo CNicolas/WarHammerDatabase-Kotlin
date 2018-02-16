@@ -215,11 +215,11 @@ class CareerDaoTest {
     }
 
     @Test
-    fun should_return_false_when_update_a_inexistant_career() {
+    fun should_return_false_when_update_a_non_existent_career() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            assertThat(careerDao.findAll().size).isEqualTo(0)
+            assertThat(careerDao.findAll()).isEmpty()
 
             val res = careerDao.update(Career(stateId = 1))
             assertThat(res).isEqualTo(-1)
@@ -228,7 +228,7 @@ class CareerDaoTest {
     }
 
     @Test
-    fun should_return_false_when_update_on_inexistant_table() {
+    fun should_return_false_when_update_on_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
@@ -298,11 +298,11 @@ class CareerDaoTest {
     }
 
     @Test
-    fun should_return_false_when_delete_a_inexistant_career() {
+    fun should_return_false_when_delete_a_non_existent_career() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            assertThat(careerDao.findAll().size).isEqualTo(0)
+            assertThat(careerDao.findAll()).isEmpty()
 
             val res = careerDao.delete(Career(1, 6))
             assertThat(res).isEqualTo(0)
@@ -311,7 +311,7 @@ class CareerDaoTest {
     }
 
     @Test
-    fun should_return_false_when_delete_on_inexistant_table() {
+    fun should_return_false_when_delete_on_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
@@ -323,7 +323,7 @@ class CareerDaoTest {
     }
 
     @Test
-    fun should_return_false_when_delete_on_state_id_but_inexistant_table() {
+    fun should_return_false_when_delete_on_state_id_but_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 

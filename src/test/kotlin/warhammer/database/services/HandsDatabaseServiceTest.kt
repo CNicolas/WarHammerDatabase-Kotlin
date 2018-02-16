@@ -142,10 +142,10 @@ class HandsDatabaseServiceTest {
     }
 
     @Test
-    fun should_return_false_when_update_a_inexistant_hand() {
+    fun should_return_false_when_update_a_non_existent_hand() {
         assertThat(handsService.countAll()).isEqualTo(0)
 
-        val updatedHand = handsService.update(Hand("Inexistant"))
+        val updatedHand = handsService.update(Hand("Unknown"))
         assertThat(updatedHand).isNull()
         assertThat(handsService.findAll()).isEmpty()
     }
@@ -184,10 +184,10 @@ class HandsDatabaseServiceTest {
     }
 
     @Test
-    fun should_return_false_when_delete_a_inexistant_hand() {
+    fun should_return_false_when_delete_a_non_existent_hand() {
         assertThat(handsService.countAll()).isEqualTo(0)
 
-        val res = handsService.delete(Hand("Inexistant"))
+        val res = handsService.delete(Hand("Unknown"))
         assertThat(res).isFalse()
         assertThat(handsService.findAll()).isEmpty()
     }

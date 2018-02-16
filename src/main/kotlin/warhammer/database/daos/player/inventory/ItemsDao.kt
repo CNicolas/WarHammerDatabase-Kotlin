@@ -17,14 +17,6 @@ import java.lang.Exception
 class ItemsDao : AbstractDao<Item>(), PlayerInventoryLinkedDao<Item>, NamedDao<Item> {
     override val table: IntIdTable = ItemsTable
 
-    @Deprecated("Nonsense to fetch ONE item by inventoryId")
-    override fun findByInventoryId(inventoryId: Int): Item? {
-        val result = ItemsTable.select { ItemsTable.inventoryId eq inventoryId }
-                .firstOrNull()
-
-        return mapResultRowToEntity(result)
-    }
-
     // region Find one
 
     override fun findByName(name: String): Item? {
@@ -45,28 +37,24 @@ class ItemsDao : AbstractDao<Item>(), PlayerInventoryLinkedDao<Item>, NamedDao<I
 
     fun findAllGenericItemByInventoryId(inventoryId: Int): List<GenericItem> {
         return findAllByInventoryId(inventoryId)
-                .filterNotNull()
                 .filter { it.type == ITEM }
                 .map { it as GenericItem }
     }
 
     fun findAllArmorsByInventoryId(inventoryId: Int): List<Armor> {
         return findAllByInventoryId(inventoryId)
-                .filterNotNull()
                 .filter { it.type == ARMOR }
                 .map { it as Armor }
     }
 
     fun findAllWeaponsByInventoryId(inventoryId: Int): List<Weapon> {
         return findAllByInventoryId(inventoryId)
-                .filterNotNull()
                 .filter { it.type == WEAPON }
                 .map { it as Weapon }
     }
 
     fun findAllExpandablesByInventoryId(inventoryId: Int): List<Expandable> {
         return findAllByInventoryId(inventoryId)
-                .filterNotNull()
                 .filter { it.type == EXPANDABLE }
                 .map { it as Expandable }
     }
@@ -75,8 +63,7 @@ class ItemsDao : AbstractDao<Item>(), PlayerInventoryLinkedDao<Item>, NamedDao<I
         val result = ItemsTable.select { ItemsTable.inventoryId eq inventoryId }
                 .toList()
 
-        return result.map { mapResultRowToEntity(it) }
-                .filterNotNull()
+        return result.mapNotNull { mapResultRowToEntity(it) }
     }
     // endregion
 

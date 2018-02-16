@@ -9,5 +9,4 @@ data class PlayerInventory(override val id: Int = -1,
                       val encumbrance: Int = 0,
                       val maxEncumbrance: Int = 0,
                       val money: Money = Money(),
-                      val items: List<Item> = listOf()) : WarHammerEntity {
-}
+                      val items: List<Item> = listOf()) : WarHammerEntity

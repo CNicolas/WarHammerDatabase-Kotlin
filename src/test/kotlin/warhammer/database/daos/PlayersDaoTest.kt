@@ -108,7 +108,7 @@ class PlayersDaoTest {
             playersDao.addAll(playersToAdd)
 
             val allInsertedPlayers = playersDao.findAll()
-            assertThat(allInsertedPlayers).isNotNull()
+            assertThat(allInsertedPlayers).isNotNull
             assertThat(allInsertedPlayers.size).isEqualTo(3)
             assertThat(allInsertedPlayers.map { it?.name }).containsExactly("Player1", "Player2", "Player3")
             assertThat(allInsertedPlayers[0]?.race).isEqualTo(Race.DWARF)
@@ -171,26 +171,26 @@ class PlayersDaoTest {
     }
 
     @Test
-    fun should_return_false_when_update_a_inexistant_player() {
+    fun should_return_false_when_update_a_non_existent_player() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            assertThat(playersDao.findAll().size).isEqualTo(0)
+            assertThat(playersDao.findAll()).isEmpty()
 
-            val res = playersDao.update(Player(name = "Inexistant"))
+            val res = playersDao.update(Player(name = "Unknown"))
             assertThat(res).isEqualTo(-1)
             assertThat(playersDao.findAll()).isEmpty()
         }
     }
 
     @Test
-    fun should_return_false_when_update_on_inexistant_table() {
+    fun should_return_false_when_update_on_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
             drop(PlayersTable)
 
-            val res = playersDao.update(Player(name = "Inexistant"))
+            val res = playersDao.update(Player(name = "Unknown"))
             assertThat(res).isEqualTo(-1)
         }
     }
@@ -238,26 +238,26 @@ class PlayersDaoTest {
     }
 
     @Test
-    fun should_return_false_when_delete_a_inexistant_player() {
+    fun should_return_false_when_delete_a_non_existent_player() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            assertThat(playersDao.findAll().size).isEqualTo(0)
+            assertThat(playersDao.findAll()).isEmpty()
 
-            val res = playersDao.delete(Player(name = "Inexistant"))
+            val res = playersDao.delete(Player(name = "Unknown"))
             assertThat(res).isEqualTo(0)
             assertThat(playersDao.findAll()).isEmpty()
         }
     }
 
     @Test
-    fun should_return_false_when_delete_on_inexistant_table() {
+    fun should_return_false_when_delete_on_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
             drop(PlayersTable)
 
-            val res = playersDao.delete(Player(name = "Inexistant"))
+            val res = playersDao.delete(Player(name = "Unknown"))
             assertThat(res).isEqualTo(-1)
         }
     }

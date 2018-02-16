@@ -24,7 +24,7 @@ class MoneyDaoTest {
     private val moneyDao = MoneyDao()
 
     @BeforeMethod
-    fun createPlayersAndInventorys() {
+    fun createPlayersAndInventories() {
         Database.connect("jdbc:sqlite:testSqlite:?mode=memory&cache=shared", driver = "org.sqlite.JDBC")
         TransactionManager.manager.defaultIsolationLevel = Connection.TRANSACTION_SERIALIZABLE
 
@@ -214,11 +214,11 @@ class MoneyDaoTest {
     }
 
     @Test
-    fun should_return_false_when_update_a_inexistant_money() {
+    fun should_return_false_when_update_a_non_existent_money() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
             
-            assertThat(moneyDao.findAll().size).isEqualTo(0)
+            assertThat(moneyDao.findAll()).isEmpty()
 
             val res = moneyDao.update(Money(inventoryId = 1))
             assertThat(res).isEqualTo(-1)
@@ -227,7 +227,7 @@ class MoneyDaoTest {
     }
 
     @Test
-    fun should_return_false_when_update_on_inexistant_table() {
+    fun should_return_false_when_update_on_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
             
@@ -297,11 +297,11 @@ class MoneyDaoTest {
     }
 
     @Test
-    fun should_return_false_when_delete_a_inexistant_money() {
+    fun should_return_false_when_delete_a_non_existent_money() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
             
-            assertThat(moneyDao.findAll().size).isEqualTo(0)
+            assertThat(moneyDao.findAll()).isEmpty()
 
             val res = moneyDao.delete(Money(1, 6))
             assertThat(res).isEqualTo(0)
@@ -310,7 +310,7 @@ class MoneyDaoTest {
     }
 
     @Test
-    fun should_return_false_when_delete_on_inexistant_table() {
+    fun should_return_false_when_delete_on_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
             
@@ -322,7 +322,7 @@ class MoneyDaoTest {
     }
 
     @Test
-    fun should_return_false_when_delete_on_inventory_id_but_inexistant_table() {
+    fun should_return_false_when_delete_on_inventory_id_but_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
             

@@ -120,22 +120,6 @@ class ItemDaoTest {
     }
 
     @Test
-    fun should_read_an_item_from_inventoryId() {
-        transaction {
-            logger.addLogger(StdOutSqlLogger)
-
-            itemsDao.add(GenericItem(inventoryId = 2, encumbrance = 1))
-
-            assertThat(itemsDao.findAll().size).isEqualTo(1)
-
-            val item = itemsDao.findByInventoryId(2)
-
-            assertThat(item).isNotNull()
-            assertThat(item?.encumbrance).isEqualTo(1)
-        }
-    }
-
-    @Test
     fun should_read_an_item_of_each_type_by_id() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
@@ -254,6 +238,19 @@ class ItemDaoTest {
             assertThat(items.size).isEqualTo(0)
         }
     }
+
+    @Test
+    fun should_return_null_when_reading_non_existent_item() {
+        transaction {
+            logger.addLogger(StdOutSqlLogger)
+
+            assertThat(itemsDao.findAll()).isEmpty()
+
+            val res = itemsDao.findById(6)
+            assertThat(res).isNull()
+            assertThat(itemsDao.findAll()).isEmpty()
+        }
+    }
     // endregion
 
     // region UPDATE
@@ -324,11 +321,11 @@ class ItemDaoTest {
     }
 
     @Test
-    fun should_return_false_when_update_a_inexistant_item() {
+    fun should_return_false_when_update_a_non_existent_item() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            assertThat(itemsDao.findAll().size).isEqualTo(0)
+            assertThat(itemsDao.findAll()).isEmpty()
 
             val res = itemsDao.update(Weapon(id = 5, inventoryId = 1))
             assertThat(res).isEqualTo(-1)
@@ -337,7 +334,7 @@ class ItemDaoTest {
     }
 
     @Test
-    fun should_return_false_when_update_on_inexistant_table() {
+    fun should_return_false_when_update_on_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
@@ -350,44 +347,6 @@ class ItemDaoTest {
     // endregion
 
     // region DELETE
-    @Test
-    fun should_delete_a_Item() {
-        val item1 = Expandable(inventoryId = 1)
-        val item2 = GenericItem(inventoryId = 2)
-        val item3 = Armor(inventoryId = 3)
-
-        transaction {
-            logger.addLogger(StdOutSqlLogger)
-
-            val addAllResult = itemsDao.addAll(listOf(item1, item2, item3))
-            assertThat(addAllResult.size).isEqualTo(3)
-            assertThat(addAllResult).containsExactly(1, 2, 3)
-
-            val res = itemsDao.delete(item2)
-            assertThat(res).isEqualTo(1)
-            assertThat(itemsDao.findAll().size).isEqualTo(2)
-            assertThat(itemsDao.findByInventoryId(1)).isNotNull()
-            assertThat(itemsDao.findByInventoryId(2)).isNull()
-            assertThat(itemsDao.findByInventoryId(3)).isNotNull()
-        }
-    }
-
-    @Test
-    fun should_delete_a_item_with_inventoryId() {
-        val item = Armor(inventoryId = 2)
-
-        transaction {
-            logger.addLogger(StdOutSqlLogger)
-
-            val addedCharacteristics = itemsDao.add(item)
-            assertThat(addedCharacteristics).isEqualTo(1)
-            assertThat(itemsDao.findByInventoryId(2)).isNotNull()
-
-            val res = itemsDao.deleteByInventoryId(2)
-            assertThat(res).isEqualTo(1)
-            assertThat(itemsDao.findByInventoryId(2)).isNull()
-        }
-    }
 
     @Test
     fun should_delete_all_items() {
@@ -494,11 +453,11 @@ class ItemDaoTest {
     }
 
     @Test
-    fun should_return_false_when_delete_a_inexistant_item() {
+    fun should_return_false_when_delete_a_non_existent_item() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            assertThat(itemsDao.findAll().size).isEqualTo(0)
+            assertThat(itemsDao.findAll()).isEmpty()
 
             val res = itemsDao.delete(Expandable(id = 6, inventoryId = 1))
             assertThat(res).isEqualTo(0)
@@ -507,7 +466,7 @@ class ItemDaoTest {
     }
 
     @Test
-    fun should_return_false_when_delete_on_inexistant_table() {
+    fun should_return_false_when_delete_on_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
@@ -519,7 +478,7 @@ class ItemDaoTest {
     }
 
     @Test
-    fun should_return_false_when_delete_on_inventory_id_but_inexistant_table() {
+    fun should_return_false_when_delete_on_inventory_id_but_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 

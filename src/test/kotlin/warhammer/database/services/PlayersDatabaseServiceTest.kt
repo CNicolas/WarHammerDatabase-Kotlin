@@ -240,10 +240,10 @@ class PlayersDatabaseServiceTest {
     }
 
     @Test
-    fun should_return_false_when_update_a_inexistant_player() {
+    fun should_return_false_when_update_a_non_existent_player() {
         assertThat(playersService.countAll()).isEqualTo(0)
 
-        val updatedPlayer = playersService.update(Player(name = "Inexistant"))
+        val updatedPlayer = playersService.update(Player(name = "Unknown"))
         assertThat(updatedPlayer).isNull()
         assertThat(playersService.findAll()).isEmpty()
     }
@@ -316,10 +316,10 @@ class PlayersDatabaseServiceTest {
     }
 
     @Test
-    fun should_return_false_when_delete_a_inexistant_player() {
+    fun should_return_false_when_delete_a_non_existent_player() {
         assertThat(playersService.countAll()).isEqualTo(0)
 
-        val res = playersService.delete(Player(name = "Inexistant"))
+        val res = playersService.delete(Player(name = "Unknown"))
         assertThat(res).isFalse()
         assertThat(playersService.findAll()).isEmpty()
     }
@@ -346,7 +346,7 @@ class PlayersDatabaseServiceTest {
         assertThat(player.money.silver).isEqualTo(3)
         assertThat(player.money.gold).isEqualTo(4)
 
-        assertThat(player.items).isNotEmpty()
+        assertThat(player.items).isNotEmpty
         assertThat(player.items.size).isEqualTo(5)
 
         assertThat(player.items[0] is GenericItem).isTrue()

@@ -205,11 +205,11 @@ class PlayerStateDaoTest {
     }
 
     @Test
-    fun should_return_false_when_update_a_inexistant_playerState() {
+    fun should_return_false_when_update_a_non_existent_playerState() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
             
-            assertThat(playerStateDao.findAll().size).isEqualTo(0)
+            assertThat(playerStateDao.findAll()).isEmpty()
 
             val res = playerStateDao.update(PlayerState(playerId = 1))
             assertThat(res).isEqualTo(-1)
@@ -218,7 +218,7 @@ class PlayerStateDaoTest {
     }
 
     @Test
-    fun should_return_false_when_update_on_inexistant_table() {
+    fun should_return_false_when_update_on_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
             
@@ -288,11 +288,11 @@ class PlayerStateDaoTest {
     }
 
     @Test
-    fun should_return_false_when_delete_a_inexistant_playerState() {
+    fun should_return_false_when_delete_a_non_existent_playerState() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
             
-            assertThat(playerStateDao.findAll().size).isEqualTo(0)
+            assertThat(playerStateDao.findAll()).isEmpty()
 
             val res = playerStateDao.delete(PlayerState(1, 6))
             assertThat(res).isEqualTo(0)
@@ -301,7 +301,7 @@ class PlayerStateDaoTest {
     }
 
     @Test
-    fun should_return_false_when_delete_on_inexistant_table() {
+    fun should_return_false_when_delete_on_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
             
@@ -313,7 +313,7 @@ class PlayerStateDaoTest {
     }
 
     @Test
-    fun should_return_false_when_delete_on_player_id_but_inexistant_table() {
+    fun should_return_false_when_delete_on_player_id_but_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
             

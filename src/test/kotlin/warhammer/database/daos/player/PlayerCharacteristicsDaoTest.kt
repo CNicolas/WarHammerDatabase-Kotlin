@@ -205,11 +205,11 @@ class PlayerCharacteristicsDaoTest {
     }
 
     @Test
-    fun should_return_false_when_update_a_inexistant_playerCharacteristic() {
+    fun should_return_false_when_update_a_non_existent_playerCharacteristic() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            assertThat(playerCharacteristicsDao.findAll().size).isEqualTo(0)
+            assertThat(playerCharacteristicsDao.findAll()).isEmpty()
 
             val res = playerCharacteristicsDao.update(PlayerCharacteristicsEntity(playerId = 1))
             assertThat(res).isEqualTo(-1)
@@ -218,7 +218,7 @@ class PlayerCharacteristicsDaoTest {
     }
 
     @Test
-    fun should_return_false_when_update_on_inexistant_table() {
+    fun should_return_false_when_update_on_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
@@ -288,11 +288,11 @@ class PlayerCharacteristicsDaoTest {
     }
 
     @Test
-    fun should_return_false_when_delete_a_inexistant_playerCharacteristic() {
+    fun should_return_false_when_delete_a_non_existent_playerCharacteristic() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            assertThat(playerCharacteristicsDao.findAll().size).isEqualTo(0)
+            assertThat(playerCharacteristicsDao.findAll()).isEmpty()
 
             val res = playerCharacteristicsDao.delete(PlayerCharacteristicsEntity(id = 6, playerId = 1))
             assertThat(res).isEqualTo(0)
@@ -301,7 +301,7 @@ class PlayerCharacteristicsDaoTest {
     }
 
     @Test
-    fun should_return_false_when_delete_on_inexistant_table() {
+    fun should_return_false_when_delete_on_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
@@ -313,7 +313,7 @@ class PlayerCharacteristicsDaoTest {
     }
 
     @Test
-    fun should_return_false_when_delete_on_player_id_but_inexistant_table() {
+    fun should_return_false_when_delete_on_player_id_but_non_existent_table() {
         transaction {
             drop(PlayerCharacteristicsTable)
 

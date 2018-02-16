@@ -166,26 +166,26 @@ class HandsDaoTest {
     }
 
     @Test
-    fun should_return_false_when_update_a_inexistant_hand() {
+    fun should_return_false_when_update_a_non_existent_hand() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
             
-            assertThat(handsDao.findAll().size).isEqualTo(0)
+            assertThat(handsDao.findAll()).isEmpty()
 
-            val res = handsDao.update(Hand("Inexistant"))
+            val res = handsDao.update(Hand("Unknown"))
             assertThat(res).isEqualTo(-1)
             assertThat(handsDao.findAll()).isEmpty()
         }
     }
 
     @Test
-    fun should_return_false_when_update_on_inexistant_table() {
+    fun should_return_false_when_update_on_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
             
             drop(HandsTable)
 
-            val res = handsDao.update(Hand("Inexistant"))
+            val res = handsDao.update(Hand("Unknown"))
             assertThat(res).isEqualTo(-1)
         }
     }
@@ -232,27 +232,27 @@ class HandsDaoTest {
     }
 
     @Test
-    fun should_return_false_when_delete_a_inexistant_hand() {
+    fun should_return_false_when_delete_a_non_existent_hand() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
             
             HandsTable.deleteAll()
-            assertThat(handsDao.findAll().size).isEqualTo(0)
+            assertThat(handsDao.findAll()).isEmpty()
 
-            val res = handsDao.delete(Hand("Inexistant"))
+            val res = handsDao.delete(Hand("Unknown"))
             assertThat(res).isEqualTo(0)
             assertThat(handsDao.findAll()).isEmpty()
         }
     }
 
     @Test
-    fun should_return_false_when_delete_on_inexistant_table() {
+    fun should_return_false_when_delete_on_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
             
             drop(HandsTable)
 
-            val res = handsDao.delete(Hand("Inexistant"))
+            val res = handsDao.delete(Hand("Unknown"))
             assertThat(res).isEqualTo(-1)
         }
     }

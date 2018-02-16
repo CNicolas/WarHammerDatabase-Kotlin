@@ -15,7 +15,7 @@ import java.lang.Exception
 class MoneyDao : AbstractDao<Money>(), PlayerInventoryLinkedDao<Money> {
     override val table: IntIdTable = MoneyTable
 
-    override fun findByInventoryId(inventoryId: Int): Money? {
+    fun findByInventoryId(inventoryId: Int): Money? {
         val result = MoneyTable.select { MoneyTable.inventoryId eq inventoryId }
                 .firstOrNull()
 

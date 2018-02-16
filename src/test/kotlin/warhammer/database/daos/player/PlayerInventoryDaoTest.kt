@@ -205,11 +205,11 @@ class PlayerInventoryDaoTest {
     }
 
     @Test
-    fun should_return_false_when_update_a_inexistant_playerInventory() {
+    fun should_return_false_when_update_a_non_existent_playerInventory() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            assertThat(playerInventoryDao.findAll().size).isEqualTo(0)
+            assertThat(playerInventoryDao.findAll()).isEmpty()
 
             val res = playerInventoryDao.update(PlayerInventory(playerId = 1))
             assertThat(res).isEqualTo(-1)
@@ -218,7 +218,7 @@ class PlayerInventoryDaoTest {
     }
 
     @Test
-    fun should_return_false_when_update_on_inexistant_table() {
+    fun should_return_false_when_update_on_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
@@ -260,8 +260,8 @@ class PlayerInventoryDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            val addedInventorys = playerInventoryDao.add(playerInventory)
-            assertThat(addedInventorys).isEqualTo(1)
+            val addedInventories = playerInventoryDao.add(playerInventory)
+            assertThat(addedInventories).isEqualTo(1)
             assertThat(playerInventoryDao.findByPlayerId(2)).isNotNull()
 
             val res = playerInventoryDao.deleteByPlayerId(2)
@@ -288,11 +288,11 @@ class PlayerInventoryDaoTest {
     }
 
     @Test
-    fun should_return_false_when_delete_a_inexistant_playerInventory() {
+    fun should_return_false_when_delete_a_non_existent_playerInventory() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            assertThat(playerInventoryDao.findAll().size).isEqualTo(0)
+            assertThat(playerInventoryDao.findAll()).isEmpty()
 
             val res = playerInventoryDao.delete(PlayerInventory(1, 6))
             assertThat(res).isEqualTo(0)
@@ -301,7 +301,7 @@ class PlayerInventoryDaoTest {
     }
 
     @Test
-    fun should_return_false_when_delete_on_inexistant_table() {
+    fun should_return_false_when_delete_on_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
@@ -313,7 +313,7 @@ class PlayerInventoryDaoTest {
     }
 
     @Test
-    fun should_return_false_when_delete_on_player_id_but_inexistant_table() {
+    fun should_return_false_when_delete_on_player_id_but_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
