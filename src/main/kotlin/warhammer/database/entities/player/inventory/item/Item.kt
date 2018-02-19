@@ -8,20 +8,20 @@ import warhammer.database.entities.player.inventory.item.enums.Range
 interface Item : NamedEntity {
     val inventoryId: Int
 
-    val description: String?
-    val encumbrance: Int
-    val quantity: Int
-    val quality: Quality
-    val type: ItemType
+    var description: String?
+    var encumbrance: Int
+    var quantity: Int
+    var quality: Quality
+    var type: ItemType
 
-    val uses: Int?
+    var uses: Int?
 
-    val isEquipped: Boolean?
+    var isEquipped: Boolean?
 
-    val soak: Int?
-    val defense: Int?
+    var soak: Int?
+    var defense: Int?
 
-    val damage: Int?
-    val criticalLevel: Int?
-    val range: Range?
+    var damage: Int?
+    var criticalLevel: Int?
+    var range: Range?
 }

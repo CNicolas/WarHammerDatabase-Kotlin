@@ -133,14 +133,14 @@ class PlayerInventoryDaoTest {
             val allInsertedPlayerInventory = playerInventoryDao.findAll()
             assertThat(allInsertedPlayerInventory.size).isEqualTo(3)
 
-            assertThat(allInsertedPlayerInventory[0]?.playerId).isEqualTo(1)
-            assertThat(allInsertedPlayerInventory[0]?.maxEncumbrance).isEqualTo(3)
+            assertThat(allInsertedPlayerInventory[0].playerId).isEqualTo(1)
+            assertThat(allInsertedPlayerInventory[0].maxEncumbrance).isEqualTo(3)
 
-            assertThat(allInsertedPlayerInventory[1]?.playerId).isEqualTo(2)
-            assertThat(allInsertedPlayerInventory[1]?.maxEncumbrance).isEqualTo(2)
+            assertThat(allInsertedPlayerInventory[1].playerId).isEqualTo(2)
+            assertThat(allInsertedPlayerInventory[1].maxEncumbrance).isEqualTo(2)
 
-            assertThat(allInsertedPlayerInventory[2]?.playerId).isEqualTo(3)
-            assertThat(allInsertedPlayerInventory[2]?.encumbrance).isEqualTo(4)
+            assertThat(allInsertedPlayerInventory[2].playerId).isEqualTo(3)
+            assertThat(allInsertedPlayerInventory[2].encumbrance).isEqualTo(4)
         }
     }
     // endregion
@@ -194,13 +194,13 @@ class PlayerInventoryDaoTest {
             // VERIFY
             val allInsertedPlayerInventory = playerInventoryDao.findAll()
             assertThat(allInsertedPlayerInventory.size).isEqualTo(2)
-            assertThat(allInsertedPlayerInventory.map { it?.id }).containsExactly(id1, id2)
+            assertThat(allInsertedPlayerInventory.map { it.id }).containsExactly(id1, id2)
 
-            assertThat(allInsertedPlayerInventory[0]?.playerId).isEqualTo(1)
-            assertThat(allInsertedPlayerInventory[0]?.encumbrance).isEqualTo(2)
+            assertThat(allInsertedPlayerInventory[0].playerId).isEqualTo(1)
+            assertThat(allInsertedPlayerInventory[0].encumbrance).isEqualTo(2)
 
-            assertThat(allInsertedPlayerInventory[1]?.playerId).isEqualTo(2)
-            assertThat(allInsertedPlayerInventory[1]?.maxEncumbrance).isEqualTo(2)
+            assertThat(allInsertedPlayerInventory[1].playerId).isEqualTo(2)
+            assertThat(allInsertedPlayerInventory[1].maxEncumbrance).isEqualTo(2)
         }
     }
 

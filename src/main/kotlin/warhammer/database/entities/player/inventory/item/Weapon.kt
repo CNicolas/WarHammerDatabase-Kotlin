@@ -6,21 +6,21 @@ import warhammer.database.entities.player.inventory.item.enums.Range
 
 data class Weapon(override val id: Int = -1,
                   override val inventoryId: Int = -1,
-                  override val name: String = "Weapon",
-                  override val description: String? = null,
-                  override val encumbrance: Int = 0,
-                  override val quantity: Int = 1,
-                  override val quality: Quality = Quality.NORMAL,
+                  override var name: String = "Weapon",
+                  override var description: String? = null,
+                  override var encumbrance: Int = 0,
+                  override var quantity: Int = 1,
+                  override var quality: Quality = Quality.NORMAL,
 
-                  override val isEquipped: Boolean = false,
+                  override var isEquipped: Boolean? = false,
 
-                  override val damage: Int? = 0,
-                  override val criticalLevel: Int? = 0,
-                  override val range: Range? = Range.ENGAGED) : Item {
+                  override var damage: Int? = 0,
+                  override var criticalLevel: Int? = 0,
+                  override var range: Range? = Range.ENGAGED) : Item {
 
-    override val type = WEAPON
+    override var type = WEAPON
 
-    override val uses: Int? = null
-    override val soak: Int? = null
-    override val defense: Int? = null
+    override var uses: Int? = null
+    override var soak: Int? = null
+    override var defense: Int? = null
 }

@@ -144,14 +144,14 @@ class StanceDaoTest {
             val allInsertedStance = stanceDao.findAll()
             assertThat(allInsertedStance.size).isEqualTo(3)
 
-            assertThat(allInsertedStance[0]?.stateId).isEqualTo(1)
-            assertThat(allInsertedStance[0]?.maxReckless).isEqualTo(3)
+            assertThat(allInsertedStance[0].stateId).isEqualTo(1)
+            assertThat(allInsertedStance[0].maxReckless).isEqualTo(3)
 
-            assertThat(allInsertedStance[1]?.stateId).isEqualTo(2)
-            assertThat(allInsertedStance[1]?.conservative).isEqualTo(2)
+            assertThat(allInsertedStance[1].stateId).isEqualTo(2)
+            assertThat(allInsertedStance[1].conservative).isEqualTo(2)
 
-            assertThat(allInsertedStance[2]?.stateId).isEqualTo(3)
-            assertThat(allInsertedStance[2]?.maxConservative).isEqualTo(4)
+            assertThat(allInsertedStance[2].stateId).isEqualTo(3)
+            assertThat(allInsertedStance[2].maxConservative).isEqualTo(4)
         }
     }
     // endregion
@@ -169,12 +169,12 @@ class StanceDaoTest {
             // FIND
             val stance = stanceDao.findById(id)
             assertThat(stance).isNotNull()
-            assertThat(stance?.stateId).isEqualTo(1)
-            assertThat(stance?.maxReckless).isEqualTo(0)
+            assertThat(stance!!.stateId).isEqualTo(1)
+            assertThat(stance.maxReckless).isEqualTo(0)
 
             // UPDATE
-            val stanceToUpdate = stance?.copy(maxReckless = 1)
-            stanceDao.update(stanceToUpdate!!)
+            stance.maxReckless = 1
+            stanceDao.update(stance)
             assertThat(stanceDao.findAll().size).isEqualTo(1)
 
             // VERIFY
@@ -205,13 +205,13 @@ class StanceDaoTest {
             // VERIFY
             val allInsertedStance = stanceDao.findAll()
             assertThat(allInsertedStance.size).isEqualTo(2)
-            assertThat(allInsertedStance.map { it?.id }).containsExactly(id1, id2)
+            assertThat(allInsertedStance.map { it.id }).containsExactly(id1, id2)
 
-            assertThat(allInsertedStance[0]?.stateId).isEqualTo(1)
-            assertThat(allInsertedStance[0]?.reckless).isEqualTo(2)
+            assertThat(allInsertedStance[0].stateId).isEqualTo(1)
+            assertThat(allInsertedStance[0].reckless).isEqualTo(2)
 
-            assertThat(allInsertedStance[1]?.stateId).isEqualTo(2)
-            assertThat(allInsertedStance[1]?.maxConservative).isEqualTo(2)
+            assertThat(allInsertedStance[1].stateId).isEqualTo(2)
+            assertThat(allInsertedStance[1].maxConservative).isEqualTo(2)
         }
     }
 

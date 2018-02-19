@@ -4,7 +4,6 @@ import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import warhammer.database.entities.player.PlayerCharacteristicsEntity
-import warhammer.database.entities.player.characteristics.Characteristic.*
 import warhammer.database.entities.player.characteristics.CharacteristicValue
 import warhammer.database.entities.player.characteristics.PlayerCharacteristics
 import warhammer.database.tables.PlayersTable
@@ -35,12 +34,12 @@ internal fun ResultRow?.mapToPlayerCharacteristicsEntity(): PlayerCharacteristic
 fun PlayerCharacteristicsEntity?.mapToPlayerCharacteristics(): PlayerCharacteristics = when (this) {
     null -> PlayerCharacteristics()
     else -> PlayerCharacteristics(
-            strength = CharacteristicValue(this.strength, this.strengthFortune),
-            toughness = CharacteristicValue(this.toughness, this.toughnessFortune),
-            agility = CharacteristicValue(this.agility, this.agilityFortune),
-            intelligence = CharacteristicValue(this.intelligence, this.intelligenceFortune),
-            willpower = CharacteristicValue(this.willpower, this.willpowerFortune),
-            fellowship = CharacteristicValue(this.fellowship, this.fellowshipFortune)
+            strength = CharacteristicValue(strength, strengthFortune),
+            toughness = CharacteristicValue(toughness, toughnessFortune),
+            agility = CharacteristicValue(agility, agilityFortune),
+            intelligence = CharacteristicValue(intelligence, intelligenceFortune),
+            willpower = CharacteristicValue(willpower, willpowerFortune),
+            fellowship = CharacteristicValue(fellowship, fellowshipFortune)
     )
 }
 
@@ -48,19 +47,19 @@ fun PlayerCharacteristics.mapToEntity(playerId: Int): PlayerCharacteristicsEntit
         PlayerCharacteristicsEntity(
                 playerId = playerId,
 
-                strength = this[STRENGTH].value,
-                toughness = this[TOUGHNESS].value,
-                agility = this[AGILITY].value,
-                intelligence = this[INTELLIGENCE].value,
-                willpower = this[WILLPOWER].value,
-                fellowship = this[FELLOWSHIP].value,
+                strength = strength.value,
+                toughness = toughness.value,
+                agility = agility.value,
+                intelligence = intelligence.value,
+                willpower = willpower.value,
+                fellowship = fellowship.value,
 
-                strengthFortune = this[STRENGTH].fortuneValue,
-                toughnessFortune = this[TOUGHNESS].fortuneValue,
-                agilityFortune = this[AGILITY].fortuneValue,
-                intelligenceFortune = this[INTELLIGENCE].fortuneValue,
-                willpowerFortune = this[WILLPOWER].fortuneValue,
-                fellowshipFortune = this[FELLOWSHIP].fortuneValue
+                strengthFortune = strength.fortuneValue,
+                toughnessFortune = toughness.fortuneValue,
+                agilityFortune = agility.fortuneValue,
+                intelligenceFortune = intelligence.fortuneValue,
+                willpowerFortune = willpower.fortuneValue,
+                fellowshipFortune = fellowship.fortuneValue
         )
 
 fun UpdateBuilder<Int>.mapFieldsOfEntity(entity: PlayerCharacteristicsEntity) {

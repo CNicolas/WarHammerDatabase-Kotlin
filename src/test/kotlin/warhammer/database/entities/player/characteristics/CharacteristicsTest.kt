@@ -5,18 +5,35 @@ import org.testng.annotations.Test
 import warhammer.database.entities.mapping.mapToPlayerCharacteristics
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.PlayerCharacteristicsEntity
-import warhammer.database.entities.player.characteristics.Characteristic.STRENGTH
+import warhammer.database.entities.player.characteristics.Characteristic.*
 
 class CharacteristicsTest {
     @Test
+    fun should_get_intelligence() {
+        val charac = CharacteristicValue(3, 2)
+        val playerCharacteristics = PlayerCharacteristics(charac, charac, charac, charac, charac, charac)
+
+        assertThat(playerCharacteristics[INTELLIGENCE].value).isEqualTo(3)
+        assertThat(playerCharacteristics[INTELLIGENCE].fortuneValue).isEqualTo(2)
+        assertThat(playerCharacteristics.intelligence.compareTo(charac)).isZero()
+
+        assertThat(playerCharacteristics[STRENGTH].compareTo(charac)).isZero()
+        assertThat(playerCharacteristics[TOUGHNESS].compareTo(charac)).isZero()
+        assertThat(playerCharacteristics[AGILITY].compareTo(charac)).isZero()
+        assertThat(playerCharacteristics[INTELLIGENCE].compareTo(charac)).isZero()
+        assertThat(playerCharacteristics[WILLPOWER].compareTo(charac)).isZero()
+        assertThat(playerCharacteristics[FELLOWSHIP].compareTo(charac)).isZero()
+    }
+
+    @Test
     fun should_set_strength() {
         val playerCharacteristics = PlayerCharacteristics(strength = CharacteristicValue(4, 1))
-        assertThat(playerCharacteristics[STRENGTH].value).isEqualTo(4)
-        assertThat(playerCharacteristics[STRENGTH].fortuneValue).isEqualTo(1)
+        assertThat(playerCharacteristics.strength.value).isEqualTo(4)
+        assertThat(playerCharacteristics.strength.fortuneValue).isEqualTo(1)
 
-        playerCharacteristics[STRENGTH] = CharacteristicValue(3, 2)
-        assertThat(playerCharacteristics[STRENGTH].value).isEqualTo(3)
-        assertThat(playerCharacteristics[STRENGTH].fortuneValue).isEqualTo(2)
+        playerCharacteristics.strength = CharacteristicValue(3, 2)
+        assertThat(playerCharacteristics.strength.value).isEqualTo(3)
+        assertThat(playerCharacteristics.strength.fortuneValue).isEqualTo(2)
     }
 
     @Test
@@ -35,7 +52,7 @@ class CharacteristicsTest {
     fun should_create_hand_from_player_strength() {
         val playerCharacteristics = PlayerCharacteristics(strength = CharacteristicValue(4, 1))
         val player = Player(name = "SamplePlayer", characteristics = playerCharacteristics)
-        val hand = player.characteristics[STRENGTH].getHand("SampleHand")
+        val hand = player.strength.getHand("SampleHand")
 
         assertThat(hand).isNotNull()
         assertThat(hand.name).isEqualTo("SampleHand")
@@ -49,5 +66,12 @@ class CharacteristicsTest {
         val entity: PlayerCharacteristicsEntity? = null
         val expected = PlayerCharacteristics()
         assertThat(entity.mapToPlayerCharacteristics()).isEqualToComparingFieldByField(expected)
+    }
+
+    @Test
+    fun should_compare_two_values() {
+        val charac1 = CharacteristicValue(5, 3)
+        val charac2 = CharacteristicValue(6, 2)
+        assertThat(charac1.compareTo(charac2)).isNegative()
     }
 }

@@ -55,7 +55,7 @@ class MoneyDaoTest {
     fun should_add_a_money() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            
+
             moneyDao.add(Money(inventoryId = 1))
 
             assertThat(moneyDao.findAll().size).isEqualTo(1)
@@ -71,7 +71,7 @@ class MoneyDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            
+
             moneyDao.addAll(moneyToAdd)
 
             assertThat(moneyDao.findAll().size).isEqualTo(3)
@@ -82,7 +82,7 @@ class MoneyDaoTest {
     fun should_add_a_money_then_fail_to_add_it_again() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            
+
             var resOfInsert = moneyDao.add(Money(inventoryId = 1))
             assertThat(resOfInsert).isEqualTo(1)
             assertThat(moneyDao.findAll().size).isEqualTo(1)
@@ -99,7 +99,7 @@ class MoneyDaoTest {
     fun should_read_a_money() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            
+
             moneyDao.add(Money(1, brass = 2))
 
             assertThat(moneyDao.findAll().size).isEqualTo(1)
@@ -115,7 +115,7 @@ class MoneyDaoTest {
     fun should_read_a_money_from_inventoryId() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            
+
             moneyDao.add(Money(inventoryId = 2, silver = 1))
 
             assertThat(moneyDao.findAll().size).isEqualTo(1)
@@ -136,20 +136,20 @@ class MoneyDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            
+
             moneyDao.addAll(moneyToAdd)
 
             val allInsertedMoney = moneyDao.findAll()
             assertThat(allInsertedMoney.size).isEqualTo(3)
 
-            assertThat(allInsertedMoney[0]?.inventoryId).isEqualTo(1)
-            assertThat(allInsertedMoney[0]?.brass).isEqualTo(3)
+            assertThat(allInsertedMoney[0].inventoryId).isEqualTo(1)
+            assertThat(allInsertedMoney[0].brass).isEqualTo(3)
 
-            assertThat(allInsertedMoney[1]?.inventoryId).isEqualTo(2)
-            assertThat(allInsertedMoney[1]?.silver).isEqualTo(1)
+            assertThat(allInsertedMoney[1].inventoryId).isEqualTo(2)
+            assertThat(allInsertedMoney[1].silver).isEqualTo(1)
 
-            assertThat(allInsertedMoney[2]?.inventoryId).isEqualTo(3)
-            assertThat(allInsertedMoney[2]?.gold).isEqualTo(4)
+            assertThat(allInsertedMoney[2].inventoryId).isEqualTo(3)
+            assertThat(allInsertedMoney[2].gold).isEqualTo(4)
         }
     }
     // endregion
@@ -159,7 +159,7 @@ class MoneyDaoTest {
     fun should_update_a_money() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            
+
             // ADD
             val id = moneyDao.add(Money(inventoryId = 1))
             assertThat(moneyDao.findAll().size).isEqualTo(1)
@@ -167,12 +167,12 @@ class MoneyDaoTest {
             // FIND
             val money = moneyDao.findById(id)
             assertThat(money).isNotNull()
-            assertThat(money?.inventoryId).isEqualTo(1)
-            assertThat(money?.silver).isEqualTo(0)
+            assertThat(money!!.inventoryId).isEqualTo(1)
+            assertThat(money.silver).isEqualTo(0)
 
             // UPDATE
-            val moneyToUpdate = money?.copy(silver = 3)
-            moneyDao.update(moneyToUpdate!!)
+            money.silver = 3
+            moneyDao.update(money)
             assertThat(moneyDao.findAll().size).isEqualTo(1)
 
             // VERIFY
@@ -187,7 +187,7 @@ class MoneyDaoTest {
     fun should_update_all_money() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            
+
             // ADD
             val id1 = moneyDao.add(Money(inventoryId = 1))
             val id2 = moneyDao.add(Money(inventoryId = 2))
@@ -195,21 +195,21 @@ class MoneyDaoTest {
 
             // UPDATE
             val updatedIds = moneyDao.updateAll(
-                    listOf(Money(1, id1, brass = 2),
-                            Money(2, id2, silver = 2))
+                    listOf(Money(id1, 1, brass = 2),
+                            Money(id2, 2, silver = 2))
             )
             assertThat(updatedIds).containsExactly(id1, id2)
 
             // VERIFY
             val allInsertedMoney = moneyDao.findAll()
             assertThat(allInsertedMoney.size).isEqualTo(2)
-            assertThat(allInsertedMoney.map { it?.id }).containsExactly(id1, id2)
+            assertThat(allInsertedMoney.map { it.id }).containsExactly(id1, id2)
 
-            assertThat(allInsertedMoney[0]?.inventoryId).isEqualTo(1)
-            assertThat(allInsertedMoney[0]?.brass).isEqualTo(2)
+            assertThat(allInsertedMoney[0].inventoryId).isEqualTo(1)
+            assertThat(allInsertedMoney[0].brass).isEqualTo(2)
 
-            assertThat(allInsertedMoney[1]?.inventoryId).isEqualTo(2)
-            assertThat(allInsertedMoney[1]?.silver).isEqualTo(2)
+            assertThat(allInsertedMoney[1].inventoryId).isEqualTo(2)
+            assertThat(allInsertedMoney[1].silver).isEqualTo(2)
         }
     }
 
@@ -217,7 +217,7 @@ class MoneyDaoTest {
     fun should_return_false_when_update_a_non_existent_money() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            
+
             assertThat(moneyDao.findAll()).isEmpty()
 
             val res = moneyDao.update(Money(inventoryId = 1))
@@ -230,7 +230,7 @@ class MoneyDaoTest {
     fun should_return_false_when_update_on_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            
+
             drop(MoneyTable)
 
             val res = moneyDao.update(Money(1, 1))
@@ -248,7 +248,7 @@ class MoneyDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            
+
             val addAllResult = moneyDao.addAll(listOf(money1, money2, money3))
             assertThat(addAllResult.size).isEqualTo(3)
             assertThat(addAllResult).containsExactly(1, 2, 3)
@@ -268,7 +268,7 @@ class MoneyDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            
+
             val addedCharacteristics = moneyDao.add(money)
             assertThat(addedCharacteristics).isEqualTo(1)
             assertThat(moneyDao.findByInventoryId(2)).isNotNull()
@@ -286,7 +286,7 @@ class MoneyDaoTest {
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            
+
             moneyDao.add(money1)
             moneyDao.add(money2)
             assertThat(moneyDao.findAll().size).isEqualTo(2)
@@ -300,7 +300,7 @@ class MoneyDaoTest {
     fun should_return_false_when_delete_a_non_existent_money() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            
+
             assertThat(moneyDao.findAll()).isEmpty()
 
             val res = moneyDao.delete(Money(1, 6))
@@ -313,7 +313,7 @@ class MoneyDaoTest {
     fun should_return_false_when_delete_on_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            
+
             drop(MoneyTable)
 
             val res = moneyDao.delete(Money(1, 1))
@@ -325,7 +325,7 @@ class MoneyDaoTest {
     fun should_return_false_when_delete_on_inventory_id_but_non_existent_table() {
         transaction {
             logger.addLogger(StdOutSqlLogger)
-            
+
             drop(MoneyTable)
 
             val res = moneyDao.deleteByInventoryId(1)

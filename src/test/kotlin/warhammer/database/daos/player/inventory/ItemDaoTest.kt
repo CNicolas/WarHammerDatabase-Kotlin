@@ -175,17 +175,17 @@ class ItemDaoTest {
             val allInsertedItems = itemsDao.findAll()
             assertThat(allInsertedItems.size).isEqualTo(3)
 
-            assertThat(allInsertedItems[0]?.inventoryId).isEqualTo(1)
-            assertThat(allInsertedItems[0] is Weapon?).isTrue()
-            assertThat(allInsertedItems[0]?.criticalLevel).isEqualTo(3)
+            assertThat(allInsertedItems[0].inventoryId).isEqualTo(1)
+            assertThat(allInsertedItems[0] is Weapon).isTrue()
+            assertThat(allInsertedItems[0].criticalLevel).isEqualTo(3)
 
-            assertThat(allInsertedItems[1]?.inventoryId).isEqualTo(2)
-            assertThat(allInsertedItems[1] is Expandable?).isTrue()
-            assertThat(allInsertedItems[1]?.uses).isEqualTo(10)
+            assertThat(allInsertedItems[1].inventoryId).isEqualTo(2)
+            assertThat(allInsertedItems[1] is Expandable).isTrue()
+            assertThat(allInsertedItems[1].uses).isEqualTo(10)
 
-            assertThat(allInsertedItems[2]?.inventoryId).isEqualTo(3)
-            assertThat(allInsertedItems[2] is Armor?).isTrue()
-            assertThat(allInsertedItems[2]?.defense).isEqualTo(2)
+            assertThat(allInsertedItems[2].inventoryId).isEqualTo(3)
+            assertThat(allInsertedItems[2] is Armor).isTrue()
+            assertThat(allInsertedItems[2].defense).isEqualTo(2)
         }
     }
 
@@ -308,15 +308,15 @@ class ItemDaoTest {
             // VERIFY
             val allInsertedItems = itemsDao.findAll()
             assertThat(allInsertedItems.size).isEqualTo(2)
-            assertThat(allInsertedItems.map { it?.id }).containsExactly(id1, id2)
+            assertThat(allInsertedItems.map { it.id }).containsExactly(id1, id2)
 
-            assertThat(allInsertedItems[0]?.inventoryId).isEqualTo(1)
+            assertThat(allInsertedItems[0].inventoryId).isEqualTo(1)
             assertThat(allInsertedItems[0] is Armor).isTrue()
-            assertThat(allInsertedItems[0]?.soak).isEqualTo(2)
+            assertThat(allInsertedItems[0].soak).isEqualTo(2)
 
-            assertThat(allInsertedItems[1]?.inventoryId).isEqualTo(2)
+            assertThat(allInsertedItems[1].inventoryId).isEqualTo(2)
             assertThat(allInsertedItems[1] is Expandable).isTrue()
-            assertThat(allInsertedItems[1]?.uses).isEqualTo(2)
+            assertThat(allInsertedItems[1].uses).isEqualTo(2)
         }
     }
 

@@ -6,18 +6,18 @@ import warhammer.database.entities.player.inventory.item.enums.Range
 
 data class GenericItem(override val id: Int = -1,
                        override val inventoryId: Int = -1,
-                       override val name: String = "Item",
-                       override val description: String? = null,
-                       override val encumbrance: Int = 0,
-                       override val quantity: Int = 1,
-                       override val quality: Quality = Quality.NORMAL) : Item {
-    override val type = ITEM
+                       override var name: String = "Item",
+                       override var description: String? = null,
+                       override var encumbrance: Int = 0,
+                       override var quantity: Int = 1,
+                       override var quality: Quality = Quality.NORMAL) : Item {
+    override var type = ITEM
 
-    override val isEquipped: Boolean? = null
-    override val uses: Int? = null
-    override val soak: Int? = null
-    override val defense: Int? = null
-    override val damage: Int? = null
-    override val criticalLevel: Int? = null
-    override val range: Range? = null
+    override var isEquipped: Boolean? = null
+    override var uses: Int? = null
+    override var soak: Int? = null
+    override var defense: Int? = null
+    override var damage: Int? = null
+    override var criticalLevel: Int? = null
+    override var range: Range? = null
 }

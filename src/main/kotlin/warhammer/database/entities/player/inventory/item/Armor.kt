@@ -6,21 +6,21 @@ import warhammer.database.entities.player.inventory.item.enums.Range
 
 data class Armor(override val id: Int = -1,
                  override val inventoryId: Int = -1,
-                 override val name: String = "Armor",
-                 override val description: String? = null,
-                 override val encumbrance: Int = 0,
-                 override val quantity: Int = 1,
-                 override val quality: Quality = Quality.NORMAL,
+                 override var name: String = "Armor",
+                 override var description: String? = null,
+                 override var encumbrance: Int = 0,
+                 override var quantity: Int = 1,
+                 override var quality: Quality = Quality.NORMAL,
 
-                 override val isEquipped: Boolean = false,
+                 override var isEquipped: Boolean? = false,
 
-                 override val soak: Int? = 0,
-                 override val defense: Int? = 0) : Item {
+                 override var soak: Int? = 0,
+                 override var defense: Int? = 0) : Item {
 
-    override val type = ARMOR
+    override var type = ARMOR
 
-    override val uses: Int? = null
-    override val damage: Int? = null
-    override val criticalLevel: Int? = null
-    override val range: Range? = null
+    override var uses: Int? = null
+    override var damage: Int? = null
+    override var criticalLevel: Int? = null
+    override var range: Range? = null
 }

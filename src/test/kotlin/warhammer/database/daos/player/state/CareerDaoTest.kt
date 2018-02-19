@@ -168,12 +168,12 @@ class CareerDaoTest {
             // FIND
             val career = careerDao.findById(id)
             assertThat(career).isNotNull()
-            assertThat(career?.stateId).isEqualTo(1)
-            assertThat(career?.name).isEqualTo("Unemployed")
+            assertThat(career!!.stateId).isEqualTo(1)
+            assertThat(career.name).isEqualTo("Unemployed")
 
             // UPDATE
-            val careerToUpdate = career?.copy(name = "Ratier")
-            careerDao.update(careerToUpdate!!)
+            career.name = "Ratier"
+            careerDao.update(career)
             assertThat(careerDao.findAll().size).isEqualTo(1)
 
             // VERIFY
@@ -196,8 +196,8 @@ class CareerDaoTest {
 
             // UPDATE
             val updatedIds = careerDao.updateAll(
-                    listOf(Career(1, id1, rank = 2),
-                            Career(2, id2, totalExperience = 2))
+                    listOf(Career(id1, 1, rank = 2),
+                            Career(id2, 2, totalExperience = 2))
             )
             assertThat(updatedIds).containsExactly(id1, id2)
 

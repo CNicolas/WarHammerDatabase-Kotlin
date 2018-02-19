@@ -133,14 +133,14 @@ class PlayerCharacteristicsDaoTest {
             val allInsertedPlayerCharacteristics = playerCharacteristicsDao.findAll()
             assertThat(allInsertedPlayerCharacteristics.size).isEqualTo(3)
 
-            assertThat(allInsertedPlayerCharacteristics[0]?.playerId).isEqualTo(1)
-            assertThat(allInsertedPlayerCharacteristics[0]?.intelligence).isEqualTo(3)
+            assertThat(allInsertedPlayerCharacteristics[0].playerId).isEqualTo(1)
+            assertThat(allInsertedPlayerCharacteristics[0].intelligence).isEqualTo(3)
 
-            assertThat(allInsertedPlayerCharacteristics[1]?.playerId).isEqualTo(2)
-            assertThat(allInsertedPlayerCharacteristics[1]?.toughnessFortune).isEqualTo(2)
+            assertThat(allInsertedPlayerCharacteristics[1].playerId).isEqualTo(2)
+            assertThat(allInsertedPlayerCharacteristics[1].toughnessFortune).isEqualTo(2)
 
-            assertThat(allInsertedPlayerCharacteristics[2]?.playerId).isEqualTo(3)
-            assertThat(allInsertedPlayerCharacteristics[2]?.willpower).isEqualTo(4)
+            assertThat(allInsertedPlayerCharacteristics[2].playerId).isEqualTo(3)
+            assertThat(allInsertedPlayerCharacteristics[2].willpower).isEqualTo(4)
         }
     }
     // endregion
@@ -158,12 +158,12 @@ class PlayerCharacteristicsDaoTest {
             // FIND
             val playerCharacteristic = playerCharacteristicsDao.findById(id)
             assertThat(playerCharacteristic).isNotNull()
-            assertThat(playerCharacteristic?.playerId).isEqualTo(1)
-            assertThat(playerCharacteristic?.fellowship).isEqualTo(0)
+            assertThat(playerCharacteristic!!.playerId).isEqualTo(1)
+            assertThat(playerCharacteristic.fellowship).isEqualTo(0)
 
             // UPDATE
-            val playerCharacteristicToUpdate = playerCharacteristic?.copy(fellowship = 1)
-            playerCharacteristicsDao.update(playerCharacteristicToUpdate!!)
+            playerCharacteristic.fellowship = 1
+            playerCharacteristicsDao.update(playerCharacteristic)
             assertThat(playerCharacteristicsDao.findAll().size).isEqualTo(1)
 
             // VERIFY
@@ -194,13 +194,13 @@ class PlayerCharacteristicsDaoTest {
             // VERIFY
             val allInsertedPlayerCharacteristics = playerCharacteristicsDao.findAll()
             assertThat(allInsertedPlayerCharacteristics.size).isEqualTo(2)
-            assertThat(allInsertedPlayerCharacteristics.map { it?.id }).containsExactly(id1, id2)
+            assertThat(allInsertedPlayerCharacteristics.map { it.id }).containsExactly(id1, id2)
 
-            assertThat(allInsertedPlayerCharacteristics[0]?.playerId).isEqualTo(1)
-            assertThat(allInsertedPlayerCharacteristics[0]?.strength).isEqualTo(2)
+            assertThat(allInsertedPlayerCharacteristics[0].playerId).isEqualTo(1)
+            assertThat(allInsertedPlayerCharacteristics[0].strength).isEqualTo(2)
 
-            assertThat(allInsertedPlayerCharacteristics[1]?.playerId).isEqualTo(2)
-            assertThat(allInsertedPlayerCharacteristics[1]?.strengthFortune).isEqualTo(2)
+            assertThat(allInsertedPlayerCharacteristics[1].playerId).isEqualTo(2)
+            assertThat(allInsertedPlayerCharacteristics[1].strengthFortune).isEqualTo(2)
         }
     }
 

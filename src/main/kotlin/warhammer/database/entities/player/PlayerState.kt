@@ -7,14 +7,14 @@ import warhammer.database.entities.player.state.Stance
 data class PlayerState(override val id: Int = -1,
                        val playerId: Int = -1,
                        val career: Career = Career(stateId = id),
-                       val wounds: Int = 0,
-                       val maxWounds: Int = 0,
-                       val corruption: Int = 0,
-                       val maxCorruption: Int = 0,
-                       val stress: Int = 0,
-                       val maxStress: Int = 0,
-                       val exhaustion: Int = 0,
-                       val maxExhaustion: Int = 0,
+                       var wounds: Int = 0,
+                       var maxWounds: Int = 0,
+                       var corruption: Int = 0,
+                       var maxCorruption: Int = 0,
+                       var stress: Int = 0,
+                       var maxStress: Int = 0,
+                       var exhaustion: Int = 0,
+                       var maxExhaustion: Int = 0,
                        val stance: Stance = Stance(stateId = id)) : WarHammerEntity {
     val careerName = career.name
     val rank = career.rank

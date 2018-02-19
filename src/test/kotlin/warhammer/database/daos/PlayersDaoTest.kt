@@ -110,10 +110,10 @@ class PlayersDaoTest {
             val allInsertedPlayers = playersDao.findAll()
             assertThat(allInsertedPlayers).isNotNull
             assertThat(allInsertedPlayers.size).isEqualTo(3)
-            assertThat(allInsertedPlayers.map { it?.name }).containsExactly("Player1", "Player2", "Player3")
-            assertThat(allInsertedPlayers[0]?.race).isEqualTo(Race.DWARF)
-            assertThat(allInsertedPlayers[1]?.size).isEqualTo(92)
-            assertThat(allInsertedPlayers[2]?.age).isEqualTo(219)
+            assertThat(allInsertedPlayers.map { it.name }).containsExactly("Player1", "Player2", "Player3")
+            assertThat(allInsertedPlayers[0].race).isEqualTo(Race.DWARF)
+            assertThat(allInsertedPlayers[1].size).isEqualTo(92)
+            assertThat(allInsertedPlayers[2].age).isEqualTo(219)
         }
     }
     // endregion
@@ -134,11 +134,11 @@ class PlayersDaoTest {
             // FIND
             val player = playersDao.findById(id)
             assertThat(player).isNotNull()
-            assertThat(player?.name).isEqualTo(playerName)
+            assertThat(player!!.name).isEqualTo(playerName)
 
             // UPDATE
-            val playerToUpdate = player?.copy(name = newPlayerName)
-            playersDao.update(playerToUpdate!!)
+            player.name = newPlayerName
+            playersDao.update(player)
             assertThat(playersDao.findAll().size).isEqualTo(1)
 
             // VERIFY
@@ -165,8 +165,8 @@ class PlayersDaoTest {
             // VERIFY
             val allInsertedPlayers = playersDao.findAll()
             assertThat(allInsertedPlayers.size).isEqualTo(2)
-            assertThat(allInsertedPlayers.map { it?.name }).containsExactly("Player11", "Player22")
-            assertThat(allInsertedPlayers.map { it?.id }).containsExactly(id1, id2)
+            assertThat(allInsertedPlayers.map { it.name }).containsExactly("Player11", "Player22")
+            assertThat(allInsertedPlayers.map { it.id }).containsExactly(id1, id2)
         }
     }
 
