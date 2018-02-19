@@ -40,7 +40,7 @@ fun PlayerCharacteristicsEntity?.mapToPlayerCharacteristics(): PlayerCharacteris
             agility = CharacteristicValue(this.agility, this.agilityFortune),
             intelligence = CharacteristicValue(this.intelligence, this.intelligenceFortune),
             willpower = CharacteristicValue(this.willpower, this.willpowerFortune),
-            fellowShip = CharacteristicValue(this.fellowship, this.fellowshipFortune)
+            fellowship = CharacteristicValue(this.fellowship, this.fellowshipFortune)
     )
 }
 

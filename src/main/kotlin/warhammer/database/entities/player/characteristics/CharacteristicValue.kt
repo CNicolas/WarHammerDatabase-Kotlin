@@ -2,6 +2,16 @@ package warhammer.database.entities.player.characteristics
 
 import warhammer.database.entities.Hand
 
-data class CharacteristicValue(val value: Int, val fortuneValue: Int = 0) {
+data class CharacteristicValue(val value: Int = 0, val fortuneValue: Int = 0) : Comparable<CharacteristicValue> {
     fun getHand(name: String) = Hand(name = name, characteristicDicesCount = value, fortuneDicesCount = fortuneValue)
+
+    override fun compareTo(other: CharacteristicValue): Int {
+        val valueDiff = value - other.value
+        val fortuneDiff = fortuneValue - other.fortuneValue
+
+        return when (valueDiff) {
+            0 -> fortuneDiff
+            else -> valueDiff
+        }
+    }
 }
