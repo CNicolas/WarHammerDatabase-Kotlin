@@ -169,8 +169,8 @@ class PlayerStateDaoTest {
             // VERIFY
             val newPlayerState = playerStateDao.findById(id)
             assertThat(newPlayerState).isNotNull()
-            assertThat(newPlayerState?.playerId).isEqualTo(1)
-            assertThat(newPlayerState?.wounds).isEqualTo(1)
+            assertThat(newPlayerState!!.playerId).isEqualTo(1)
+            assertThat(newPlayerState.wounds).isEqualTo(1)
         }
     }
 

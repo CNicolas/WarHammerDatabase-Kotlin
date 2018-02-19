@@ -16,13 +16,41 @@ data class PlayerState(override val id: Int = -1,
                        var exhaustion: Int = 0,
                        var maxExhaustion: Int = 0,
                        val stance: Stance = Stance(stateId = id)) : WarHammerEntity {
-    val careerName get() = career.name
-    val rank get() = career.rank
-    val availableExperience get() = career.availableExperience
-    val totalExperience get() = career.totalExperience
+    var careerName
+        get() = career.name
+        set(value) {
+            career.name = value
+        }
+    var rank
+        get() = career.rank
+        set(value) {
+            career.rank = value
+        }
+    var availableExperience
+        get() = career.availableExperience
+        set(value) {
+            career.availableExperience = value
+        }
+    var totalExperience
+        get() = career.totalExperience
+        set(value) {
+            career.totalExperience = value
+        }
 
-    val reckless get() = stance.reckless
-    val maxReckless get() = stance.maxReckless
-    val conservative get() = stance.conservative
-    val maxConservative get() = stance.maxConservative
+    var reckless get() = stance.reckless
+        set(value) {
+            stance.reckless = value
+        }
+    var maxReckless get() = stance.maxReckless
+        set(value) {
+            stance.maxReckless = value
+        }
+    var conservative get() = stance.conservative
+        set(value) {
+            stance.conservative = value
+        }
+    var maxConservative get() = stance.maxConservative
+        set(value) {
+            stance.maxConservative = value
+        }
 }

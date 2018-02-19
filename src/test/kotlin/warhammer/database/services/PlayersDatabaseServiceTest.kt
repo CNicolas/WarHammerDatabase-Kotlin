@@ -206,8 +206,9 @@ class PlayersDatabaseServiceTest {
         // UPDATE
         player!!.name = newPlayerName
         player.race = WOOD_ELF
-        player.characteristics.agility = CharacteristicValue(5, 2)
-        player.career.availableExperience = 1
+        player.agility = CharacteristicValue(5, 2)
+        player.availableExperience = 1
+        player.careerName = "Retired"
         player.money.brass = 52
         val newPlayer = playersService.update(player)
 
@@ -221,6 +222,7 @@ class PlayersDatabaseServiceTest {
         assertThat(newPlayer.agility.fortuneValue).isEqualTo(2)
         assertThat(newPlayer.availableExperience).isEqualTo(1)
         assertThat(newPlayer.money.brass).isEqualTo(52)
+        assertThat(newPlayer.careerName).isEqualTo("Retired")
     }
 
     @Test
