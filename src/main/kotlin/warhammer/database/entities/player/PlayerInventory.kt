@@ -8,5 +8,5 @@ data class PlayerInventory(override val id: Int = -1,
                            val playerId: Int = -1,
                            var encumbrance: Int = 0,
                            var maxEncumbrance: Int = 0,
-                           var money: Money = Money(inventoryId = id),
+                           val money: Money = Money(inventoryId = id),
                            val items: MutableList<Item> = mutableListOf()) : WarHammerEntity
