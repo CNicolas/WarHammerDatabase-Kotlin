@@ -218,17 +218,43 @@ class PlayersDatabaseServiceTest {
     }
 
     @Test
-    fun should_update_name_by_id() {
+    fun should_update_by_id() {
         val player = Player(name = "PlayerName")
         val addedPlayer = playersService.add(player)
         assertThat(addedPlayer).isNotNull()
         assertThat(addedPlayer!!.id).isEqualTo(1)
         assertThat(addedPlayer.name).isEqualTo("PlayerName")
+        assertThat(addedPlayer.willpower.value).isEqualTo(0)
+        assertThat(addedPlayer.willpower.fortuneValue).isEqualTo(0)
 
         val updatedPlayer = playersService.update(Player(id = 1, name = "John"))
         assertThat(updatedPlayer).isNotNull()
         assertThat(updatedPlayer!!.id).isEqualTo(1)
         assertThat(updatedPlayer.name).isEqualTo("John")
+        assertThat(updatedPlayer.willpower.value).isEqualTo(0)
+        assertThat(updatedPlayer.willpower.fortuneValue).isEqualTo(0)
+
+        val updatedPlayerWithCharacteristics = playersService.update(Player(
+                id = 1,
+                name = "Bob",
+                characteristics = PlayerCharacteristics(willpower = CharacteristicValue(4, 1))
+        ))
+        assertThat(updatedPlayerWithCharacteristics).isNotNull()
+        assertThat(updatedPlayerWithCharacteristics!!.id).isEqualTo(1)
+        assertThat(updatedPlayerWithCharacteristics.name).isEqualTo("Bob")
+        assertThat(updatedPlayerWithCharacteristics.willpower.value).isEqualTo(4)
+        assertThat(updatedPlayerWithCharacteristics.willpower.fortuneValue).isEqualTo(1)
+
+        val updatedPlayerWithOtherCharacteristics = playersService.update(Player(
+                id = 1,
+                name = "Dave",
+                characteristics = PlayerCharacteristics(willpower = CharacteristicValue(1, 0))
+        ))
+        assertThat(updatedPlayerWithOtherCharacteristics).isNotNull()
+        assertThat(updatedPlayerWithOtherCharacteristics!!.id).isEqualTo(1)
+        assertThat(updatedPlayerWithOtherCharacteristics.name).isEqualTo("Dave")
+        assertThat(updatedPlayerWithOtherCharacteristics.willpower.value).isEqualTo(1)
+        assertThat(updatedPlayerWithOtherCharacteristics.willpower.fortuneValue).isEqualTo(0)
     }
 
     @Test
