@@ -6,7 +6,7 @@ import warhammer.database.entities.player.state.Stance
 
 data class PlayerState(override val id: Int = -1,
                        val playerId: Int = -1,
-                       val career: Career = Career(id),
+                       val career: Career = Career(stateId = id),
                        val wounds: Int = 0,
                        val maxWounds: Int = 0,
                        val corruption: Int = 0,
@@ -15,7 +15,7 @@ data class PlayerState(override val id: Int = -1,
                        val maxStress: Int = 0,
                        val exhaustion: Int = 0,
                        val maxExhaustion: Int = 0,
-                       val stance: Stance = Stance(id)) : WarHammerEntity {
+                       val stance: Stance = Stance(stateId = id)) : WarHammerEntity {
     val careerName = career.name
     val rank = career.rank
     val availableExperience = career.availableExperience

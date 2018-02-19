@@ -30,7 +30,7 @@ class PlayerCharacteristicsDao : AbstractDao<PlayerCharacteristicsEntity>(), Pla
                 mapEntityToTable(it, entity)
             }
 
-            entity.id
+            findByPlayerId(entity.playerId)?.id!!
         } catch (e: Exception) {
             e.printStackTrace()
             -1

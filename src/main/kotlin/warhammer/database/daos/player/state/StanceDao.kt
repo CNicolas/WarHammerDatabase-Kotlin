@@ -30,7 +30,7 @@ class StanceDao : AbstractDao<Stance>(), PlayerStateLinkedDao<Stance> {
                 mapEntityToTable(it, entity)
             }
 
-            entity.id
+            findByStateId(entity.stateId)?.id!!
         } catch (e: Exception) {
             e.printStackTrace()
             -1

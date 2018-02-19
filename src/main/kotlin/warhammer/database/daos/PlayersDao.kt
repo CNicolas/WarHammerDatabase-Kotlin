@@ -26,7 +26,7 @@ class PlayersDao : AbstractDao<Player>(), NamedDao<Player> {
                 mapEntityToTable(it, entity)
             }
 
-            entity.id
+            findByName(entity.name)?.id!!
         } catch (e: Exception) {
             e.printStackTrace()
             -1

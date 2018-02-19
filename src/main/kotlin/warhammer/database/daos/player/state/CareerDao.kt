@@ -30,7 +30,7 @@ class CareerDao : AbstractDao<Career>(), PlayerStateLinkedDao<Career> {
                 mapEntityToTable(it, entity)
             }
 
-            entity.id
+            findByStateId(entity.stateId)?.id!!
         } catch (e: Exception) {
             e.printStackTrace()
             -1

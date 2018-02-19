@@ -24,13 +24,21 @@ class PlayerStateDao : AbstractDao<PlayerState>(), PlayerLinkedDao<PlayerState> 
 
     override fun update(entity: PlayerState): Int {
         return try {
-            table.update({
-                (table.id eq entity.id) or (PlayerStateTable.playerId eq entity.playerId)
-            }) {
-                mapEntityToTable(it, entity)
+            val oldState = when {
+                entity.id == -1 -> findByPlayerId(entity.playerId)
+                else -> findById(entity.id)
             }
 
-            entity.id
+            return when (oldState) {
+                null -> -1
+                else -> {
+                    table.update({ (table.id eq oldState.id) }) {
+                        mapEntityToTable(it, entity.copy(id = oldState.id))
+                    }
+
+                    oldState.id
+                }
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             -1

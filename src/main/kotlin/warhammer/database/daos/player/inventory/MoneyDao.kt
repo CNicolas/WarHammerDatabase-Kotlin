@@ -30,7 +30,7 @@ class MoneyDao : AbstractDao<Money>(), PlayerInventoryLinkedDao<Money> {
                 mapEntityToTable(it, entity)
             }
 
-            entity.id
+            findByInventoryId(entity.inventoryId)?.id!!
         } catch (e: Exception) {
             e.printStackTrace()
             -1

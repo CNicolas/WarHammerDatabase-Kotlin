@@ -218,6 +218,20 @@ class PlayersDatabaseServiceTest {
     }
 
     @Test
+    fun should_update_name_by_id() {
+        val player = Player(name = "PlayerName")
+        val addedPlayer = playersService.add(player)
+        assertThat(addedPlayer).isNotNull()
+        assertThat(addedPlayer!!.id).isEqualTo(1)
+        assertThat(addedPlayer.name).isEqualTo("PlayerName")
+
+        val updatedPlayer = playersService.update(Player(id = 1, name = "John"))
+        assertThat(updatedPlayer).isNotNull()
+        assertThat(updatedPlayer!!.id).isEqualTo(1)
+        assertThat(updatedPlayer.name).isEqualTo("John")
+    }
+
+    @Test
     fun should_update_all_players() {
         // ADD
         val player1 = playersService.add(Player(name = "Player1", race = HIGH_ELF))

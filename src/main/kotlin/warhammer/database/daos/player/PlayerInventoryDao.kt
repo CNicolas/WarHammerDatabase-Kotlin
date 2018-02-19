@@ -24,13 +24,21 @@ class PlayerInventoryDao : AbstractDao<PlayerInventory>(), PlayerLinkedDao<Playe
 
     override fun update(entity: PlayerInventory): Int {
         return try {
-            table.update({
-                (table.id eq entity.id) or (PlayerInventoryTable.playerId eq entity.playerId)
-            }) {
-                mapEntityToTable(it, entity)
+            val oldInventory = when {
+                entity.id == -1 -> findByPlayerId(entity.playerId)
+                else -> findById(entity.id)
             }
 
-            entity.id
+            return when (oldInventory) {
+                null -> -1
+                else -> {
+                    table.update({ (table.id eq oldInventory.id) }) {
+                        mapEntityToTable(it, entity.copy(id = oldInventory.id))
+                    }
+
+                    oldInventory.id
+                }
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             -1
