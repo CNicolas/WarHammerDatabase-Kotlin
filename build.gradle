@@ -28,6 +28,9 @@ dependencies {
     compile "org.xerial:sqlite-jdbc:3.21.0"
     compile "org.jetbrains.exposed:exposed:0.9.1"
 
+    compile 'org.litote.kmongo:kmongo:3.6.2'
+    compile 'org.litote.kmongo:kmongo-native:3.6.2'
+
     testCompile "org.testng:testng:6.11"
     testCompile "org.assertj:assertj-core:3.8.0"
 }

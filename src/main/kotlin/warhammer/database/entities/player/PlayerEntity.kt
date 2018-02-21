@@ -4,14 +4,14 @@ import warhammer.database.entities.NamedEntity
 import warhammer.database.entities.player.characteristics.PlayerCharacteristics
 import warhammer.database.entities.player.other.Race
 
-data class Player(override val id: Int = -1,
-                  override var name: String,
-                  var race: Race = Race.HUMAN,
-                  var age: Int? = null,
-                  var size: Int? = null,
-                  val characteristics: PlayerCharacteristics = PlayerCharacteristics(),
-                  val state: PlayerState = PlayerState(playerId = id),
-                  val inventory: PlayerInventory = PlayerInventory(playerId = id)) : NamedEntity {
+data class PlayerEntity(override val id: Int = -1,
+                        override var name: String,
+                        var race: Race = Race.HUMAN,
+                        var age: Int? = null,
+                        var size: Int? = null,
+                        val characteristics: PlayerCharacteristics = PlayerCharacteristics(),
+                        val state: PlayerState = PlayerState(playerId = id),
+                        val inventory: PlayerInventory = PlayerInventory(playerId = id)) : NamedEntity {
     // region CHARACTERISTICS
 
     var strength

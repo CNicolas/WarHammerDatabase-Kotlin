@@ -9,8 +9,12 @@ import warhammer.database.daos.AbstractDao
 import warhammer.database.daos.NamedDao
 import warhammer.database.entities.mapping.inventory.mapFieldsOfEntity
 import warhammer.database.entities.mapping.inventory.mapToItem
-import warhammer.database.entities.player.inventory.item.*
+import warhammer.database.entities.player.inventory.item.Item
 import warhammer.database.entities.player.inventory.item.enums.ItemType.*
+import warhammer.database.entities.player.inventory.item.Armor
+import warhammer.database.entities.player.inventory.item.Expandable
+import warhammer.database.entities.player.inventory.item.GenericItem
+import warhammer.database.entities.player.inventory.item.Weapon
 import warhammer.database.tables.player.inventory.ItemsTable
 import java.lang.Exception
 

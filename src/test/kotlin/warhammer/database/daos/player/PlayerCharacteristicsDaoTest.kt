@@ -11,7 +11,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 import warhammer.database.daos.PlayersDao
-import warhammer.database.entities.player.Player
+import warhammer.database.entities.player.PlayerEntity
 import warhammer.database.entities.player.PlayerCharacteristicsEntity
 import warhammer.database.tables.PlayersTable
 import warhammer.database.tables.player.PlayerCharacteristicsTable
@@ -35,9 +35,9 @@ class PlayerCharacteristicsDaoTest {
             playersDao.deleteAll()
             PlayerCharacteristicsTable.deleteAll()
 
-            playersDao.add(Player(id = 1, name = "PlayerName1"))
-            playersDao.add(Player(id = 2, name = "PlayerName2"))
-            playersDao.add(Player(id = 3, name = "PlayerName3"))
+            playersDao.add(PlayerEntity(id = 1, name = "PlayerName1"))
+            playersDao.add(PlayerEntity(id = 2, name = "PlayerName2"))
+            playersDao.add(PlayerEntity(id = 3, name = "PlayerName3"))
         }
     }
 

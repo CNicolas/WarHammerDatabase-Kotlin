@@ -11,7 +11,7 @@ import warhammer.database.daos.player.state.CareerDao
 import warhammer.database.daos.player.state.StanceDao
 import warhammer.database.entities.mapping.mapToEntity
 import warhammer.database.entities.mapping.mapToPlayerCharacteristics
-import warhammer.database.entities.player.Player
+import warhammer.database.entities.player.PlayerEntity
 import warhammer.database.entities.player.PlayerInventory
 import warhammer.database.entities.player.PlayerState
 import warhammer.database.entities.player.inventory.item.Armor
@@ -28,7 +28,7 @@ import warhammer.database.tables.player.inventory.MoneyTable
 import warhammer.database.tables.player.state.CareerTable
 import warhammer.database.tables.player.state.StanceTable
 
-class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractDatabaseNamedService<Player>(databaseUrl, driver) {
+class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractDatabaseNamedService<PlayerEntity>(databaseUrl, driver) {
     override val tables = listOf(
             PlayersTable,
             PlayerCharacteristicsTable,
@@ -51,7 +51,7 @@ class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractData
     }
 
     // region CREATE
-    override fun add(entity: Player): Player? {
+    override fun add(entity: PlayerEntity): PlayerEntity? {
         connectToDatabase()
 
         return transaction {
@@ -59,7 +59,7 @@ class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractData
         }
     }
 
-    override fun addAll(entities: List<Player>): List<Player?> {
+    override fun addAll(entities: List<PlayerEntity>): List<PlayerEntity?> {
         connectToDatabase()
 
         return transaction {
@@ -69,7 +69,7 @@ class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractData
         }
     }
 
-    private fun addInsideTransaction(entity: Player): Player? {
+    private fun addInsideTransaction(entity: PlayerEntity): PlayerEntity? {
         val playerId = dao.add(entity)
 
         val stateId = playerStateDao.add(entity.state.copy(playerId = playerId))
@@ -95,13 +95,13 @@ class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractData
 
     // region READ
 
-    override fun findById(id: Int): Player? {
+    override fun findById(id: Int): PlayerEntity? {
         connectToDatabase()
 
         return transaction { findByIdInsideTransaction(id) }
     }
 
-    override fun findByName(name: String): Player? {
+    override fun findByName(name: String): PlayerEntity? {
         connectToDatabase()
 
         return transaction {
@@ -115,7 +115,7 @@ class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractData
         }
     }
 
-    override fun findAll(): List<Player> {
+    override fun findAll(): List<PlayerEntity> {
         connectToDatabase()
 
         return transaction {
@@ -128,7 +128,7 @@ class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractData
 
     override fun countAll(): Int = findAll().size
 
-    private fun findByIdInsideTransaction(playerId: Int): Player? {
+    private fun findByIdInsideTransaction(playerId: Int): PlayerEntity? {
         val playerCharacteristics = playerCharacteristicsDao.findByPlayerId(playerId)
 
         val playerState = playerStateDao.findByPlayerId(playerId)
@@ -162,7 +162,7 @@ class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractData
     // endregion
 
     // region UPDATE
-    override fun update(entity: Player): Player? {
+    override fun update(entity: PlayerEntity): PlayerEntity? {
         connectToDatabase()
 
         return transaction {
@@ -193,7 +193,7 @@ class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractData
         }
     }
 
-    override fun updateAll(entities: List<Player>): List<Player?> {
+    override fun updateAll(entities: List<PlayerEntity>): List<PlayerEntity?> {
         connectToDatabase()
 
         return transaction {
@@ -206,7 +206,7 @@ class PlayersDatabaseService(databaseUrl: String, driver: String) : AbstractData
     // endregion UPDATE
 
     // region DELETE
-    override fun delete(entity: Player): Boolean {
+    override fun delete(entity: PlayerEntity): Boolean {
         connectToDatabase()
 
         return transaction {

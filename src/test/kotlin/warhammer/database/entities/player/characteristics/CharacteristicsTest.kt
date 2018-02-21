@@ -4,7 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.Test
 import warhammer.database.entities.DifficultyLevel
 import warhammer.database.entities.mapping.mapToPlayerCharacteristics
-import warhammer.database.entities.player.Player
+import warhammer.database.entities.player.PlayerEntity
 import warhammer.database.entities.player.PlayerCharacteristicsEntity
 import warhammer.database.entities.player.characteristics.Characteristic.*
 
@@ -52,7 +52,7 @@ class CharacteristicsTest {
     @Test
     fun should_create_hand_from_player_strength() {
         val playerCharacteristics = PlayerCharacteristics(strength = CharacteristicValue(4, 1))
-        val player = Player(name = "SamplePlayer", characteristics = playerCharacteristics)
+        val player = PlayerEntity(name = "SamplePlayer", characteristics = playerCharacteristics)
         val hand = player.strength.getHand("SampleHand")
 
         assertThat(hand).isNotNull()
@@ -65,7 +65,7 @@ class CharacteristicsTest {
     @Test
     fun should_create_hand_with_difficulty_level() {
         val playerCharacteristics = PlayerCharacteristics(strength = CharacteristicValue(4, 1))
-        val player = Player(name = "SamplePlayer", characteristics = playerCharacteristics)
+        val player = PlayerEntity(name = "SamplePlayer", characteristics = playerCharacteristics)
         val hand = player.strength.getHand("SampleHand", DifficultyLevel.MEDIUM)
 
         assertThat(hand).isNotNull()

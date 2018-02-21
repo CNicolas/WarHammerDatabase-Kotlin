@@ -10,7 +10,7 @@ import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
-import warhammer.database.entities.player.Player
+import warhammer.database.entities.player.PlayerEntity
 import warhammer.database.entities.player.other.Race
 import warhammer.database.tables.PlayersTable
 import java.sql.Connection
@@ -38,7 +38,7 @@ class PlayersDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            playersDao.add(Player(name = "PlayerName"))
+            playersDao.add(PlayerEntity(name = "PlayerName"))
 
             assertThat(playersDao.findAll().size).isEqualTo(1)
         }
@@ -47,9 +47,9 @@ class PlayersDaoTest {
     @Test
     fun should_add_all_players() {
         val playersToAdd = listOf(
-                Player(name = "Player1"),
-                Player(name = "Player2"),
-                Player(name = "Player3"))
+                PlayerEntity(name = "Player1"),
+                PlayerEntity(name = "Player2"),
+                PlayerEntity(name = "Player3"))
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
@@ -67,11 +67,11 @@ class PlayersDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            var resOfInsert = playersDao.add(Player(name = playerName))
+            var resOfInsert = playersDao.add(PlayerEntity(name = playerName))
             assertThat(resOfInsert).isEqualTo(1)
             assertThat(playersDao.findAll().size).isEqualTo(1)
 
-            resOfInsert = playersDao.add(Player(name = playerName))
+            resOfInsert = playersDao.add(PlayerEntity(name = playerName))
             assertThat(resOfInsert).isEqualTo(-1)
             assertThat(playersDao.findAll().size).isEqualTo(1)
         }
@@ -86,7 +86,7 @@ class PlayersDaoTest {
         transaction {
             logger.addLogger(StdOutSqlLogger)
 
-            playersDao.add(Player(name = playerName))
+            playersDao.add(PlayerEntity(name = playerName))
             assertThat(playersDao.findAll().size).isEqualTo(1)
 
             val player = playersDao.findByName(playerName)
@@ -98,9 +98,9 @@ class PlayersDaoTest {
     @Test
     fun should_read_all_players() {
         val playersToAdd = listOf(
-                Player(name = "Player1", race = Race.DWARF),
-                Player(name = "Player2", size = 92),
-                Player(name = "Player3", age = 219))
+                PlayerEntity(name = "Player1", race = Race.DWARF),
+                PlayerEntity(name = "Player2", size = 92),
+                PlayerEntity(name = "Player3", age = 219))
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
@@ -128,7 +128,7 @@ class PlayersDaoTest {
             logger.addLogger(StdOutSqlLogger)
 
             // ADD
-            val id = playersDao.add(Player(name = playerName))
+            val id = playersDao.add(PlayerEntity(name = playerName))
             assertThat(playersDao.findAll().size).isEqualTo(1)
 
             // FIND
@@ -154,12 +154,12 @@ class PlayersDaoTest {
             logger.addLogger(StdOutSqlLogger)
 
             // ADD
-            val id1 = playersDao.add(Player(name = "Player1"))
-            val id2 = playersDao.add(Player(name = "Player2"))
+            val id1 = playersDao.add(PlayerEntity(name = "Player1"))
+            val id2 = playersDao.add(PlayerEntity(name = "Player2"))
             assertThat(playersDao.findAll().size).isEqualTo(2)
 
             // UPDATE
-            val updatedIds = playersDao.updateAll(listOf(Player(id = id1, name = "Player11"), Player(id = id2, name = "Player22")))
+            val updatedIds = playersDao.updateAll(listOf(PlayerEntity(id = id1, name = "Player11"), PlayerEntity(id = id2, name = "Player22")))
             assertThat(updatedIds).containsExactly(id1, id2)
 
             // VERIFY
@@ -177,7 +177,7 @@ class PlayersDaoTest {
 
             assertThat(playersDao.findAll()).isEmpty()
 
-            val res = playersDao.update(Player(name = "Unknown"))
+            val res = playersDao.update(PlayerEntity(name = "Unknown"))
             assertThat(res).isEqualTo(-1)
             assertThat(playersDao.findAll()).isEmpty()
         }
@@ -190,7 +190,7 @@ class PlayersDaoTest {
 
             drop(PlayersTable)
 
-            val res = playersDao.update(Player(name = "Unknown"))
+            val res = playersDao.update(PlayerEntity(name = "Unknown"))
             assertThat(res).isEqualTo(-1)
         }
     }
@@ -199,9 +199,9 @@ class PlayersDaoTest {
     // region DELETE
     @Test
     fun should_delete_a_player() {
-        val player1 = Player(name = "Player1")
-        val player2 = Player(name = "Player2")
-        val player3 = Player(name = "Player3")
+        val player1 = PlayerEntity(name = "Player1")
+        val player2 = PlayerEntity(name = "Player2")
+        val player3 = PlayerEntity(name = "Player3")
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
@@ -222,8 +222,8 @@ class PlayersDaoTest {
 
     @Test
     fun should_delete_all_players() {
-        val player1 = Player(name = "Player1")
-        val player2 = Player(name = "Player2")
+        val player1 = PlayerEntity(name = "Player1")
+        val player2 = PlayerEntity(name = "Player2")
 
         transaction {
             logger.addLogger(StdOutSqlLogger)
@@ -244,7 +244,7 @@ class PlayersDaoTest {
 
             assertThat(playersDao.findAll()).isEmpty()
 
-            val res = playersDao.delete(Player(name = "Unknown"))
+            val res = playersDao.delete(PlayerEntity(name = "Unknown"))
             assertThat(res).isEqualTo(0)
             assertThat(playersDao.findAll()).isEmpty()
         }
@@ -257,7 +257,7 @@ class PlayersDaoTest {
 
             drop(PlayersTable)
 
-            val res = playersDao.delete(Player(name = "Unknown"))
+            val res = playersDao.delete(PlayerEntity(name = "Unknown"))
             assertThat(res).isEqualTo(-1)
         }
     }

@@ -2,14 +2,14 @@ package warhammer.database.entities.mapping
 
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
-import warhammer.database.entities.player.Player
+import warhammer.database.entities.player.PlayerEntity
 import warhammer.database.entities.player.other.Race
 import warhammer.database.tables.PlayersTable
 
-fun ResultRow?.mapToPlayer(): Player? = when (this) {
+fun ResultRow?.mapToPlayer(): PlayerEntity? = when (this) {
     null -> null
     else -> {
-        Player(id = this[PlayersTable.id].value,
+        PlayerEntity(id = this[PlayersTable.id].value,
                 name = this[PlayersTable.name],
                 race = Race.valueOf(this[PlayersTable.race]),
                 age = this[PlayersTable.age],
@@ -17,7 +17,7 @@ fun ResultRow?.mapToPlayer(): Player? = when (this) {
     }
 }
 
-fun UpdateBuilder<Int>.mapFieldsOfEntity(entity: Player) {
+fun UpdateBuilder<Int>.mapFieldsOfEntity(entity: PlayerEntity) {
     this[PlayersTable.name] = entity.name
     this[PlayersTable.race] = entity.race.toString()
     this[PlayersTable.age] = entity.age

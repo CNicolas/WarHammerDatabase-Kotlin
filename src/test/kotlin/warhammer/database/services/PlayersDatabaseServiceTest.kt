@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
-import warhammer.database.entities.player.Player
+import warhammer.database.entities.player.PlayerEntity
 import warhammer.database.entities.player.PlayerInventory
 import warhammer.database.entities.player.PlayerState
 import warhammer.database.entities.player.characteristics.CharacteristicValue
@@ -52,7 +52,7 @@ class PlayersDatabaseServiceTest {
                     )
             )
 
-            Player(
+            PlayerEntity(
                     name = playerName,
                     race = DWARF,
                     age = 110,
@@ -90,17 +90,17 @@ class PlayersDatabaseServiceTest {
     @Test
     fun should_add_all_players() {
         val playersToAdd = listOf(
-                Player(name = "Player1",
+                PlayerEntity(name = "Player1",
                         characteristics = PlayerCharacteristics(strength = CharacteristicValue(1)),
                         state = PlayerState(exhaustion = 1, wounds = 1, maxCorruption = 3, stance = Stance(reckless = 1, maxConservative = 3)),
                         inventory = PlayerInventory(maxEncumbrance = 20)
                 ),
-                Player(name = "Player2",
+                PlayerEntity(name = "Player2",
                         characteristics = PlayerCharacteristics(intelligence = CharacteristicValue(2)),
                         state = PlayerState(corruption = 1, stress = 1, stance = Stance(conservative = 1, maxReckless = 2)),
                         inventory = PlayerInventory(money = Money(silver = 2))
                 ),
-                Player(name = "Player3",
+                PlayerEntity(name = "Player3",
                         characteristics = PlayerCharacteristics(fellowship = CharacteristicValue(3)),
                         state = PlayerState(maxStress = 3, maxExhaustion = 4, career = Career(rank = 1)),
                         inventory = PlayerInventory(items = mutableListOf(
@@ -148,11 +148,11 @@ class PlayersDatabaseServiceTest {
 
     @Test
     fun should_add_a_player_then_fail_to_add_it_again() {
-        val addedPlayer1 = playersService.add(Player(name = playerName))
+        val addedPlayer1 = playersService.add(PlayerEntity(name = playerName))
         assertThat(playersService.countAll()).isEqualTo(1)
         assertThat(addedPlayer1?.name).isEqualTo(playerName)
 
-        val addedPlayer2 = playersService.add(Player(name = playerName))
+        val addedPlayer2 = playersService.add(PlayerEntity(name = playerName))
         assertThat(addedPlayer2).isNull()
         assertThat(playersService.countAll()).isEqualTo(1)
     }
@@ -179,9 +179,9 @@ class PlayersDatabaseServiceTest {
     @Test
     fun should_read_all_players() {
         val playersToAdd = listOf(
-                Player(name = "Player1"),
-                Player(name = "Player2"),
-                Player(name = "Player3"))
+                PlayerEntity(name = "Player1"),
+                PlayerEntity(name = "Player2"),
+                PlayerEntity(name = "Player3"))
 
         playersService.addAll(playersToAdd)
 
@@ -227,7 +227,7 @@ class PlayersDatabaseServiceTest {
 
     @Test
     fun should_update_by_id() {
-        val player = Player(name = "PlayerName")
+        val player = PlayerEntity(name = "PlayerName")
         val addedPlayer = playersService.add(player)
         assertThat(addedPlayer).isNotNull()
         assertThat(addedPlayer!!.id).isEqualTo(1)
@@ -235,14 +235,14 @@ class PlayersDatabaseServiceTest {
         assertThat(addedPlayer.willpower.value).isEqualTo(0)
         assertThat(addedPlayer.willpower.fortuneValue).isEqualTo(0)
 
-        val updatedPlayer = playersService.update(Player(id = 1, name = "John"))
+        val updatedPlayer = playersService.update(PlayerEntity(id = 1, name = "John"))
         assertThat(updatedPlayer).isNotNull()
         assertThat(updatedPlayer!!.id).isEqualTo(1)
         assertThat(updatedPlayer.name).isEqualTo("John")
         assertThat(updatedPlayer.willpower.value).isEqualTo(0)
         assertThat(updatedPlayer.willpower.fortuneValue).isEqualTo(0)
 
-        val updatedPlayerWithCharacteristics = playersService.update(Player(
+        val updatedPlayerWithCharacteristics = playersService.update(PlayerEntity(
                 id = 1,
                 name = "Bob",
                 characteristics = PlayerCharacteristics(willpower = CharacteristicValue(4, 1))
@@ -253,7 +253,7 @@ class PlayersDatabaseServiceTest {
         assertThat(updatedPlayerWithCharacteristics.willpower.value).isEqualTo(4)
         assertThat(updatedPlayerWithCharacteristics.willpower.fortuneValue).isEqualTo(1)
 
-        val updatedPlayerWithOtherCharacteristics = playersService.update(Player(
+        val updatedPlayerWithOtherCharacteristics = playersService.update(PlayerEntity(
                 id = 1,
                 name = "Dave",
                 characteristics = PlayerCharacteristics(willpower = CharacteristicValue(1, 0))
@@ -268,8 +268,8 @@ class PlayersDatabaseServiceTest {
     @Test
     fun should_update_all_players() {
         // ADD
-        val player1 = playersService.add(Player(name = "Player1", race = HIGH_ELF))
-        val player2 = playersService.add(Player(name = "Player2", race = WOOD_ELF))
+        val player1 = playersService.add(PlayerEntity(name = "Player1", race = HIGH_ELF))
+        val player2 = playersService.add(PlayerEntity(name = "Player2", race = WOOD_ELF))
         assertThat(playersService.countAll()).isEqualTo(2)
 
         // UPDATE
@@ -291,7 +291,7 @@ class PlayersDatabaseServiceTest {
     fun should_return_false_when_update_a_non_existent_player() {
         assertThat(playersService.countAll()).isEqualTo(0)
 
-        val updatedPlayer = playersService.update(Player(name = "Unknown"))
+        val updatedPlayer = playersService.update(PlayerEntity(name = "Unknown"))
         assertThat(updatedPlayer).isNull()
         assertThat(playersService.findAll()).isEmpty()
     }
@@ -300,13 +300,13 @@ class PlayersDatabaseServiceTest {
     // region DELETE
     @Test
     fun should_delete_a_player() {
-        val player1 = Player(name = "Player1", characteristics = PlayerCharacteristics(strength = CharacteristicValue(1)))
-        val player2 = Player(name = "Player2",
+        val player1 = PlayerEntity(name = "Player1", characteristics = PlayerCharacteristics(strength = CharacteristicValue(1)))
+        val player2 = PlayerEntity(name = "Player2",
                 characteristics = PlayerCharacteristics(strength = CharacteristicValue(2)),
                 state = PlayerState(stance = Stance(maxReckless = 2)),
                 inventory = PlayerInventory(money = Money(0, 0, 2))
         )
-        val player3 = Player(name = "Player3",
+        val player3 = PlayerEntity(name = "Player3",
                 characteristics = PlayerCharacteristics(strength = CharacteristicValue(3)),
                 state = PlayerState(career = Career(totalExperience = 3)),
                 inventory = PlayerInventory(maxEncumbrance = 50)
@@ -344,8 +344,8 @@ class PlayersDatabaseServiceTest {
 
     @Test
     fun should_delete_all_players() {
-        val player1 = Player(name = "Player1")
-        val player2 = Player(name = "Player2",
+        val player1 = PlayerEntity(name = "Player1")
+        val player2 = PlayerEntity(name = "Player2",
                 characteristics = PlayerCharacteristics(toughness = CharacteristicValue(2)),
                 state = PlayerState(wounds = 2),
                 inventory = PlayerInventory(encumbrance = 2)
@@ -368,13 +368,13 @@ class PlayersDatabaseServiceTest {
     fun should_return_false_when_delete_a_non_existent_player() {
         assertThat(playersService.countAll()).isEqualTo(0)
 
-        val res = playersService.delete(Player(name = "Unknown"))
+        val res = playersService.delete(PlayerEntity(name = "Unknown"))
         assertThat(res).isFalse()
         assertThat(playersService.findAll()).isEmpty()
     }
     // endregion
 
-    private fun assertSamplePlayer(player: Player?) {
+    private fun assertSamplePlayer(player: PlayerEntity?) {
         assertThat(player).isNotNull()
         assertThat(player!!.name).isEqualTo(playerName)
         assertThat(player.race).isEqualTo(DWARF)
