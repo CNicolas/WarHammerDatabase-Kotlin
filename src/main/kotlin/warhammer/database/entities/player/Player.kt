@@ -1,162 +1,65 @@
 package warhammer.database.entities.player
 
 import warhammer.database.entities.NamedEntity
-import warhammer.database.entities.player.characteristics.PlayerCharacteristics
-import warhammer.database.entities.player.other.Race
+import warhammer.database.entities.player.enums.Characteristic
+import warhammer.database.entities.player.enums.Characteristic.*
+import warhammer.database.entities.player.item.Item
+import warhammer.database.entities.player.enums.Race
 
 data class Player(override val id: Int = -1,
                   override var name: String,
                   var race: Race = Race.HUMAN,
                   var age: Int? = null,
                   var size: Int? = null,
-                  val characteristics: PlayerCharacteristics = PlayerCharacteristics(),
-                  val state: PlayerState = PlayerState(playerId = id),
-                  val inventory: PlayerInventory = PlayerInventory(playerId = id)) : NamedEntity {
-    // region CHARACTERISTICS
 
-    var strength
-        get() = characteristics.strength
-        set(value) {
-            characteristics.strength = value
-        }
-    var toughness
-        get() = characteristics.toughness
-        set(value) {
-            characteristics.toughness = value
-        }
-    var agility
-        get() = characteristics.agility
-        set(value) {
-            characteristics.agility = value
-        }
-    var intelligence
-        get() = characteristics.intelligence
-        set(value) {
-            characteristics.intelligence = value
-        }
-    var willpower
-        get() = characteristics.willpower
-        set(value) {
-            characteristics.willpower = value
-        }
-    var fellowship
-        get() = characteristics.fellowship
-        set(value) {
-            characteristics.fellowship = value
-        }
+                  var strength: CharacteristicValue = CharacteristicValue(0),
+                  var toughness: CharacteristicValue = CharacteristicValue(0),
+                  var agility: CharacteristicValue = CharacteristicValue(0),
+                  var intelligence: CharacteristicValue = CharacteristicValue(0),
+                  var willpower: CharacteristicValue = CharacteristicValue(0),
+                  var fellowship: CharacteristicValue = CharacteristicValue(0),
 
-    // endregion
+                  var careerName: String? = null,
+                  var rank: Int = 0,
+                  var availableExperience: Int = 0,
+                  var totalExperience: Int = 0,
 
-    // region STATE
+                  var reckless: Int = 0,
+                  var maxReckless: Int = 0,
+                  var conservative: Int = 0,
+                  var maxConservative: Int = 0,
 
-    var wounds
-        get() = state.wounds
-        set(value) {
-            state.wounds = value
-        }
-    var maxWounds
-        get() = state.maxWounds
-        set(value) {
-            state.maxWounds = value
-        }
-    var corruption
-        get() = state.corruption
-        set(value) {
-            state.corruption = value
-        }
-    var maxCorruption
-        get() = state.maxCorruption
-        set(value) {
-            state.maxCorruption = value
-        }
-    var stress
-        get() = state.stress
-        set(value) {
-            state.stress = value
-        }
-    var maxStress
-        get() = state.maxStress
-        set(value) {
-            state.maxStress = value
-        }
-    var exhaustion
-        get() = state.exhaustion
-        set(value) {
-            state.exhaustion = value
-        }
-    var maxExhaustion
-        get() = state.maxExhaustion
-        set(value) {
-            state.maxExhaustion = value
-        }
+                  var wounds: Int = 0,
+                  var maxWounds: Int = 0,
+                  var corruption: Int = 0,
+                  var maxCorruption: Int = 0,
+                  var stress: Int = 0,
+                  var exhaustion: Int = 0,
 
-    // endregion
+                  var encumbrance: Int = 0,
 
-    // region CAREER
-    val career get() = state.career
-    var careerName
-        get() = state.careerName
-        set(value) {
-            state.careerName = value
-        }
-    var rank
-        get() = state.rank
-        set(value) {
-            state.rank = value
-        }
-    var availableExperience
-        get() = state.availableExperience
-        set(value) {
-            state.availableExperience = value
-        }
-    var totalExperience
-        get() = state.totalExperience
-        set(value) {
-            state.totalExperience = value
-        }
+                  var brass: Int = 0,
+                  var silver: Int = 0,
+                  var gold: Int = 0,
+                  var items: List<Item> = listOf()/*,
+                  val skills: List<Skill> = listOf()*/) : NamedEntity
 
-    // endregion
+val Player.maxStress: Int
+    get() = willpower.value * 2
+val Player.maxExhaustion: Int
+    get() = toughness.value * 2
 
-    // region STANCE
+val Player.maxEncumbrance: Int
+    get() = strength.value * 5 + strength.fortuneValue + 5 + when (race) {
+        Race.DWARF -> 5
+        else -> 0
+    }
 
-    val stance get() = state.stance
-    var reckless
-        get() = state.reckless
-        set(value) {
-            state.reckless = value
-        }
-    var maxReckless
-        get() = state.maxReckless
-        set(value) {
-            state.maxReckless = value
-        }
-    var conservative
-        get() = state.conservative
-        set(value) {
-            state.conservative = value
-        }
-    var maxConservative
-        get() = state.maxConservative
-        set(value) {
-            state.maxConservative = value
-        }
-
-    // endregion
-
-    // region INVENTORY
-
-    var encumbrance
-        get() = inventory.encumbrance
-        set(value) {
-            inventory.encumbrance = value
-        }
-    var maxEncumbrance
-        get() = inventory.maxEncumbrance
-        set(value) {
-            inventory.maxEncumbrance = value
-        }
-    val money get() = inventory.money
-    val items get() = inventory.items
-
-    // endregion
+operator fun Player.get(characteristic: Characteristic): CharacteristicValue = when (characteristic) {
+    STRENGTH -> strength
+    TOUGHNESS -> toughness
+    AGILITY -> agility
+    INTELLIGENCE -> intelligence
+    WILLPOWER -> willpower
+    FELLOWSHIP -> fellowship
 }

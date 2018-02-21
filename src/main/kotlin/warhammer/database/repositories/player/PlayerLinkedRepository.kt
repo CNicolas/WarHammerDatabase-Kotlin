@@ -1,9 +1,12 @@
-package warhammer.database.daos.player
+package warhammer.database.repositories.player
 
+import warhammer.database.daos.player.PlayerLinkedDao
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.PlayerLinkedEntity
 
-interface PlayerLinkedDao<E : PlayerLinkedEntity> {
+interface PlayerLinkedRepository<E : PlayerLinkedEntity> {
+    val dao: PlayerLinkedDao<E>
+
     fun add(entity: E, player: Player): E?
 
     fun findByNameAndPlayer(name: String, player: Player): E?

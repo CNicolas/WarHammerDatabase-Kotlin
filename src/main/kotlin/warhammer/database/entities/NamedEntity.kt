@@ -1,5 +1,6 @@
 package warhammer.database.entities
 
-interface NamedEntity : WarHammerEntity {
-    val name: String
+interface NamedEntity {
+    val id: Int
+    var name: String
 }
