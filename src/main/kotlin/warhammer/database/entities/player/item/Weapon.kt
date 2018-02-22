@@ -4,8 +4,7 @@ import warhammer.database.entities.player.item.enums.ItemType.WEAPON
 import warhammer.database.entities.player.item.enums.Quality
 import warhammer.database.entities.player.item.enums.Range
 
-data class Weapon(override val id: Int = -1,
-                  override var name: String = "Weapon",
+data class Weapon(override var name: String = "Weapon",
                   override var description: String? = null,
                   override var encumbrance: Int = 0,
                   override var quantity: Int = 1,
@@ -15,7 +14,9 @@ data class Weapon(override val id: Int = -1,
 
                   override var damage: Int? = 0,
                   override var criticalLevel: Int? = 0,
-                  override var range: Range? = Range.ENGAGED) : Item {
+                  override var range: Range? = Range.ENGAGED,
+
+                  override val id: Int = -1) : Item {
 
     override var type = WEAPON
 

@@ -8,7 +8,7 @@ import warhammer.database.entities.player.item.Item
 import warhammer.database.repositories.player.AbstractPlayerLinkedRepository
 import warhammer.database.tables.ItemsTable
 
-class ItemRepository : AbstractPlayerLinkedRepository<Item>() {
+class ItemRepository(databaseUrl: String, driver: String) : AbstractPlayerLinkedRepository<Item>(databaseUrl, driver) {
     override val dao = ItemDao()
 
     init {

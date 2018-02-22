@@ -5,9 +5,7 @@ import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import warhammer.database.entities.NamedEntity
 import java.lang.Exception
 
-abstract class AbstractNameKeyDao<E : NamedEntity> : NameKeyDao<E> {
-    abstract val table: Table
-
+abstract class AbstractNameKeyDao<E : NamedEntity> : AbstractDao<E>(), NameKeyDao<E> {
     override fun add(entity: E): E? {
         return try {
             table.insert {
@@ -29,8 +27,6 @@ abstract class AbstractNameKeyDao<E : NamedEntity> : NameKeyDao<E> {
         table.deleteAll()
     }
 
-    protected abstract fun mapResultRowToEntity(result: ResultRow?): E?
     protected abstract fun mapFieldsOfEntityToTable(statement: UpdateBuilder<Int>, entity: E)
-
     protected abstract fun predicateByName(name: String): SqlExpressionBuilder.() -> Op<Boolean>
 }

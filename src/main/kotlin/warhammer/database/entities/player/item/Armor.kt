@@ -4,8 +4,7 @@ import warhammer.database.entities.player.item.enums.ItemType.ARMOR
 import warhammer.database.entities.player.item.enums.Quality
 import warhammer.database.entities.player.item.enums.Range
 
-data class Armor(override val id: Int = -1,
-                 override var name: String = "Armor",
+data class Armor(override var name: String = "Armor",
                  override var description: String? = null,
                  override var encumbrance: Int = 0,
                  override var quantity: Int = 1,
@@ -14,7 +13,9 @@ data class Armor(override val id: Int = -1,
                  override var isEquipped: Boolean? = false,
 
                  override var soak: Int? = 0,
-                 override var defense: Int? = 0) : Item {
+                 override var defense: Int? = 0,
+
+                 override val id: Int = -1) : Item {
 
     override var type = ARMOR
 

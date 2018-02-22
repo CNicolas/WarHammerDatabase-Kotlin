@@ -2,6 +2,7 @@ package warhammer.database.entities.player.item
 
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
+import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.item.enums.ItemType.*
 import warhammer.database.entities.player.item.enums.Quality
 import warhammer.database.entities.player.item.enums.Range
@@ -57,7 +58,9 @@ internal fun ResultRow?.mapToItem(): Item? = when (this) {
     }
 }
 
-fun UpdateBuilder<Int>.mapFieldsOfEntity(entity: Item) {
+fun UpdateBuilder<Int>.mapFieldsOfEntity(entity: Item, player: Player) {
+    this[ItemsTable.playerName] = player.name
+
     this[ItemsTable.name] = entity.name
     this[ItemsTable.description] = entity.description
     this[ItemsTable.encumbrance] = entity.encumbrance

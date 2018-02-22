@@ -5,7 +5,8 @@ import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.PlayerLinkedEntity
 import warhammer.database.repositories.AbstractRepository
 
-abstract class AbstractPlayerLinkedRepository<E : PlayerLinkedEntity> : AbstractRepository(), PlayerLinkedRepository<E> {
+abstract class AbstractPlayerLinkedRepository<E : PlayerLinkedEntity>(databaseUrl: String, driver: String)
+    : AbstractRepository<E>(databaseUrl, driver), PlayerLinkedRepository<E> {
     override fun add(entity: E, player: Player): E? {
         connectToDatabase()
 

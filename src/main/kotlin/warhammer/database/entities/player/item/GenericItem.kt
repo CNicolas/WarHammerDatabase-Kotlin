@@ -4,12 +4,14 @@ import warhammer.database.entities.player.item.enums.ItemType.ITEM
 import warhammer.database.entities.player.item.enums.Quality
 import warhammer.database.entities.player.item.enums.Range
 
-data class GenericItem(override val id: Int = -1,
-                       override var name: String = "Item",
+data class GenericItem(override var name: String = "Item",
                        override var description: String? = null,
                        override var encumbrance: Int = 0,
                        override var quantity: Int = 1,
-                       override var quality: Quality = Quality.NORMAL) : Item {
+                       override var quality: Quality = Quality.NORMAL,
+
+                       override val id: Int = -1) : Item {
+
     override var type = ITEM
 
     override var isEquipped: Boolean? = null

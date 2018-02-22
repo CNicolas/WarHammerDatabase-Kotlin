@@ -3,7 +3,9 @@ package warhammer.database.repositories
 import org.jetbrains.exposed.sql.transactions.transaction
 import warhammer.database.entities.NamedEntity
 
-abstract class AbstractNameKeyRepository<E : NamedEntity> : AbstractRepository(), NameKeyRepository<E> {
+abstract class AbstractNameKeyRepository<E : NamedEntity>(databaseUrl: String = "jdbc:sqlite:file:warhammer",
+                                                          driver: String = "org.sqlite.JDBC")
+    : AbstractRepository<E>(databaseUrl, driver), NameKeyRepository<E> {
     override fun add(entity: E): E? {
         connectToDatabase()
 

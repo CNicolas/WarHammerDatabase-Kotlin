@@ -2,8 +2,6 @@ package warhammer.database.entities.player
 
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
-import warhammer.database.entities.player.Player
-import warhammer.database.entities.player.CharacteristicValue
 import warhammer.database.entities.player.enums.Race
 import warhammer.database.tables.PlayersTable
 
@@ -37,7 +35,8 @@ fun ResultRow?.mapToPlayer(): Player? = when (this) {
                 encumbrance = this[PlayersTable.encumbrance],
                 brass = this[PlayersTable.brass],
                 silver = this[PlayersTable.silver],
-                gold = this[PlayersTable.gold]
+                gold = this[PlayersTable.gold],
+                id = this[PlayersTable.id].value
         )
     }
 }
@@ -86,5 +85,4 @@ fun UpdateBuilder<Int>.mapFieldsOfEntity(entity: Player) {
     this[PlayersTable.silver] = entity.silver
     this[PlayersTable.gold] = entity.gold
     // endregion
-
 }

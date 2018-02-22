@@ -3,7 +3,7 @@ package warhammer.database.entities.hand
 import warhammer.database.entities.NamedEntity
 
 data class Hand(override val id: Int = -1,
-                override val name: String,
+                override var name: String,
                 val characteristicDicesCount: Int = 0,
                 val expertiseDicesCount: Int = 0,
                 val fortuneDicesCount: Int = 0,

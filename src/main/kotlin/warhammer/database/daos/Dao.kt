@@ -1,5 +1,5 @@
 package warhammer.database.daos
 
-interface Dao<E> {
-
+interface Dao<out E> {
+    fun findById(id: Int): E?
 }

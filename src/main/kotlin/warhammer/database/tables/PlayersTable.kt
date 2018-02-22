@@ -3,7 +3,7 @@ package warhammer.database.tables
 import org.jetbrains.exposed.dao.IntIdTable
 
 object PlayersTable : IntIdTable() {
-    val name = varchar("name", length = 50).primaryKey()
+    val name = varchar("name", length = 50)
 
     val race = varchar("race", length = 20)
     val age = integer("age").nullable()
@@ -36,7 +36,7 @@ object PlayersTable : IntIdTable() {
     val stress = integer("stress")
     val exhaustion = integer("exhaustion")
 
-    val careerName = varchar("name", length = 70).nullable()
+    val careerName = varchar("careerName", length = 70).nullable()
     val rank = integer("rank")
     val availableExperience = integer("availableExperience")
     val totalExperience = integer("totalExperience")

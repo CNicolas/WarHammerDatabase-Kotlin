@@ -3,8 +3,8 @@ package warhammer.database.repositories
 import warhammer.database.daos.NameKeyDao
 import warhammer.database.entities.NamedEntity
 
-interface NameKeyRepository<E : NamedEntity> {
-    val dao: NameKeyDao<E>
+interface NameKeyRepository<E : NamedEntity> : Repository<E> {
+    override val dao: NameKeyDao<E>
 
     fun add(entity: E): E?
 

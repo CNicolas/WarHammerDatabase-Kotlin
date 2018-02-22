@@ -4,13 +4,16 @@ import warhammer.database.entities.player.item.enums.ItemType
 import warhammer.database.entities.player.item.enums.Quality
 import warhammer.database.entities.player.item.enums.Range
 
-data class Expandable(override val id: Int = -1,
-                      override var name: String = "Expandable",
+data class Expandable(override var name: String = "Expandable",
                       override var description: String? = null,
                       override var encumbrance: Int = 0,
                       override var quantity: Int = 1,
                       override var quality: Quality = Quality.NORMAL,
-                      override var uses: Int? = 0) : Item {
+
+                      override var uses: Int? = 0,
+
+                      override val id: Int = -1) : Item {
+
     override var type = ItemType.EXPANDABLE
 
     override var isEquipped: Boolean? = null

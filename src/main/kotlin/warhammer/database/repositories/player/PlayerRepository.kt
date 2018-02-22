@@ -8,7 +8,7 @@ import warhammer.database.entities.player.Player
 import warhammer.database.repositories.AbstractNameKeyRepository
 import warhammer.database.tables.PlayersTable
 
-class PlayerRepository : AbstractNameKeyRepository<Player>() {
+class PlayerRepository(databaseUrl: String, driver: String) : AbstractNameKeyRepository<Player>(databaseUrl, driver) {
     override val dao = PlayerDao()
 
     init {

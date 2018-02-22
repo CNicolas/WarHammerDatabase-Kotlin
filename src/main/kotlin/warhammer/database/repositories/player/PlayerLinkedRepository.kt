@@ -3,9 +3,10 @@ package warhammer.database.repositories.player
 import warhammer.database.daos.player.PlayerLinkedDao
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.PlayerLinkedEntity
+import warhammer.database.repositories.Repository
 
-interface PlayerLinkedRepository<E : PlayerLinkedEntity> {
-    val dao: PlayerLinkedDao<E>
+interface PlayerLinkedRepository<E : PlayerLinkedEntity> : Repository<E> {
+    override val dao: PlayerLinkedDao<E>
 
     fun add(entity: E, player: Player): E?
 

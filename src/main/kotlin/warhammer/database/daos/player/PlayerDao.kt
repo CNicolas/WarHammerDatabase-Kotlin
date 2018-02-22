@@ -4,9 +4,9 @@ import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import warhammer.database.daos.AbstractNameKeyDao
+import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.mapFieldsOfEntity
 import warhammer.database.entities.player.mapToPlayer
-import warhammer.database.entities.player.Player
 import warhammer.database.tables.PlayersTable
 import java.lang.Exception
 
@@ -22,7 +22,7 @@ class PlayerDao : AbstractNameKeyDao<Player>() {
 
     override fun update(entity: Player): Player? {
         return try {
-            table.update(predicateByName(entity.name)) {
+            table.update({ (PlayersTable.id eq entity.id) or predicateByName(entity.name).invoke(this) }) {
                 it[table.id] = EntityID(entity.id, table)
                 mapFieldsOfEntityToTable(it, entity)
             }

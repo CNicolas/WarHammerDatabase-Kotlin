@@ -2,18 +2,20 @@ package warhammer.database.daos.player.item
 
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.*
+import warhammer.database.daos.AbstractDao
 import warhammer.database.daos.player.PlayerLinkedDao
-import warhammer.database.entities.player.item.mapToItem
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.item.*
 import warhammer.database.entities.player.item.enums.ItemType.*
 import warhammer.database.tables.ItemsTable
 import java.lang.Exception
 
-class ItemDao : PlayerLinkedDao<Item> {
+class ItemDao : AbstractDao<Item>(), PlayerLinkedDao<Item> {
+    override val table = ItemsTable
+
     override fun add(entity: Item, player: Player): Item? {
         return try {
-            ItemsTable.insert { it.mapFieldsOfEntity(entity) }
+            table.insert { it.mapFieldsOfEntity(entity, player) }
 
             findByNameAndPlayer(entity.name, player)
         } catch (e: Exception) {
@@ -29,7 +31,7 @@ class ItemDao : PlayerLinkedDao<Item> {
     // region Find all
 
     override fun findAllByPlayer(player: Player): List<Item> {
-        val result = ItemsTable.select { ItemsTable.playerName eq player.name }
+        val result = table.select { table.playerName eq player.name }
                 .toList()
 
         return result.mapNotNull { it.mapToItem() }
@@ -62,9 +64,9 @@ class ItemDao : PlayerLinkedDao<Item> {
 
     override fun updateByPlayer(entity: Item, player: Player): Item? {
         return try {
-            ItemsTable.update({ (ItemsTable.id eq entity.id) and (ItemsTable.playerName eq player.name) }) {
-                it[ItemsTable.id] = EntityID(entity.id, ItemsTable)
-                it.mapFieldsOfEntity(entity)
+            table.update({ (table.id eq entity.id) and (ItemsTable.playerName eq player.name) }) {
+                it[table.id] = EntityID(entity.id, table)
+                it.mapFieldsOfEntity(entity, player)
             }
 
             findByNameAndPlayer(entity.name, player)
@@ -78,7 +80,7 @@ class ItemDao : PlayerLinkedDao<Item> {
 
     override fun deleteByNameAndPlayer(name: String, player: Player): Int {
         return try {
-            ItemsTable.deleteWhere {
+            table.deleteWhere {
                 (ItemsTable.name eq name) and (ItemsTable.playerName eq player.name)
             }
         } catch (e: Exception) {
@@ -89,7 +91,7 @@ class ItemDao : PlayerLinkedDao<Item> {
 
     override fun deleteAllByPlayer(player: Player): Int {
         return try {
-            ItemsTable.deleteWhere { ItemsTable.playerName eq player.name }
+            table.deleteWhere { ItemsTable.playerName eq player.name }
         } catch (e: Exception) {
             e.printStackTrace()
             -1
@@ -99,4 +101,6 @@ class ItemDao : PlayerLinkedDao<Item> {
     override fun deleteAll() {
         ItemsTable.deleteAll()
     }
+
+    override fun mapResultRowToEntity(result: ResultRow?): Item? = result.mapToItem()
 }
