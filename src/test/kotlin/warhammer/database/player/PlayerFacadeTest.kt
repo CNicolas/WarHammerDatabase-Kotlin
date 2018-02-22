@@ -8,6 +8,9 @@ import warhammer.database.entities.player.CharacteristicValue
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.addItem
 import warhammer.database.entities.player.item.Weapon
+import warhammer.database.entities.player.item.enums.Quality.LOW
+import warhammer.database.entities.player.item.enums.Quality.NORMAL
+import warhammer.database.entities.player.updateItem
 
 class PlayerFacadeTest {
     private val playerFacade = PlayerFacade(
@@ -48,7 +51,6 @@ class PlayerFacadeTest {
 
         val player = playerFacade.save(Player(playerName))
         assertThat(player.name).isEqualTo(playerName)
-        assertThat(player).isEqualToComparingFieldByField(player)
 
         player.careerName = "Soldier"
         player.toughness = CharacteristicValue(4, 1)
@@ -79,22 +81,83 @@ class PlayerFacadeTest {
     @Test
     fun should_update_items_of_a_player() {
         val playerName = "PlayerName"
-        val player = Player(playerName)
 
-        val savedPlayer = playerFacade.save(player)
-        assertThat(savedPlayer.name).isEqualTo(playerName)
-        assertThat(savedPlayer).isEqualToComparingFieldByField(player)
-        assertThat(savedPlayer.items).isEmpty()
+        val player = playerFacade.save(Player(playerName))
+        assertThat(player.name).isEqualTo(playerName)
+        assertThat(player.items).isEmpty()
 
-        val sword = Weapon(name = "Sword", damage = 4, criticalLevel = 3)
-        player.addItem(sword)
+        player.addItem(Weapon(name = "Sword", damage = 4, criticalLevel = 3))
 
         val updatedPlayer = playerFacade.save(player)
         assertThat(updatedPlayer.name).isEqualTo(playerName)
         assertThat(updatedPlayer.items).isNotEmpty()
         assertThat(updatedPlayer.items).isEqualTo(player.items)
         assertThat(updatedPlayer.items[0] is Weapon).isTrue()
-        assertThat(updatedPlayer.items[0]).isEqualToComparingFieldByField(sword)
+        assertThat(updatedPlayer.items[0].name).isEqualTo("Sword")
+        assertThat(updatedPlayer.items[0].damage).isEqualTo(4)
+        assertThat(updatedPlayer.items[0].criticalLevel).isEqualTo(3)
         assertThat(updatedPlayer).isEqualToComparingFieldByField(player)
+    }
+
+    @Test
+    fun should_update_field_of_item_of_a_player() {
+        val player = playerFacade.save(Player("John", items = listOf(Weapon(name = "Sword", damage = 4, criticalLevel = 3))))
+        assertThat(player.name).isEqualTo("John")
+        assertThat(player.items.size).isEqualTo(1)
+        assertThat(player.items[0] is Weapon).isTrue()
+        val weapon = player.items[0] as Weapon
+        assertThat(weapon.name).isEqualTo("Sword")
+        assertThat(weapon.damage).isEqualTo(4)
+        assertThat(weapon.criticalLevel).isEqualTo(3)
+        assertThat(weapon.quality).isEqualTo(NORMAL)
+
+        weapon.quality = LOW
+        player.updateItem(weapon)
+
+        val updatedPlayer = playerFacade.save(player)
+        assertThat(updatedPlayer.name).isEqualTo("John")
+        assertThat(updatedPlayer.items.size).isEqualTo(1)
+        assertThat(updatedPlayer.items[0] is Weapon).isTrue()
+        val newWeapon = updatedPlayer.items[0] as Weapon
+        assertThat(newWeapon.name).isEqualTo("Sword")
+        assertThat(newWeapon.damage).isEqualTo(4)
+        assertThat(newWeapon.criticalLevel).isEqualTo(3)
+        assertThat(newWeapon.quality).isEqualTo(LOW)
+    }
+
+    @Test
+    fun should_update_name_of_item_of_a_player() {
+        val player = playerFacade.save(Player("John", items = listOf(Weapon(name = "Sword", damage = 4, criticalLevel = 3))))
+        assertThat(player.name).isEqualTo("John")
+        assertThat(player.items.size).isEqualTo(1)
+        assertThat(player.items[0] is Weapon).isTrue()
+        val weapon = player.items[0] as Weapon
+        assertThat(weapon.name).isEqualTo("Sword")
+        assertThat(weapon.damage).isEqualTo(4)
+        assertThat(weapon.criticalLevel).isEqualTo(3)
+
+        weapon.name = "Spear"
+        player.updateItem(weapon)
+
+        val updatedPlayer = playerFacade.save(player)
+        assertThat(updatedPlayer.name).isEqualTo("John")
+        assertThat(updatedPlayer.items.size).isEqualTo(1)
+        assertThat(updatedPlayer.items[0] is Weapon).isTrue()
+        val newWeapon = updatedPlayer.items[0] as Weapon
+        assertThat(newWeapon.name).isEqualTo("Spear")
+        assertThat(newWeapon.damage).isEqualTo(4)
+        assertThat(newWeapon.criticalLevel).isEqualTo(3)
+    }
+
+    @Test
+    fun should_delete_items_of_player_then_player() {
+        val player = playerFacade.save(Player("John", items = listOf(Weapon(name = "Sword", damage = 4, criticalLevel = 3))))
+        assertThat(player.items.size).isEqualTo(1)
+
+        playerFacade.deleteAllItemsOfPlayer(player)
+        assertThat(player.items).isEmpty()
+
+        playerFacade.deletePlayer(player)
+        assertThat(playerFacade.findAll()).isEmpty()
     }
 }

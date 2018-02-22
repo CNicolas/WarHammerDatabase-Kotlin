@@ -11,10 +11,9 @@ class PlayerFacade(databaseUrl: String = "jdbc:sqlite:file:warhammer", driver: S
     // region SAVE
     fun save(player: Player): Player {
         val existingPlayer = playerRepository.findById(player.id)
-        return if (existingPlayer == null) {
-            addPlayer(player)
-        } else {
-            updatePlayer(player)
+        return when (existingPlayer) {
+            null -> addPlayer(player)
+            else -> updatePlayer(player)
         }
     }
 
@@ -29,14 +28,17 @@ class PlayerFacade(databaseUrl: String = "jdbc:sqlite:file:warhammer", driver: S
 
     private fun updatePlayer(player: Player): Player {
         playerRepository.update(player)
-        player.items.forEach { it ->
-            val item = itemRepository.findByNameAndPlayer(it.name, player)
+        player.items = player.items.map { it ->
+            var item = itemRepository.findById(it.id)
             if (item == null) {
-                itemRepository.add(it, player)
+                item = itemRepository.findByNameAndPlayer(it.name, player)
+                when (item) {
+                    null -> itemRepository.add(it, player)!!
+                    else -> itemRepository.updateByPlayer(it, player)!!
+                }
             } else {
-                itemRepository.updateByPlayer(item, player)
+                itemRepository.updateByPlayer(it, player)!!
             }
-
         }
 
         return find(player.name)!!
@@ -73,6 +75,7 @@ class PlayerFacade(databaseUrl: String = "jdbc:sqlite:file:warhammer", driver: S
 
     fun deleteAllItemsOfPlayer(player: Player) {
         itemRepository.deleteAllByPlayer(player)
+        player.items = listOf()
     }
 
     fun deleteAll() {

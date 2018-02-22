@@ -91,7 +91,8 @@ class ItemDao : AbstractDao<Item>(), PlayerLinkedDao<Item> {
 
     override fun deleteAllByPlayer(player: Player): Int {
         return try {
-            table.deleteWhere { ItemsTable.playerName eq player.name }
+            val res = table.deleteWhere { ItemsTable.playerName eq player.name }
+            return res
         } catch (e: Exception) {
             e.printStackTrace()
             -1

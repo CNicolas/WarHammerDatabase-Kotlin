@@ -5,6 +5,7 @@ import warhammer.database.entities.player.enums.Characteristic
 import warhammer.database.entities.player.enums.Characteristic.*
 import warhammer.database.entities.player.enums.Race
 import warhammer.database.entities.player.item.Item
+import warhammer.database.entities.player.item.merge
 
 data class Player(override var name: String,
 
@@ -69,6 +70,16 @@ fun Player.addItem(item: Item): List<Item> {
     val mutableItems = items.toMutableList()
     mutableItems.add(item)
     items = mutableItems.toList()
+
+    return items
+}
+
+fun Player.updateItem(item: Item): List<Item> {
+    items.forEach {
+        if (it.id == item.id) {
+            it.merge(item)
+        }
+    }
 
     return items
 }
