@@ -1,6 +1,6 @@
 package warhammer.database.entities.hand
 
-enum class DifficultyLevel(val challengeDicesCount: kotlin.Int) {
+enum class DifficultyLevel(val challengeDicesCount: Int) {
     NONE(0),
     EASY(1),
     MEDIUM(2),

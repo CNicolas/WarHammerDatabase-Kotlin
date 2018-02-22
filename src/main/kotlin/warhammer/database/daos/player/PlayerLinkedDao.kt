@@ -13,7 +13,6 @@ interface PlayerLinkedDao<E : PlayerLinkedEntity> : Dao<E> {
     fun updateByPlayer(entity: E, player: Player): E?
 
     fun deleteByPlayer(entity: E, player: Player): Int
-    fun deleteByNameAndPlayer(name: String, player: Player): Int
     fun deleteAllByPlayer(player: Player): Int
-    fun deleteAll()
+    fun deleteAll(): Int
 }

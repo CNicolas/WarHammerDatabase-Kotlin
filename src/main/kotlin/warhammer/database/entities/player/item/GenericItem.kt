@@ -1,6 +1,6 @@
 package warhammer.database.entities.player.item
 
-import warhammer.database.entities.player.item.enums.ItemType.ITEM
+import warhammer.database.entities.player.item.enums.ItemType.GENERIC_ITEM
 import warhammer.database.entities.player.item.enums.Quality
 import warhammer.database.entities.player.item.enums.Range
 
@@ -12,7 +12,7 @@ data class GenericItem(override var name: String = "Item",
 
                        override val id: Int = -1) : Item {
 
-    override var type = ITEM
+    override var type = GENERIC_ITEM
 
     override var isEquipped: Boolean? = null
     override var uses: Int? = null

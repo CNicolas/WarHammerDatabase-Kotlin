@@ -14,7 +14,7 @@ internal fun ResultRow?.mapToItem(): Item? = when (this) {
         val type = valueOf(this[ItemsTable.type])
 
         when (type) {
-            ITEM -> GenericItem(
+            GENERIC_ITEM -> GenericItem(
                     id = this[ItemsTable.id].value,
                     name = this[ItemsTable.name],
                     description = this[ItemsTable.description],

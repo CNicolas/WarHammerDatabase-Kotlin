@@ -1,11 +1,8 @@
 package warhammer.database.entities.player
 
 import warhammer.database.entities.NamedEntity
-import warhammer.database.entities.player.enums.Characteristic
-import warhammer.database.entities.player.enums.Characteristic.*
 import warhammer.database.entities.player.enums.Race
 import warhammer.database.entities.player.item.Item
-import warhammer.database.entities.player.item.merge
 
 data class Player(override var name: String,
 
@@ -45,49 +42,3 @@ data class Player(override var name: String,
                   var items: List<Item> = listOf(), /* val skills: List<Skill> = listOf()*/
 
                   override val id: Int = -1) : NamedEntity
-
-val Player.maxStress: Int
-    get() = willpower.value * 2
-val Player.maxExhaustion: Int
-    get() = toughness.value * 2
-
-val Player.maxEncumbrance: Int
-    get() = strength.value * 5 + strength.fortuneValue + 5 + when (race) {
-        Race.DWARF -> 5
-        else -> 0
-    }
-
-operator fun Player.get(characteristic: Characteristic): CharacteristicValue = when (characteristic) {
-    STRENGTH -> strength
-    TOUGHNESS -> toughness
-    AGILITY -> agility
-    INTELLIGENCE -> intelligence
-    WILLPOWER -> willpower
-    FELLOWSHIP -> fellowship
-}
-
-fun Player.addItem(item: Item): List<Item> {
-    val mutableItems = items.toMutableList()
-    mutableItems.add(item)
-    items = mutableItems.toList()
-
-    return items
-}
-
-fun Player.updateItem(item: Item): List<Item> {
-    items.forEach {
-        if (it.id == item.id) {
-            it.merge(item)
-        }
-    }
-
-    return items
-}
-
-fun Player.removeItem(item: Item): List<Item> {
-    val mutableItems = items.toMutableList()
-    mutableItems.remove(item)
-    items = mutableItems.toList()
-
-    return items
-}

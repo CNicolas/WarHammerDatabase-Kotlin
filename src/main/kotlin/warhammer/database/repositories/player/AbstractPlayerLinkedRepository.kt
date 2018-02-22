@@ -13,12 +13,6 @@ abstract class AbstractPlayerLinkedRepository<E : PlayerLinkedEntity>(databaseUr
         return transaction { dao.add(entity, player) }
     }
 
-    override fun findByNameAndPlayer(name: String, player: Player): E? {
-        connectToDatabase()
-
-        return transaction { dao.findByNameAndPlayer(name, player) }
-    }
-
     override fun findAllByPlayer(player: Player): List<E> {
         connectToDatabase()
 
@@ -35,12 +29,6 @@ abstract class AbstractPlayerLinkedRepository<E : PlayerLinkedEntity>(databaseUr
         connectToDatabase()
 
         return transaction { dao.deleteByPlayer(entity, player) }
-    }
-
-    override fun deleteByNameAndPlayer(name: String, player: Player): Int {
-        connectToDatabase()
-
-        return transaction { dao.deleteByNameAndPlayer(name, player) }
     }
 
     override fun deleteAllByPlayer(player: Player): Int {
