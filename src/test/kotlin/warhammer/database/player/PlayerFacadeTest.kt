@@ -4,13 +4,10 @@ import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 import warhammer.database.PlayerFacade
-import warhammer.database.entities.player.CharacteristicValue
-import warhammer.database.entities.player.Player
-import warhammer.database.entities.player.addItem
+import warhammer.database.entities.player.*
 import warhammer.database.entities.player.item.Weapon
 import warhammer.database.entities.player.item.enums.Quality.LOW
 import warhammer.database.entities.player.item.enums.Quality.NORMAL
-import warhammer.database.entities.player.updateItem
 
 class PlayerFacadeTest {
     private val playerFacade = PlayerFacade(
@@ -151,7 +148,7 @@ class PlayerFacadeTest {
 
     @Test
     fun should_delete_items_of_player_then_player() {
-        val player = playerFacade.save(Player("John", items = listOf(Weapon(name = "Sword", damage = 4, criticalLevel = 3))))
+        var player = playerFacade.save(Player("John", items = listOf(Weapon(name = "Sword", damage = 4, criticalLevel = 3))))
         assertThat(player.items.size).isEqualTo(1)
 
         playerFacade.deleteAllItemsOfPlayer(player)
@@ -159,5 +156,26 @@ class PlayerFacadeTest {
 
         playerFacade.deletePlayer(player)
         assertThat(playerFacade.findAll()).isEmpty()
+
+        player = playerFacade.save(Player("John", items = listOf(Weapon(name = "Sword", damage = 4, criticalLevel = 3))))
+        assertThat(player.items.size).isEqualTo(1)
+        playerFacade.deletePlayer("John")
+        assertThat(playerFacade.findAll()).isEmpty()
+    }
+
+    @Test
+    fun should_delete_an_item_of_player() {
+        val player = playerFacade.save(Player("John", items = listOf(Weapon(name = "Sword", damage = 4, criticalLevel = 3))))
+        assertThat(player.items.size).isEqualTo(1)
+        assertThat(player.items[0] is Weapon).isTrue()
+        assertThat(player.items[0].name).isEqualTo("Sword")
+
+        val weapon = player.items[0] as Weapon
+        player.removeItem(weapon)
+        assertThat(player.items.size).isEqualTo(0)
+
+        playerFacade.save(player)
+
+        assertThat(player.items.size).isEqualTo(0)
     }
 }

@@ -12,5 +12,5 @@ interface NameKeyDao<E : NamedEntity> : Dao<E> {
 
     fun delete(entity: E): Int
     fun deleteByName(name: String): Int
-    fun deleteAll()
+    fun deleteAll(): Int
 }

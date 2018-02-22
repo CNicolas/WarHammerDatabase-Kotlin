@@ -28,18 +28,22 @@ class PlayerFacade(databaseUrl: String = "jdbc:sqlite:file:warhammer", driver: S
 
     private fun updatePlayer(player: Player): Player {
         playerRepository.update(player)
-        player.items = player.items.map { it ->
-            var item = itemRepository.findById(it.id)
+        val savedItems = itemRepository.findAllByPlayer(player).toMutableList()
+
+        player.items.map { it ->
+            val item = itemRepository.findById(it.id)
+            savedItems.remove(item)
+
             if (item == null) {
-                item = itemRepository.findByNameAndPlayer(it.name, player)
-                when (item) {
-                    null -> itemRepository.add(it, player)!!
-                    else -> itemRepository.updateByPlayer(it, player)!!
-                }
+                itemRepository.add(it, player)!!
             } else {
                 itemRepository.updateByPlayer(it, player)!!
             }
         }
+
+        savedItems.forEach { itemRepository.deleteByPlayer(it, player) }
+
+        player.items = itemRepository.findAllByPlayer(player)
 
         return find(player.name)!!
     }
@@ -71,11 +75,17 @@ class PlayerFacade(databaseUrl: String = "jdbc:sqlite:file:warhammer", driver: S
         }
     }
 
-    fun deletePlayer(player: Player) = deletePlayer(player.name)
+    fun deletePlayer(player: Player) {
+        val foundPlayer = playerRepository.findById(player.id)
+        if (foundPlayer != null) {
+            itemRepository.deleteAllByPlayer(foundPlayer)
+            playerRepository.delete(foundPlayer)
+        }
+    }
 
-    fun deleteAllItemsOfPlayer(player: Player) {
-        itemRepository.deleteAllByPlayer(player)
+    fun deleteAllItemsOfPlayer(player: Player): Int {
         player.items = listOf()
+        return itemRepository.deleteAllByPlayer(player)
     }
 
     fun deleteAll() {

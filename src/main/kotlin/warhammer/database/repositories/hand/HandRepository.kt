@@ -8,7 +8,7 @@ import warhammer.database.entities.hand.Hand
 import warhammer.database.repositories.AbstractNameKeyRepository
 import warhammer.database.tables.HandsTable
 
-class HandRepository : AbstractNameKeyRepository<Hand>() {
+class HandRepository(databaseUrl: String, driver: String) : AbstractNameKeyRepository<Hand>(databaseUrl, driver) {
     override val dao = HandDao()
 
     init {

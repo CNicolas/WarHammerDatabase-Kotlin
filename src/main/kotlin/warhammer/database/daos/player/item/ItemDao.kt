@@ -76,7 +76,16 @@ class ItemDao : AbstractDao<Item>(), PlayerLinkedDao<Item> {
         }
     }
 
-    override fun deleteByPlayer(entity: Item, player: Player): Int = deleteByNameAndPlayer(entity.name, player)
+    override fun deleteByPlayer(entity: Item, player: Player): Int {
+        return try {
+            table.deleteWhere {
+                (ItemsTable.id eq entity.id) and (ItemsTable.playerName eq player.name)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            -1
+        }
+    }
 
     override fun deleteByNameAndPlayer(name: String, player: Player): Int {
         return try {
@@ -91,8 +100,7 @@ class ItemDao : AbstractDao<Item>(), PlayerLinkedDao<Item> {
 
     override fun deleteAllByPlayer(player: Player): Int {
         return try {
-            val res = table.deleteWhere { ItemsTable.playerName eq player.name }
-            return res
+            table.deleteWhere { ItemsTable.playerName eq player.name }
         } catch (e: Exception) {
             e.printStackTrace()
             -1

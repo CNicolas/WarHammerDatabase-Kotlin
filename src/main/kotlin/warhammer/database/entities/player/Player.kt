@@ -83,3 +83,11 @@ fun Player.updateItem(item: Item): List<Item> {
 
     return items
 }
+
+fun Player.removeItem(item: Item): List<Item> {
+    val mutableItems = items.toMutableList()
+    mutableItems.remove(item)
+    items = mutableItems.toList()
+
+    return items
+}
