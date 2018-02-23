@@ -3,7 +3,7 @@
     "name": "Athlétisme",
     "characteristic": "STRENGTH",
     "type": "BASIC",
-    "specialisations": [
+    "specializations": [
       "Escalade",
       "Natation",
       "Saut",

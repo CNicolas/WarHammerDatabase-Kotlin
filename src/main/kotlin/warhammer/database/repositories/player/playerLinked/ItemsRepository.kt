@@ -1,15 +1,15 @@
-package warhammer.database.repositories.player.item
+package warhammer.database.repositories.player.playerLinked
 
 import org.jetbrains.exposed.sql.SchemaUtils.create
 import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.transactions.transaction
-import warhammer.database.daos.player.item.ItemDao
-import warhammer.database.entities.player.item.Item
+import warhammer.database.daos.player.playerLinked.ItemsDao
+import warhammer.database.entities.player.playerLinked.item.Item
 import warhammer.database.repositories.player.AbstractPlayerLinkedRepository
 import warhammer.database.tables.ItemsTable
 
-class ItemRepository(databaseUrl: String, driver: String) : AbstractPlayerLinkedRepository<Item>(databaseUrl, driver) {
-    override val dao = ItemDao()
+class ItemsRepository(databaseUrl: String, driver: String) : AbstractPlayerLinkedRepository<Item>(databaseUrl, driver) {
+    override val dao = ItemsDao()
 
     init {
         connectToDatabase()

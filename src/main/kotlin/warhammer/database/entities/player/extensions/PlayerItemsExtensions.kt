@@ -1,30 +1,8 @@
-package warhammer.database.entities.player
+package warhammer.database.entities.player.extensions
 
-import warhammer.database.entities.player.enums.Characteristic
-import warhammer.database.entities.player.enums.Characteristic.*
-import warhammer.database.entities.player.enums.Race
-import warhammer.database.entities.player.item.*
-import warhammer.database.entities.player.item.enums.ItemType
-
-val Player.maxStress: Int
-    get() = willpower.value * 2
-val Player.maxExhaustion: Int
-    get() = toughness.value * 2
-
-val Player.maxEncumbrance: Int
-    get() = strength.value * 5 + strength.fortuneValue + 5 + when (race) {
-        Race.DWARF -> 5
-        else -> 0
-    }
-
-operator fun Player.get(characteristic: Characteristic): CharacteristicValue = when (characteristic) {
-    STRENGTH -> strength
-    TOUGHNESS -> toughness
-    AGILITY -> agility
-    INTELLIGENCE -> intelligence
-    WILLPOWER -> willpower
-    FELLOWSHIP -> fellowship
-}
+import warhammer.database.entities.player.Player
+import warhammer.database.entities.player.playerLinked.item.*
+import warhammer.database.entities.player.playerLinked.item.enums.ItemType
 
 fun Player.addItem(item: Item): List<Item> {
     val mutableItems = items.toMutableList()

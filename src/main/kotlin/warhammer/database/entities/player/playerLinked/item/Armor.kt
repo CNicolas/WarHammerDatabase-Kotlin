@@ -1,8 +1,8 @@
-package warhammer.database.entities.player.item
+package warhammer.database.entities.player.playerLinked.item
 
-import warhammer.database.entities.player.item.enums.ItemType.ARMOR
-import warhammer.database.entities.player.item.enums.Quality
-import warhammer.database.entities.player.item.enums.Range
+import warhammer.database.entities.player.playerLinked.item.enums.ItemType.ARMOR
+import warhammer.database.entities.player.playerLinked.item.enums.Quality
+import warhammer.database.entities.player.playerLinked.item.enums.Range
 
 data class Armor(override var name: String = "Armor",
                  override var description: String? = null,

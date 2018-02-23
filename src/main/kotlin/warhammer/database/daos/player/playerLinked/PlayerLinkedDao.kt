@@ -1,8 +1,8 @@
-package warhammer.database.daos.player
+package warhammer.database.daos.player.playerLinked
 
 import warhammer.database.daos.Dao
 import warhammer.database.entities.player.Player
-import warhammer.database.entities.player.PlayerLinkedEntity
+import warhammer.database.entities.player.playerLinked.PlayerLinkedEntity
 
 interface PlayerLinkedDao<E : PlayerLinkedEntity> : Dao<E> {
     fun add(entity: E, player: Player): E?

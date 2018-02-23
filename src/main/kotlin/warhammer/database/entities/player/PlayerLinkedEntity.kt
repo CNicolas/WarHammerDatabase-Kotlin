@@ -1,3 +1,0 @@
-package warhammer.database.entities.player
-
-interface PlayerLinkedEntity

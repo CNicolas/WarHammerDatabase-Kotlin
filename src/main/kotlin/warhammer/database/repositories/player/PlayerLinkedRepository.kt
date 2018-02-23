@@ -1,8 +1,8 @@
 package warhammer.database.repositories.player
 
-import warhammer.database.daos.player.PlayerLinkedDao
+import warhammer.database.daos.player.playerLinked.PlayerLinkedDao
 import warhammer.database.entities.player.Player
-import warhammer.database.entities.player.PlayerLinkedEntity
+import warhammer.database.entities.player.playerLinked.PlayerLinkedEntity
 import warhammer.database.repositories.Repository
 
 interface PlayerLinkedRepository<E : PlayerLinkedEntity> : Repository<E> {

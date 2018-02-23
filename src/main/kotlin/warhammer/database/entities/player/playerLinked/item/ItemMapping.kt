@@ -1,11 +1,11 @@
-package warhammer.database.entities.player.item
+package warhammer.database.entities.player.playerLinked.item
 
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import warhammer.database.entities.player.Player
-import warhammer.database.entities.player.item.enums.ItemType.*
-import warhammer.database.entities.player.item.enums.Quality
-import warhammer.database.entities.player.item.enums.Range
+import warhammer.database.entities.player.playerLinked.item.enums.ItemType.*
+import warhammer.database.entities.player.playerLinked.item.enums.Quality
+import warhammer.database.entities.player.playerLinked.item.enums.Range
 import warhammer.database.tables.ItemsTable
 
 internal fun ResultRow?.mapToItem(): Item? = when (this) {

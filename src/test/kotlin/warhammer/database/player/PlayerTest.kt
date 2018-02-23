@@ -3,17 +3,19 @@ package warhammer.database.player
 import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.Test
 import warhammer.database.entities.hand.DifficultyLevel.MEDIUM
-import warhammer.database.entities.player.*
+import warhammer.database.entities.player.CharacteristicValue
+import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.enums.Characteristic
 import warhammer.database.entities.player.enums.Characteristic.AGILITY
 import warhammer.database.entities.player.enums.Race.DWARF
 import warhammer.database.entities.player.enums.Race.WOOD_ELF
-import warhammer.database.entities.player.item.Armor
-import warhammer.database.entities.player.item.Expandable
-import warhammer.database.entities.player.item.GenericItem
-import warhammer.database.entities.player.item.Weapon
-import warhammer.database.entities.player.item.enums.Quality.LOW
-import warhammer.database.entities.player.item.enums.Quality.NORMAL
+import warhammer.database.entities.player.extensions.*
+import warhammer.database.entities.player.playerLinked.item.Armor
+import warhammer.database.entities.player.playerLinked.item.Expandable
+import warhammer.database.entities.player.playerLinked.item.GenericItem
+import warhammer.database.entities.player.playerLinked.item.Weapon
+import warhammer.database.entities.player.playerLinked.item.enums.Quality.LOW
+import warhammer.database.entities.player.playerLinked.item.enums.Quality.NORMAL
 
 class PlayerTest {
     @Test

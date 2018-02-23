@@ -15,6 +15,7 @@ apply plugin: 'kotlin'
 
 repositories {
     mavenCentral()
+    jcenter()
 
     maven {
         url "https://dl.bintray.com/kotlin/exposed"
@@ -27,6 +28,8 @@ dependencies {
 
     compile "org.xerial:sqlite-jdbc:3.21.0"
     compile "org.jetbrains.exposed:exposed:0.9.1"
+
+    compile "com.beust:klaxon:2.1.7"
 
     testCompile "org.testng:testng:6.11"
     testCompile "org.assertj:assertj-core:3.8.0"

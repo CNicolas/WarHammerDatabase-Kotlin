@@ -1,12 +1,14 @@
-package warhammer.database.entities.player.item
+package warhammer.database.entities.player.playerLinked.item
 
 import warhammer.database.entities.NamedEntity
-import warhammer.database.entities.player.PlayerLinkedEntity
-import warhammer.database.entities.player.item.enums.ItemType
-import warhammer.database.entities.player.item.enums.Quality
-import warhammer.database.entities.player.item.enums.Range
+import warhammer.database.entities.player.playerLinked.PlayerLinkedEntity
+import warhammer.database.entities.player.playerLinked.item.enums.ItemType
+import warhammer.database.entities.player.playerLinked.item.enums.Quality
+import warhammer.database.entities.player.playerLinked.item.enums.Range
 
 interface Item : NamedEntity, PlayerLinkedEntity {
+    override var name: String
+
     var description: String?
     var encumbrance: Int
     var quantity: Int

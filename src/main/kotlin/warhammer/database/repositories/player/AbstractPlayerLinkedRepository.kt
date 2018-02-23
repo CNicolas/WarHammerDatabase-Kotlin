@@ -2,7 +2,7 @@ package warhammer.database.repositories.player
 
 import org.jetbrains.exposed.sql.transactions.transaction
 import warhammer.database.entities.player.Player
-import warhammer.database.entities.player.PlayerLinkedEntity
+import warhammer.database.entities.player.playerLinked.PlayerLinkedEntity
 import warhammer.database.repositories.AbstractRepository
 
 abstract class AbstractPlayerLinkedRepository<E : PlayerLinkedEntity>(databaseUrl: String, driver: String)

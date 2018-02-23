@@ -1,8 +1,8 @@
-package warhammer.database.entities.player.item
+package warhammer.database.entities.player.playerLinked.item
 
-import warhammer.database.entities.player.item.enums.ItemType.WEAPON
-import warhammer.database.entities.player.item.enums.Quality
-import warhammer.database.entities.player.item.enums.Range
+import warhammer.database.entities.player.playerLinked.item.enums.ItemType.WEAPON
+import warhammer.database.entities.player.playerLinked.item.enums.Quality
+import warhammer.database.entities.player.playerLinked.item.enums.Range
 
 data class Weapon(override var name: String = "Weapon",
                   override var description: String? = null,

@@ -1,8 +1,8 @@
-package warhammer.database.entities.player.item
+package warhammer.database.entities.player.playerLinked.item
 
-import warhammer.database.entities.player.item.enums.ItemType.GENERIC_ITEM
-import warhammer.database.entities.player.item.enums.Quality
-import warhammer.database.entities.player.item.enums.Range
+import warhammer.database.entities.player.playerLinked.item.enums.ItemType.GENERIC_ITEM
+import warhammer.database.entities.player.playerLinked.item.enums.Quality
+import warhammer.database.entities.player.playerLinked.item.enums.Range
 
 data class GenericItem(override var name: String = "Item",
                        override var description: String? = null,

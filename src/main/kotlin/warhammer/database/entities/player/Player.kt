@@ -2,7 +2,8 @@ package warhammer.database.entities.player
 
 import warhammer.database.entities.NamedEntity
 import warhammer.database.entities.player.enums.Race
-import warhammer.database.entities.player.item.Item
+import warhammer.database.entities.player.playerLinked.item.Item
+import warhammer.database.entities.player.playerLinked.skill.Skill
 
 data class Player(override var name: String,
 
@@ -39,6 +40,7 @@ data class Player(override var name: String,
                   var brass: Int = 0,
                   var silver: Int = 0,
                   var gold: Int = 0,
-                  var items: List<Item> = listOf(), /* val skills: List<Skill> = listOf()*/
+                  var items: List<Item> = listOf(),
+                  var skills: List<Skill> = listOf(),
 
                   override val id: Int = -1) : NamedEntity
