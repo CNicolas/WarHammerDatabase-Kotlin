@@ -20,9 +20,11 @@ class PlayerFacade(databaseUrl: String = "jdbc:sqlite:file:warhammer", driver: S
     }
 
     private fun addPlayer(player: Player): Player {
-        playerRepository.add(player)
-        updateItems(player)
-        skillsRepository.crateSkillsForPlayer(player)
+        val savedPlayer = playerRepository.add(player)
+        savedPlayer!!.items = player.items
+
+        updateItems(savedPlayer)
+        skillsRepository.crateSkillsForPlayer(savedPlayer)
 
         return find(player.name)!!
     }
@@ -30,7 +32,10 @@ class PlayerFacade(databaseUrl: String = "jdbc:sqlite:file:warhammer", driver: S
     private fun updatePlayer(player: Player): Player {
         playerRepository.update(player)
         updateItems(player)
+
         updateSkills(player)
+//        skillsRepository.deleteAllByPlayer(player)
+//        player.skills.forEach { skillsRepository.add(it, player) }
 
         setPlayersLists(player)
 

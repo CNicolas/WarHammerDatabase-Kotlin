@@ -3,7 +3,7 @@ package warhammer.database.tables
 import org.jetbrains.exposed.dao.IntIdTable
 
 object ItemsTable : IntIdTable() {
-    val playerName = reference("player_foreign_key", PlayersTable.name)
+    val playerId = integer("playerId")
 
     val name = varchar("name", length = 70)
     val description = varchar("description", length = 300).nullable()
@@ -24,6 +24,6 @@ object ItemsTable : IntIdTable() {
     val range = varchar("range", length = 20)
 
     init {
-        uniqueIndex(name, playerName)
+        uniqueIndex(name, playerId)
     }
 }

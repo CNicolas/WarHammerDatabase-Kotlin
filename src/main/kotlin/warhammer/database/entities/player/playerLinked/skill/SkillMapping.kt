@@ -20,7 +20,7 @@ fun ResultRow?.mapToSkill(): Skill? = when (this) {
 }
 
 fun UpdateBuilder<Int>.mapFieldsOfEntity(entity: Skill, player: Player) {
-    this[SkillsTable.playerName] = player.name
+    this[SkillsTable.playerId] = player.id
 
     this[SkillsTable.name] = entity.name
     this[SkillsTable.characteristic] = entity.characteristic.toString()

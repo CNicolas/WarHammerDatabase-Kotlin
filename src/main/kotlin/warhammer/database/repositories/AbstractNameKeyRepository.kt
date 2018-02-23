@@ -24,7 +24,6 @@ abstract class AbstractNameKeyRepository<E : NamedEntity>(databaseUrl: String = 
         return transaction { dao.findAll() }
     }
 
-
     override fun update(entity: E): E? {
         connectToDatabase()
 

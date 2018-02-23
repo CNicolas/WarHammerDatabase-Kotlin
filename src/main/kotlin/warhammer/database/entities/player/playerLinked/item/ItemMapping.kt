@@ -59,7 +59,7 @@ internal fun ResultRow?.mapToItem(): Item? = when (this) {
 }
 
 fun UpdateBuilder<Int>.mapFieldsOfEntity(entity: Item, player: Player) {
-    this[ItemsTable.playerName] = player.name
+    this[ItemsTable.playerId] = player.id
 
     this[ItemsTable.name] = entity.name
     this[ItemsTable.description] = entity.description

@@ -1,5 +1,6 @@
 package warhammer.database.daos.player.playerLinked
 
+import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder
@@ -8,6 +9,7 @@ import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.playerLinked.skill.Skill
 import warhammer.database.entities.player.playerLinked.skill.mapFieldsOfEntity
 import warhammer.database.entities.player.playerLinked.skill.mapToSkill
+import warhammer.database.tables.PlayersTable
 import warhammer.database.tables.SkillsTable
 
 class SkillsDao : AbstractPlayerLinkedDao<Skill>() {
@@ -18,5 +20,6 @@ class SkillsDao : AbstractPlayerLinkedDao<Skill>() {
     override fun mapFieldsOfEntityToTable(statement: UpdateBuilder<Int>, entity: Skill, player: Player) =
             statement.mapFieldsOfEntity(entity, player)
 
-    override fun predicateByPlayer(player: Player): SqlExpressionBuilder.() -> Op<Boolean> = { table.playerName eq player.name }
+    override fun predicateByPlayer(player: Player): SqlExpressionBuilder.() -> Op<Boolean> =
+            { table.playerId eq EntityID(player.id, PlayersTable) }
 }

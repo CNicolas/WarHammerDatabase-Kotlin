@@ -63,10 +63,14 @@ class PlayerFacadeTest {
     fun should_update_name_of_player() {
         val player = playerFacade.save(Player("John", items = listOf(GenericItem(name = "Rope"))))
         assertThat(player.name).isEqualTo("John")
+        assertThat(player.items.size).isEqualTo(1)
 
         player.name = "Jack"
 
         val updatedPlayer = playerFacade.save(player)
+        assertThat(player.name).isEqualTo("Jack")
+        assertThat(player.items.size).isEqualTo(1)
+
         assertThat(updatedPlayer.name).isEqualTo("Jack")
         assertThat(updatedPlayer).isEqualToComparingFieldByField(player)
         assertThat(updatedPlayer.items.size).isEqualTo(1)
