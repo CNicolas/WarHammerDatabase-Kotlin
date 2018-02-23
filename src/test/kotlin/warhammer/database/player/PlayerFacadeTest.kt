@@ -6,6 +6,7 @@ import org.testng.annotations.Test
 import warhammer.database.PlayerFacade
 import warhammer.database.entities.player.CharacteristicValue
 import warhammer.database.entities.player.Player
+import warhammer.database.entities.player.playerLinked.item.GenericItem
 
 class PlayerFacadeTest {
     private val playerFacade = PlayerFacade(
@@ -60,7 +61,7 @@ class PlayerFacadeTest {
 
     @Test
     fun should_update_name_of_player() {
-        val player = playerFacade.save(Player("John"))
+        val player = playerFacade.save(Player("John", items = listOf(GenericItem(name = "Rope"))))
         assertThat(player.name).isEqualTo("John")
 
         player.name = "Jack"
@@ -68,6 +69,7 @@ class PlayerFacadeTest {
         val updatedPlayer = playerFacade.save(player)
         assertThat(updatedPlayer.name).isEqualTo("Jack")
         assertThat(updatedPlayer).isEqualToComparingFieldByField(player)
+        assertThat(updatedPlayer.items.size).isEqualTo(1)
 
         val allPlayers = playerFacade.findAll()
         assertThat(allPlayers.size).isEqualTo(1)

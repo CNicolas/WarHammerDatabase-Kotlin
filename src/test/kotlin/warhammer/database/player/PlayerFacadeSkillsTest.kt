@@ -34,6 +34,7 @@ class PlayerFacadeSkillsTest {
 
         val advancedSkills = playerFacade.getAdvancedSkills()
         println(advancedSkills)
+        assertThat(advancedSkills.map { it.type }.distinct()).isEqualTo(listOf(SkillType.ADVANCED))
         player.addSkill(advancedSkills[0])
 
         val updatedPlayer = playerFacade.save(player)
