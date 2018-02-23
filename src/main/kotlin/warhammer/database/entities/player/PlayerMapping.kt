@@ -32,7 +32,6 @@ fun ResultRow?.mapToPlayer(): Player? = when (this) {
                 maxCorruption = this[PlayersTable.maxCorruption],
                 stress = this[PlayersTable.stress],
                 exhaustion = this[PlayersTable.exhaustion],
-                encumbrance = this[PlayersTable.encumbrance],
                 brass = this[PlayersTable.brass],
                 silver = this[PlayersTable.silver],
                 gold = this[PlayersTable.gold],
@@ -80,7 +79,6 @@ fun UpdateBuilder<Int>.mapFieldsOfEntity(entity: Player) {
     this[PlayersTable.maxConservative] = entity.maxConservative
     // endregion
     // region INVENTORY
-    this[PlayersTable.encumbrance] = entity.encumbrance
     this[PlayersTable.brass] = entity.brass
     this[PlayersTable.silver] = entity.silver
     this[PlayersTable.gold] = entity.gold

@@ -50,7 +50,6 @@ object PlayersTable : IntIdTable() {
 
     // region INVENTORY
 
-    val encumbrance = integer("encumbrance")
     val brass = integer("brass")
     val silver = integer("silver")
     val gold = integer("gold")

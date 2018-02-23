@@ -1,6 +1,7 @@
 package warhammer.database.entities.player
 
 import warhammer.database.entities.NamedEntity
+import warhammer.database.entities.player.enums.Characteristic
 import warhammer.database.entities.player.enums.Race
 import warhammer.database.entities.player.playerLinked.item.Item
 import warhammer.database.entities.player.playerLinked.skill.Skill
@@ -35,12 +36,34 @@ data class Player(override var name: String,
                   var stress: Int = 0,
                   var exhaustion: Int = 0,
 
-                  var encumbrance: Int = 0,
-
                   var brass: Int = 0,
                   var silver: Int = 0,
                   var gold: Int = 0,
                   var items: List<Item> = listOf(),
                   var skills: List<Skill> = listOf(),
 
-                  override val id: Int = -1) : NamedEntity
+                  override val id: Int = -1) : NamedEntity {
+    val maxStress: Int
+        get() = willpower.value * 2
+
+    val maxExhaustion: Int
+        get() = toughness.value * 2
+
+    val encumbrance: Int
+        get() = items.sumBy { it.encumbrance }
+
+    val maxEncumbrance: Int
+        get() = strength.value * 5 + strength.fortuneValue + 5 + when (race) {
+            Race.DWARF -> 5
+            else -> 0
+        }
+
+    operator fun get(characteristic: Characteristic): CharacteristicValue = when (characteristic) {
+        Characteristic.STRENGTH -> strength
+        Characteristic.TOUGHNESS -> toughness
+        Characteristic.AGILITY -> agility
+        Characteristic.INTELLIGENCE -> intelligence
+        Characteristic.WILLPOWER -> willpower
+        Characteristic.FELLOWSHIP -> fellowship
+    }
+}
