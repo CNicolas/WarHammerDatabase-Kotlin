@@ -55,4 +55,6 @@ object PlayersTable : IntIdTable() {
     val gold = integer("gold")
 
     // endregion
+
+    val skills = varchar("skills", length = 10000)
 }

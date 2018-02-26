@@ -1,44 +1,47 @@
 package warhammer.database.entities.player
 
+import com.beust.klaxon.Klaxon
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import warhammer.database.entities.player.enums.Race
 import warhammer.database.tables.PlayersTable
 
-fun ResultRow?.mapToPlayer(): Player? = when (this) {
-    null -> null
-    else -> {
-        Player(name = this[PlayersTable.name],
-                race = Race.valueOf(this[PlayersTable.race]),
-                age = this[PlayersTable.age],
-                size = this[PlayersTable.size],
-                strength = CharacteristicValue(this[PlayersTable.strength], this[PlayersTable.strengthFortune]),
-                toughness = CharacteristicValue(this[PlayersTable.toughness], this[PlayersTable.toughnessFortune]),
-                agility = CharacteristicValue(this[PlayersTable.agility], this[PlayersTable.agilityFortune]),
-                intelligence = CharacteristicValue(this[PlayersTable.intelligence], this[PlayersTable.intelligenceFortune]),
-                willpower = CharacteristicValue(this[PlayersTable.willpower], this[PlayersTable.willpowerFortune]),
-                fellowship = CharacteristicValue(this[PlayersTable.fellowship], this[PlayersTable.fellowshipFortune]),
-                careerName = this[PlayersTable.careerName],
-                rank = this[PlayersTable.rank],
-                availableExperience = this[PlayersTable.availableExperience],
-                totalExperience = this[PlayersTable.totalExperience],
-                reckless = this[PlayersTable.reckless],
-                maxReckless = this[PlayersTable.maxReckless],
-                conservative = this[PlayersTable.conservative],
-                maxConservative = this[PlayersTable.maxConservative],
-                wounds = this[PlayersTable.wounds],
-                maxWounds = this[PlayersTable.maxWounds],
-                corruption = this[PlayersTable.corruption],
-                maxCorruption = this[PlayersTable.maxCorruption],
-                stress = this[PlayersTable.stress],
-                exhaustion = this[PlayersTable.exhaustion],
-                brass = this[PlayersTable.brass],
-                silver = this[PlayersTable.silver],
-                gold = this[PlayersTable.gold],
-                id = this[PlayersTable.id].value
-        )
-    }
-}
+fun ResultRow?.mapToPlayer(): Player? =
+        when (this) {
+            null -> null
+            else -> {
+                Player(name = this[PlayersTable.name],
+                        race = Race.valueOf(this[PlayersTable.race]),
+                        age = this[PlayersTable.age],
+                        size = this[PlayersTable.size],
+                        strength = CharacteristicValue(this[PlayersTable.strength], this[PlayersTable.strengthFortune]),
+                        toughness = CharacteristicValue(this[PlayersTable.toughness], this[PlayersTable.toughnessFortune]),
+                        agility = CharacteristicValue(this[PlayersTable.agility], this[PlayersTable.agilityFortune]),
+                        intelligence = CharacteristicValue(this[PlayersTable.intelligence], this[PlayersTable.intelligenceFortune]),
+                        willpower = CharacteristicValue(this[PlayersTable.willpower], this[PlayersTable.willpowerFortune]),
+                        fellowship = CharacteristicValue(this[PlayersTable.fellowship], this[PlayersTable.fellowshipFortune]),
+                        careerName = this[PlayersTable.careerName],
+                        rank = this[PlayersTable.rank],
+                        availableExperience = this[PlayersTable.availableExperience],
+                        totalExperience = this[PlayersTable.totalExperience],
+                        reckless = this[PlayersTable.reckless],
+                        maxReckless = this[PlayersTable.maxReckless],
+                        conservative = this[PlayersTable.conservative],
+                        maxConservative = this[PlayersTable.maxConservative],
+                        wounds = this[PlayersTable.wounds],
+                        maxWounds = this[PlayersTable.maxWounds],
+                        corruption = this[PlayersTable.corruption],
+                        maxCorruption = this[PlayersTable.maxCorruption],
+                        stress = this[PlayersTable.stress],
+                        exhaustion = this[PlayersTable.exhaustion],
+                        brass = this[PlayersTable.brass],
+                        silver = this[PlayersTable.silver],
+                        gold = this[PlayersTable.gold],
+                        skills = Klaxon().parseArray(this[PlayersTable.skills])!!,
+                        id = this[PlayersTable.id].value
+                )
+            }
+        }
 
 fun UpdateBuilder<Int>.mapFieldsOfEntity(entity: Player) {
     this[PlayersTable.name] = entity.name
@@ -83,4 +86,5 @@ fun UpdateBuilder<Int>.mapFieldsOfEntity(entity: Player) {
     this[PlayersTable.silver] = entity.silver
     this[PlayersTable.gold] = entity.gold
     // endregion
+    this[PlayersTable.skills] = Klaxon().toJsonString(entity.skills)
 }

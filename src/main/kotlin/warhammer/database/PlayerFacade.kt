@@ -1,14 +1,15 @@
 package warhammer.database
 
+import com.beust.klaxon.Klaxon
 import warhammer.database.entities.player.Player
+import warhammer.database.entities.player.playerLinked.skill.Skill
+import warhammer.database.entities.player.playerLinked.skill.SkillType
 import warhammer.database.repositories.player.PlayerRepository
 import warhammer.database.repositories.player.playerLinked.ItemsRepository
-import warhammer.database.repositories.player.playerLinked.SkillsRepository
 
 class PlayerFacade(databaseUrl: String = "jdbc:sqlite:file:warhammer", driver: String = "org.sqlite.JDBC") {
     private val playerRepository = PlayerRepository(databaseUrl, driver)
     private val itemsRepository = ItemsRepository(databaseUrl, driver)
-    private val skillsRepository = SkillsRepository(databaseUrl, driver)
 
     // region SAVE
     fun save(player: Player): Player {
@@ -20,11 +21,11 @@ class PlayerFacade(databaseUrl: String = "jdbc:sqlite:file:warhammer", driver: S
     }
 
     private fun addPlayer(player: Player): Player {
+        createSkillsForPlayer(player)
         val savedPlayer = playerRepository.add(player)
-        savedPlayer!!.items = player.items
 
+        savedPlayer!!.items = player.items
         updateItems(savedPlayer)
-        skillsRepository.crateSkillsForPlayer(savedPlayer)
 
         return find(player.name)!!
     }
@@ -32,10 +33,6 @@ class PlayerFacade(databaseUrl: String = "jdbc:sqlite:file:warhammer", driver: S
     private fun updatePlayer(player: Player): Player {
         playerRepository.update(player)
         updateItems(player)
-
-        updateSkills(player)
-//        skillsRepository.deleteAllByPlayer(player)
-//        player.skills.forEach { skillsRepository.add(it, player) }
 
         setPlayersLists(player)
 
@@ -66,7 +63,6 @@ class PlayerFacade(databaseUrl: String = "jdbc:sqlite:file:warhammer", driver: S
         val player = playerRepository.findByName(name)
         if (player != null) {
             itemsRepository.deleteAllByPlayer(player)
-            skillsRepository.deleteAllByPlayer(player)
             playerRepository.deleteByName(name)
         }
     }
@@ -75,7 +71,6 @@ class PlayerFacade(databaseUrl: String = "jdbc:sqlite:file:warhammer", driver: S
         val foundPlayer = playerRepository.findById(player.id)
         if (foundPlayer != null) {
             itemsRepository.deleteAllByPlayer(foundPlayer)
-            skillsRepository.deleteAllByPlayer(foundPlayer)
             playerRepository.delete(foundPlayer)
         }
     }
@@ -83,11 +78,8 @@ class PlayerFacade(databaseUrl: String = "jdbc:sqlite:file:warhammer", driver: S
     fun deleteAll() {
         playerRepository.deleteAll()
         itemsRepository.deleteAll()
-        skillsRepository.deleteAll()
     }
     // endregion
-
-    fun getAdvancedSkills() = skillsRepository.getAdvancedSkills()
 
     private fun updateItems(player: Player) {
         val savedItems = findAllItemsByPlayer(player).toMutableList()
@@ -106,28 +98,24 @@ class PlayerFacade(databaseUrl: String = "jdbc:sqlite:file:warhammer", driver: S
         savedItems.forEach { itemsRepository.deleteByPlayer(it, player) }
     }
 
-    private fun updateSkills(player: Player) {
-        val savedSkills = findAllSkillsByPlayer(player).toMutableList()
-
-        player.skills.forEach { it ->
-            val skill = skillsRepository.findById(it.id)
-            savedSkills.remove(skill)
-
-            if (skill == null) {
-                skillsRepository.add(it, player)!!
-            } else {
-                skillsRepository.updateByPlayer(it, player)!!
-            }
-        }
-
-        savedSkills.forEach { skillsRepository.deleteByPlayer(it, player) }
-    }
-
     private fun findAllItemsByPlayer(player: Player) = itemsRepository.findAllByPlayer(player)
-    private fun findAllSkillsByPlayer(player: Player) = skillsRepository.findAllByPlayer(player)
 
     private fun setPlayersLists(player: Player) {
         player.items = findAllItemsByPlayer(player)
-        player.skills = findAllSkillsByPlayer(player)
+    }
+
+    private fun createSkillsForPlayer(player: Player) {
+        loadSkills()?.filter { it.type == SkillType.BASIC }!!.forEach {
+            val mutableSkills = player.skills.toMutableList()
+            mutableSkills.add(it)
+            player.skills = mutableSkills
+        }
+    }
+
+    fun getAdvancedSkills(): List<Skill> =
+            loadSkills()?.filter { it.type == SkillType.ADVANCED } ?: listOf()
+
+    private fun loadSkills(): List<Skill>? {
+        return Klaxon().parseArray(this.javaClass.getResource("/skills.json").readText())
     }
 }

@@ -1,8 +1,6 @@
 package warhammer.database.player
 
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 import warhammer.database.PlayerFacade
@@ -10,7 +8,6 @@ import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.enums.Characteristic.*
 import warhammer.database.entities.player.extensions.*
 import warhammer.database.entities.player.playerLinked.skill.SkillType
-import warhammer.database.tables.SkillsTable
 
 class PlayerFacadeSkillsTest {
     private val playerFacade = PlayerFacade(
@@ -64,18 +61,6 @@ class PlayerFacadeSkillsTest {
         assertThat(newSkill.getSpecializationByName("Armes d’Hast")?.isSpecialized).isTrue()
         assertThat(updatedPlayer.getSpecializations()).isNotEmpty()
         assertThat(updatedPlayer.getSpecializationByName("Armes d’Hast")?.isSpecialized).isTrue()
-    }
-
-    @Test
-    fun should_delete_skills_of_player_then_player() {
-        val player = playerFacade.save(Player("John"))
-
-        playerFacade.deletePlayer(player)
-        assertThat(playerFacade.findAll()).isEmpty()
-
-        transaction {
-            assertThat(SkillsTable.selectAll()).isEmpty()
-        }
     }
 
     @Test

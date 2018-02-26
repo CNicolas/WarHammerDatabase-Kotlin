@@ -13,10 +13,10 @@ fun Player.addSkill(skill: Skill): List<Skill> {
     return skills
 }
 
-fun Player.getSkillByName(name: String) =
+fun Player.getSkillByName(name: String): Skill? =
         skills.firstOrNull { it.name.toLowerCase() == name.toLowerCase() }
 
-fun Player.getSkillsByCharacteristic(characteristic: Characteristic) =
+fun Player.getSkillsByCharacteristic(characteristic: Characteristic): List<Skill> =
         skills.filter { it.characteristic == characteristic }
 
 fun Player.getSpecializationByName(name: String): Specialization? =
