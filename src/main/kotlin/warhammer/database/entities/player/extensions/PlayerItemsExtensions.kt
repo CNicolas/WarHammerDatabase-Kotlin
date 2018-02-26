@@ -33,16 +33,6 @@ fun Player.getExpandableByName(name: String): Expandable? = getExpandables().fir
 fun Player.getGenericItemByName(name: String): GenericItem? = getGenericItems().firstOrNull { it.name == name }
 fun Player.getWeaponByName(name: String): Weapon? = getWeapons().firstOrNull { it.name == name }
 
-fun Player.updateItem(item: Item): List<Item> {
-    items.forEach {
-        if (it.id == item.id) {
-            it.merge(item)
-        }
-    }
-
-    return items
-}
-
 fun Player.removeItem(item: Item): List<Item> {
     val mutableItems = items.toMutableList()
     mutableItems.remove(item)

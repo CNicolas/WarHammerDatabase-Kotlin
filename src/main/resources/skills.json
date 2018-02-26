@@ -4,12 +4,12 @@
     "characteristic": "STRENGTH",
     "type": "BASIC",
     "specializations": [
-      "Escalade",
-      "Natation",
-      "Saut",
-      "Ramer",
-      "Course",
-      "Levage"
+      { "name": "Escalade" },
+      { "name": "Natation" },
+      { "name": "Saut" },
+      { "name": "Ramer" },
+      { "name": "Course" },
+      { "name": "Levage" }
     ]
   },
   {
@@ -17,10 +17,10 @@
     "type": "BASIC",
     "name": "Capacité de Tir",
     "specializations": [
-      "Arcs",
-      "Arbalètes",
-      "Armes de Jet",
-      "Armes à Poudre"
+      { "name": "Arcs" },
+      { "name": "Arbalètes" },
+      { "name": "Armes de Jet" },
+      { "name": "Armes à Poudre" }
     ]
   },
   {
@@ -28,12 +28,12 @@
     "type": "BASIC",
     "name": "Coordination",
     "specializations": [
-      "Esquive",
-      "Équilibre",
-      "Acrobaties",
-      "Jonglage",
-      "Danse",
-      "Cordes et Nœuds"
+      { "name": "Esquive" },
+      { "name": "Équilibre" },
+      { "name": "Acrobaties" },
+      { "name": "Jonglage" },
+      { "name": "Danse" },
+      { "name": "Cordes et Nœuds" }
     ]
   },
   {
@@ -41,9 +41,9 @@
     "type": "BASIC",
     "name": "Intimidation",
     "specializations": [
-      "Violence",
-      "Interrogation",
-      "Politique"
+      { "name": "Violence" },
+      { "name": "Interrogation" },
+      { "name": "Politique" }
     ]
   },
   {
@@ -51,11 +51,11 @@
     "type": "BASIC",
     "name": "Résistance",
     "specializations": [
-      "Blocage au Bouclier",
-      "Récupération Après l'Effort",
-      "Résistance aux Maladies",
-      "Résistance au Poison",
-      "Résistance à la Faim"
+      { "name": "Blocage au Bouclier" },
+      { "name": "Récupération Après l'Effort" },
+      { "name": "Résistance aux Maladies" },
+      { "name": "Résistance au Poison" },
+      { "name": "Résistance à la Faim" }
     ]
   },
   {
@@ -63,11 +63,11 @@
     "type": "BASIC",
     "name": "Équitation",
     "specializations": [
-      "Chevaux",
-      "Saut Équestre",
-      "Coches",
-      "Combat Monté",
-      "Longs Voyages"
+      { "name": "Chevaux" },
+      { "name": "Saut Équestre" },
+      { "name": "Coches" },
+      { "name": "Combat Monté" },
+      { "name": "Longs Voyages" }
     ]
   },
   {
@@ -75,11 +75,11 @@
     "type": "BASIC",
     "name": "Forfait",
     "specializations": [
-      "Pickpocket",
-      "Serrures",
-      "Fabrication de Pièges",
-      "Déjouter les Pièges",
-      "Escamotage"
+      { "name": "Pickpocket" },
+      { "name": "Serrures" },
+      { "name": "Fabrication de Pièges" },
+      { "name": "Déjouter les Pièges" },
+      { "name": "Escamotage" }
     ]
   },
   {
@@ -87,11 +87,11 @@
     "type": "BASIC",
     "name": "Furtivité",
     "specializations": [
-      "Mouvement Silencieux (Rural)",
-      "Mouvement Silencieux (Urbain)",
-      "Dissimulation",
-      "Embuscade",
-      "Se Fondre dans la Foule"
+      { "name": "Mouvement Silencieux (Rural)" },
+      { "name": "Mouvement Silencieux (Urbain)" },
+      { "name": "Dissimulation" },
+      { "name": "Embuscade" },
+      { "name": "Se Fondre dans la Foule" }
     ]
   },
   {
@@ -99,11 +99,11 @@
     "type": "BASIC",
     "name": "Capacité de Combat",
     "specializations": [
-      "Armes à Une Main",
-      "Armes à Deux Mains",
-      "Armes d’Hast",
-      "Parade (Armes à Une Main)",
-      "Parade (Armes à Deux Mains)"
+      { "name": "Armes à Une Main" },
+      { "name": "Armes à Deux Mains" },
+      { "name": "Armes d’Hast" },
+      { "name": "Parade (Armes à Une Main)" },
+      { "name": "Parade (Armes à Deux Mains)" }
     ]
   },
   {
@@ -111,11 +111,11 @@
     "type": "BASIC",
     "name": "Charisme",
     "specializations": [
-      "Étiquette",
-      "Commérage",
-      "Diplomatie",
-      "Marchandage",
-      "Séduction"
+      { "name": "Étiquette" },
+      { "name": "Commérage" },
+      { "name": "Diplomatie" },
+      { "name": "Marchandage" },
+      { "name": "Séduction" }
     ]
   },
   {
@@ -123,12 +123,12 @@
     "type": "BASIC",
     "name": "Discipline",
     "specializations": [
-      "Résistance au Charisme",
-      "Résistance à la Ruse",
-      "Résistance à l'Intimidation",
-      "Résistance à la Peur",
-      "Résistance à la Terreur",
-      "Résistance à la Torture"
+      { "name": "Résistance au Charisme" },
+      { "name": "Résistance à la Ruse" },
+      { "name": "Résistance à l'Intimidation" },
+      { "name": "Résistance à la Peur" },
+      { "name": "Résistance à la Terreur" },
+      { "name": "Résistance à la Torture" }
     ]
   },
   {
@@ -136,10 +136,10 @@
     "type": "BASIC",
     "name": "Premiers Soins",
     "specializations": [
-      "Chirurgie de Terrain",
-      "Soins à Long Terme",
-      "Soins des Blessures Critiques",
-      "Soins des Blessures Ordinaires"
+      { "name": "Chirurgie de Terrain" },
+      { "name": "Soins à Long Terme" },
+      { "name": "Soins des Blessures Critiques" },
+      { "name": "Soins des Blessures Ordinaires" }
     ]
   },
   {
@@ -147,11 +147,11 @@
     "type": "BASIC",
     "name": "Folklore",
     "specializations": [
-      "Connaissance des Créatures",
-      "Connaissance du Reikland",
-      "Géographie",
-      "Superstitions",
-      "Coutumes Locales"
+      { "name": "Connaissance des Créatures" },
+      { "name": "Connaissance du Reikland" },
+      { "name": "Géographie" },
+      { "name": "Superstitions" },
+      { "name": "Coutumes Locales" }
     ]
   },
   {
@@ -159,11 +159,11 @@
     "type": "BASIC",
     "name": "Ruse",
     "specializations": [
-      "Subterfuge",
-      "Baratin",
-      "Escroquerie",
-      "Sous-Entendus",
-      "Feindre l'Innocence"
+      { "name": "Subterfuge" },
+      { "name": "Baratin" },
+      { "name": "Escroquerie" },
+      { "name": "Sous-Entendus" },
+      { "name": "Feindre l'Innocence" }
     ]
   },
   {
@@ -171,10 +171,10 @@
     "type": "BASIC",
     "name": "Intuition",
     "specializations": [
-      "Discerner les Mensonges",
-      "Compter la Monnaie",
-      "Évaluation",
-      "Appréciation des Adversaires"
+      { "name": "Discerner les Mensonges" },
+      { "name": "Compter la Monnaie" },
+      { "name": "Évaluation" },
+      { "name": "Appréciation des Adversaires" }
     ]
   },
   {
@@ -182,10 +182,10 @@
     "type": "BASIC",
     "name": "Commandement",
     "specializations": [
-      "Commandement Militaire",
-      "Commandement Politique",
-      "Logistique",
-      "Chef Spirituel"
+      { "name": "Commandement Militaire" },
+      { "name": "Commandement Politique" },
+      { "name": "Logistique" },
+      { "name": "Chef Spirituel" }
     ]
   },
   {
@@ -193,11 +193,11 @@
     "type": "BASIC",
     "name": "Connaissance de la Nature",
     "specializations": [
-      "Trouver Un Abri",
-      "Trouver à Manger",
-      "Trouver à Boire",
-      "Identification des Animaux",
-      "Identification des Plantes"
+      { "name": "Trouver Un Abri" },
+      { "name": "Trouver à Manger" },
+      { "name": "Trouver à Boire" },
+      { "name": "Identification des Animaux" },
+      { "name": "Identification des Plantes" }
     ]
   },
   {
@@ -205,10 +205,10 @@
     "type": "BASIC",
     "name": "Observation",
     "specializations": [
-      "Acuité Auditive",
-      "Acuité Visuelle",
-      "Pistage",
-      "Sens du Détail"
+      { "name": "Acuité Auditive" },
+      { "name": "Acuité Visuelle" },
+      { "name": "Pistage" },
+      { "name": "Sens du Détail" }
     ]
   },
   {
@@ -216,13 +216,13 @@
     "type": "ADVANCED",
     "name": "Art de la magie",
     "specializations": [
-      "Histoire de la Magie",
-      "Collèges de Magie",
-      "Sorts de Rang 1",
-      "Sorts de Rang 2",
-      "Sorts de Rang 3",
-      "Sorts de Rang 4",
-      "Sorts de Rang 5"
+      { "name": "Histoire de la Magie" },
+      { "name": "Collèges de Magie" },
+      { "name": "Sorts de Rang 1" },
+      { "name": "Sorts de Rang 2" },
+      { "name": "Sorts de Rang 3" },
+      { "name": "Sorts de Rang 4" },
+      { "name": "Sorts de Rang 5" }
     ]
   },
   {
@@ -230,11 +230,11 @@
     "type": "ADVANCED",
     "name": "Dressage des animaux",
     "specializations": [
-      "Commandement",
-      "Entraînement",
-      "Empathie",
-      "Apaisement",
-      "Retour d'Obéissance"
+      { "name": "Commandement" },
+      { "name": "Entraînement" },
+      { "name": "Empathie" },
+      { "name": "Apaisement" },
+      { "name": "Retour d'Obéissance" }
     ]
   },
   {
@@ -242,11 +242,11 @@
     "type": "ADVANCED",
     "name": "Education",
     "specializations": [
-      "Histoire",
-      "Géographie",
-      "Raisonnement",
-      "Linguistique",
-      "Philosophie"
+      { "name": "Histoire" },
+      { "name": "Géographie" },
+      { "name": "Raisonnement" },
+      { "name": "Linguistique" },
+      { "name": "Philosophie" }
     ]
   },
   {
@@ -254,11 +254,11 @@
     "type": "ADVANCED",
     "name": "Focalisation",
     "specializations": [
-      "Demi-Régime",
-      "Surfocalisation",
-      "Prudence",
-      "Témérité",
-      "Collège de Magie Spécifique"
+      { "name": "Demi-Régime" },
+      { "name": "Surfocalisation" },
+      { "name": "Prudence" },
+      { "name": "Témérité" },
+      { "name": "Collège de Magie Spécifique" }
     ]
   },
   {
@@ -266,9 +266,9 @@
     "type": "ADVANCED",
     "name": "Invocation",
     "specializations": [
-      "Divinité Spécifique",
-      "Invocation Rituelle",
-      "Invocation de Groupe"
+      { "name": "Divinité Spécifique" },
+      { "name": "Invocation Rituelle" },
+      { "name": "Invocation de Groupe" }
     ]
   },
   {
@@ -276,11 +276,11 @@
     "type": "ADVANCED",
     "name": "Médecine",
     "specializations": [
-      "Blessures Critiques",
-      "Poisons",
-      "Maladies",
-      "Soins à Long Terme",
-      "Chirurgie"
+      { "name": "Blessures Critiques" },
+      { "name": "Poisons" },
+      { "name": "Maladies" },
+      { "name": "Soins à Long Terme" },
+      { "name": "Chirurgie" }
     ]
   },
   {
@@ -288,12 +288,12 @@
     "type": "ADVANCED",
     "name": "Métier",
     "specializations": [
-      "Forgeron",
-      "Charpentier",
-      "Joailler",
-      "Brasser",
-      "Ingénieur",
-      "Spectacle"
+      { "name": "Forgeron" },
+      { "name": "Charpentier" },
+      { "name": "Joailler" },
+      { "name": "Brasser" },
+      { "name": "Ingénieur" },
+      { "name": "Spectacle" }
     ]
   },
   {
@@ -301,11 +301,11 @@
     "type": "ADVANCED",
     "name": "Perception de la magie",
     "specializations": [
-      "Observer un Vent Spécifique",
-      "Identification des Sorts",
-      "Discerner les Auras",
-      "Magie Noire",
-      "Estimation de l'Énergie"
+      { "name": "Observer un Vent Spécifique" },
+      { "name": "Identification des Sorts" },
+      { "name": "Discerner les Auras" },
+      { "name": "Magie Noire" },
+      { "name": "Estimation de l'Énergie" }
     ]
   },
   {
@@ -313,12 +313,12 @@
     "type": "ADVANCED",
     "name": "Piété",
     "specializations": [
-      "Demi-Régime",
-      "Prudence",
-      "Témérité",
-      "En Grand Besoin",
-      "Traditions",
-      "Dogme"
+      { "name": "Demi-Régime" },
+      { "name": "Prudence" },
+      { "name": "Témérité" },
+      { "name": "En Grand Besoin" },
+      { "name": "Traditions" },
+      { "name": "Dogme" }
     ]
   }
 ]

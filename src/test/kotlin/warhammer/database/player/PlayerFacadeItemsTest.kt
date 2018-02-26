@@ -1,6 +1,6 @@
 package warhammer.database.player
 
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 import warhammer.database.PlayerFacade
@@ -28,101 +28,101 @@ class PlayerFacadeItemsTest {
         val playerName = "PlayerName"
 
         val player = playerFacade.save(Player(playerName))
-        Assertions.assertThat(player.name).isEqualTo(playerName)
-        Assertions.assertThat(player.items).isEmpty()
+        assertThat(player.name).isEqualTo(playerName)
+        assertThat(player.items).isEmpty()
+        assertThat(player.encumbrance).isZero()
 
-        player.addItem(Weapon(name = "Sword", damage = 4, isEquipped = true))
+        player.addItem(Weapon(name = "Sword", damage = 4, isEquipped = true, encumbrance = 3))
 
         val updatedPlayer = playerFacade.save(player)
-        Assertions.assertThat(updatedPlayer.name).isEqualTo(playerName)
-        Assertions.assertThat(updatedPlayer.items).isNotEmpty()
-        Assertions.assertThat(updatedPlayer.items).isEqualTo(player.items)
-        Assertions.assertThat(updatedPlayer.items[0] is Weapon).isTrue()
+        assertThat(updatedPlayer.name).isEqualTo(playerName)
+        assertThat(updatedPlayer.items).isNotEmpty()
+        assertThat(updatedPlayer.items).isEqualTo(player.items)
+        assertThat(updatedPlayer.items[0] is Weapon).isTrue()
         val weapon = updatedPlayer.getWeapons()[0]
-        Assertions.assertThat(weapon.name).isEqualTo("Sword")
-        Assertions.assertThat(weapon.damage).isEqualTo(4)
-        Assertions.assertThat(weapon.isEquipped).isTrue()
-        Assertions.assertThat(updatedPlayer).isEqualToComparingFieldByField(player)
+        assertThat(weapon.name).isEqualTo("Sword")
+        assertThat(weapon.damage).isEqualTo(4)
+        assertThat(weapon.isEquipped).isTrue()
+        assertThat(updatedPlayer).isEqualToComparingFieldByField(player)
+        assertThat(updatedPlayer.encumbrance).isEqualTo(3)
     }
 
     @Test
     fun should_update_field_of_item_of_a_player() {
         val player = playerFacade.save(Player("John", items = listOf(GenericItem(name = "Rope"))))
-        Assertions.assertThat(player.name).isEqualTo("John")
-        Assertions.assertThat(player.items.size).isEqualTo(1)
-        Assertions.assertThat(player.items[0] is GenericItem).isTrue()
+        assertThat(player.name).isEqualTo("John")
+        assertThat(player.items.size).isEqualTo(1)
+        assertThat(player.items[0] is GenericItem).isTrue()
         val genericItem = player.getGenericItems()[0]
-        Assertions.assertThat(genericItem.name).isEqualTo("Rope")
-        Assertions.assertThat(genericItem.isEquipped).isNull()
-        Assertions.assertThat(genericItem.quality).isEqualTo(Quality.NORMAL)
+        assertThat(genericItem.name).isEqualTo("Rope")
+        assertThat(genericItem.isEquipped).isNull()
+        assertThat(genericItem.quality).isEqualTo(Quality.NORMAL)
 
         genericItem.quality = Quality.LOW
-        player.updateItem(genericItem)
 
         val updatedPlayer = playerFacade.save(player)
-        Assertions.assertThat(updatedPlayer.name).isEqualTo("John")
-        Assertions.assertThat(updatedPlayer.items.size).isEqualTo(1)
-        Assertions.assertThat(updatedPlayer.items[0] is GenericItem).isTrue()
+        assertThat(updatedPlayer.name).isEqualTo("John")
+        assertThat(updatedPlayer.items.size).isEqualTo(1)
+        assertThat(updatedPlayer.items[0] is GenericItem).isTrue()
         val newItem = updatedPlayer.getGenericItems()[0]
-        Assertions.assertThat(newItem.isEquipped).isNull()
-        Assertions.assertThat(newItem.quality).isEqualTo(Quality.LOW)
+        assertThat(newItem.isEquipped).isNull()
+        assertThat(newItem.quality).isEqualTo(Quality.LOW)
     }
 
     @Test
     fun should_update_name_of_item_of_a_player() {
         val player = playerFacade.save(Player("John", items = listOf(Armor(name = "Helmet", soak = 2, defense = 1))))
-        Assertions.assertThat(player.name).isEqualTo("John")
-        Assertions.assertThat(player.items.size).isEqualTo(1)
-        Assertions.assertThat(player.items[0] is Armor).isTrue()
+        assertThat(player.name).isEqualTo("John")
+        assertThat(player.items.size).isEqualTo(1)
+        assertThat(player.items[0] is Armor).isTrue()
         val armor = player.items[0] as Armor
-        Assertions.assertThat(armor.name).isEqualTo("Helmet")
-        Assertions.assertThat(armor.soak).isEqualTo(2)
-        Assertions.assertThat(armor.defense).isEqualTo(1)
+        assertThat(armor.name).isEqualTo("Helmet")
+        assertThat(armor.soak).isEqualTo(2)
+        assertThat(armor.defense).isEqualTo(1)
 
         armor.name = "Shield"
-        player.updateItem(armor)
 
         val updatedPlayer = playerFacade.save(player)
-        Assertions.assertThat(updatedPlayer.name).isEqualTo("John")
-        Assertions.assertThat(updatedPlayer.items.size).isEqualTo(1)
-        Assertions.assertThat(updatedPlayer.items[0] is Armor).isTrue()
+        assertThat(updatedPlayer.name).isEqualTo("John")
+        assertThat(updatedPlayer.items.size).isEqualTo(1)
+        assertThat(updatedPlayer.items[0] is Armor).isTrue()
 
         val newWeapon = updatedPlayer.getArmors()[0]
-        Assertions.assertThat(newWeapon.name).isEqualTo("Shield")
-        Assertions.assertThat(armor.soak).isEqualTo(2)
-        Assertions.assertThat(armor.defense).isEqualTo(1)
+        assertThat(newWeapon.name).isEqualTo("Shield")
+        assertThat(armor.soak).isEqualTo(2)
+        assertThat(armor.defense).isEqualTo(1)
     }
 
     @Test
     fun should_delete_items_of_player_then_player() {
         var player = playerFacade.save(Player("John", items = listOf(Weapon(name = "Sword", damage = 4, criticalLevel = 3))))
-        Assertions.assertThat(player.items.size).isEqualTo(1)
+        assertThat(player.items.size).isEqualTo(1)
 
         playerFacade.deleteAllItemsOfPlayer(player)
-        Assertions.assertThat(player.items).isEmpty()
+        assertThat(player.items).isEmpty()
 
         playerFacade.deletePlayer(player)
-        Assertions.assertThat(playerFacade.findAll()).isEmpty()
+        assertThat(playerFacade.findAll()).isEmpty()
 
         player = playerFacade.save(Player("John", items = listOf(Weapon(name = "Sword", damage = 4, criticalLevel = 3))))
-        Assertions.assertThat(player.items.size).isEqualTo(1)
+        assertThat(player.items.size).isEqualTo(1)
         playerFacade.deletePlayer("John")
-        Assertions.assertThat(playerFacade.findAll()).isEmpty()
+        assertThat(playerFacade.findAll()).isEmpty()
     }
 
     @Test
     fun should_delete_an_item_of_player() {
         val player = playerFacade.save(Player("John", items = listOf(Expandable(name = "Potion", uses = 1))))
-        Assertions.assertThat(player.items.size).isEqualTo(1)
-        Assertions.assertThat(player.items[0] is Expandable).isTrue()
-        Assertions.assertThat(player.items[0].name).isEqualTo("Potion")
+        assertThat(player.items.size).isEqualTo(1)
+        assertThat(player.items[0] is Expandable).isTrue()
+        assertThat(player.items[0].name).isEqualTo("Potion")
 
         val expandable = player.getExpandableByName("Potion")!!
         player.removeItem(expandable)
-        Assertions.assertThat(player.items.size).isEqualTo(0)
+        assertThat(player.items.size).isEqualTo(0)
 
         playerFacade.save(player)
 
-        Assertions.assertThat(player.items.size).isEqualTo(0)
+        assertThat(player.items.size).isEqualTo(0)
     }
 }

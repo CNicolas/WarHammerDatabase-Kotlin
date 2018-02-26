@@ -8,10 +8,7 @@ import org.testng.annotations.Test
 import warhammer.database.PlayerFacade
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.enums.Characteristic.*
-import warhammer.database.entities.player.extensions.addSkill
-import warhammer.database.entities.player.extensions.getSkillByName
-import warhammer.database.entities.player.extensions.getSkillsByCharacteristic
-import warhammer.database.entities.player.extensions.updateSkillLevel
+import warhammer.database.entities.player.extensions.*
 import warhammer.database.entities.player.playerLinked.skill.SkillType
 import warhammer.database.tables.SkillsTable
 
@@ -50,8 +47,10 @@ class PlayerFacadeSkillsTest {
         val fight = player.getSkillByName("capacité de combat")
         assertThat(fight).isNotNull()
         assertThat(fight!!.level).isEqualTo(0)
+        assertThat(fight.getSpecializationByName("Armes d’Hast")?.isSpecialized).isFalse()
+
         fight.level = 2
-        player.updateSkillLevel(fight)
+        fight.getSpecializationByName("Armes d’Hast")?.isSpecialized = true
 
         val updatedPlayer = playerFacade.save(player)
         assertThat(updatedPlayer.name).isEqualTo("John")
@@ -62,6 +61,9 @@ class PlayerFacadeSkillsTest {
         assertThat(newSkill!!.type).isEqualTo(SkillType.BASIC)
         assertThat(newSkill.characteristic).isEqualTo(STRENGTH)
         assertThat(newSkill.level).isEqualTo(2)
+        assertThat(newSkill.getSpecializationByName("Armes d’Hast")?.isSpecialized).isTrue()
+        assertThat(updatedPlayer.getSpecializations()).isNotEmpty()
+        assertThat(updatedPlayer.getSpecializationByName("Armes d’Hast")?.isSpecialized).isTrue()
     }
 
     @Test

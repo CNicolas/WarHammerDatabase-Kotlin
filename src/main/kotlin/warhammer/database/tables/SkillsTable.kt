@@ -9,6 +9,7 @@ object SkillsTable : IntIdTable() {
     val characteristic = varchar("characteristic", length = 20)
     val type = varchar("type", length = 10)
     val level = integer("level")
+    val specializations = varchar("specializations", length = 300)
 
     init {
         uniqueIndex(name, playerId)

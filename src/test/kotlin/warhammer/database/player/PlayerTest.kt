@@ -80,7 +80,6 @@ class PlayerTest {
 
         weapon.name = "Spear"
         weapon.quality = LOW
-        player.updateItem(weapon)
 
         assertThat(player.items.size).isEqualTo(1)
         assertThat(player.items[0].name).isEqualTo("Spear")
