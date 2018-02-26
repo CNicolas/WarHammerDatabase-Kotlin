@@ -2,7 +2,6 @@ package warhammer.database.entities.hand
 
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
-import warhammer.database.entities.hand.Hand
 import warhammer.database.tables.HandsTable
 
 fun ResultRow?.mapToHand(): Hand? = when (this) {
