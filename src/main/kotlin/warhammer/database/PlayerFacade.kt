@@ -80,11 +80,6 @@ class PlayerFacade(databaseUrl: String = "jdbc:sqlite:file:warhammer", driver: S
         }
     }
 
-    fun deleteAllItemsOfPlayer(player: Player): Int {
-        player.items = listOf()
-        return itemsRepository.deleteAllByPlayer(player)
-    }
-
     fun deleteAll() {
         playerRepository.deleteAll()
         itemsRepository.deleteAll()

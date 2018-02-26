@@ -98,8 +98,9 @@ class PlayerFacadeItemsTest {
         var player = playerFacade.save(Player("John", items = listOf(Weapon(name = "Sword", damage = 4, criticalLevel = 3))))
         assertThat(player.items.size).isEqualTo(1)
 
-        playerFacade.deleteAllItemsOfPlayer(player)
-        assertThat(player.items).isEmpty()
+        player.removeAllItems()
+        val updatedPlayer = playerFacade.save(player)
+        assertThat(updatedPlayer.items).isEmpty()
 
         playerFacade.deletePlayer(player)
         assertThat(playerFacade.findAll()).isEmpty()

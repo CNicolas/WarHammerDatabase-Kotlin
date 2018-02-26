@@ -40,3 +40,7 @@ fun Player.removeItem(item: Item): List<Item> {
 
     return items
 }
+
+fun Player.removeAllItems() {
+    items = listOf()
+}
