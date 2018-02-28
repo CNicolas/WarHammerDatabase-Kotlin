@@ -2,7 +2,7 @@ package warhammer.database.player
 
 import org.assertj.core.api.Assertions.assertThat
 import org.testng.annotations.Test
-import warhammer.database.entities.hand.DifficultyLevel.MEDIUM
+import warhammer.database.entities.hand.DifficultyLevel.HARD
 import warhammer.database.entities.player.CharacteristicValue
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.enums.Characteristic
@@ -19,7 +19,7 @@ import warhammer.database.entities.player.playerLinked.item.enums.Quality.NORMAL
 
 class PlayerTest {
     @Test
-    fun should_get_agility_hand_medium() {
+    fun should_get_agility_hand_HARD() {
         val player = Player("John", agility = CharacteristicValue(5, 2))
         Characteristic.values().forEach {
             if (it != AGILITY) {
@@ -27,11 +27,11 @@ class PlayerTest {
             }
         }
 
-        val hand = player[AGILITY].getHand("HandName", MEDIUM)
+        val hand = player[AGILITY].getHand("HandName", HARD)
 
         assertThat(hand.characteristicDicesCount).isEqualTo(5)
         assertThat(hand.fortuneDicesCount).isEqualTo(2)
-        assertThat(hand.challengeDicesCount).isEqualTo(2)
+        assertThat(hand.challengeDicesCount).isEqualTo(HARD.challengeDicesCount)
     }
 
     @Test
