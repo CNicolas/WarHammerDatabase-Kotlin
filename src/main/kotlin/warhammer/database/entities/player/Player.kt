@@ -5,6 +5,7 @@ import warhammer.database.entities.player.enums.Characteristic
 import warhammer.database.entities.player.enums.Race
 import warhammer.database.entities.player.playerLinked.item.Item
 import warhammer.database.entities.player.playerLinked.skill.Skill
+import warhammer.database.entities.player.playerLinked.talent.Talent
 
 data class Player(override var name: String,
 
@@ -41,6 +42,7 @@ data class Player(override var name: String,
                   var gold: Int = 0,
                   var items: List<Item> = listOf(),
                   var skills: List<Skill> = listOf(),
+                  var talents: List<Talent> = listOf(),
 
                   override val id: Int = -1) : NamedEntity {
     val maxStress: Int

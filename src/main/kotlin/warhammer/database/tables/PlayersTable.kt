@@ -57,4 +57,5 @@ object PlayersTable : IntIdTable() {
     // endregion
 
     val skills = varchar("skills", length = 10000)
+    val talents = varchar("talents", length = 5000)
 }

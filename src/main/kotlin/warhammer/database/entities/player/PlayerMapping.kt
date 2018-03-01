@@ -38,6 +38,7 @@ fun ResultRow?.mapToPlayer(): Player? =
                         silver = this[PlayersTable.silver],
                         gold = this[PlayersTable.gold],
                         skills = Klaxon().parseArray(this[PlayersTable.skills])!!,
+                        talents = Klaxon().parseArray(this[PlayersTable.talents])!!,
                         id = this[PlayersTable.id].value
                 )
             }
@@ -87,4 +88,5 @@ fun UpdateBuilder<Int>.mapFieldsOfEntity(entity: Player) {
     this[PlayersTable.gold] = entity.gold
     // endregion
     this[PlayersTable.skills] = Klaxon().toJsonString(entity.skills)
+    this[PlayersTable.talents] = Klaxon().toJsonString(entity.talents)
 }
