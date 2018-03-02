@@ -10,6 +10,7 @@ import warhammer.database.entities.player.playerLinked.item.Armor
 import warhammer.database.entities.player.playerLinked.item.Expandable
 import warhammer.database.entities.player.playerLinked.item.GenericItem
 import warhammer.database.entities.player.playerLinked.item.Weapon
+import warhammer.database.entities.player.playerLinked.item.enums.ArmorType.HELMET
 import warhammer.database.entities.player.playerLinked.item.enums.Quality
 
 class PlayerFacadeItemsTest {
@@ -71,7 +72,9 @@ class PlayerFacadeItemsTest {
 
     @Test
     fun should_update_name_of_item_of_a_player() {
-        val player = playerFacade.save(Player("John", items = listOf(Armor(name = "Helmet", soak = 2, defense = 1))))
+        val player = playerFacade.save(
+                Player("John", items = listOf(Armor(name = "Helmet", soak = 2, subType = HELMET, defense = 1)))
+        )
         assertThat(player.name).isEqualTo("John")
         assertThat(player.items.size).isEqualTo(1)
         assertThat(player.items[0] is Armor).isTrue()
@@ -79,6 +82,7 @@ class PlayerFacadeItemsTest {
         assertThat(armor.name).isEqualTo("Helmet")
         assertThat(armor.soak).isEqualTo(2)
         assertThat(armor.defense).isEqualTo(1)
+        assertThat(armor.subType).isEqualTo(HELMET)
 
         armor.name = "Shield"
 
@@ -91,6 +95,7 @@ class PlayerFacadeItemsTest {
         assertThat(newWeapon.name).isEqualTo("Shield")
         assertThat(armor.soak).isEqualTo(2)
         assertThat(armor.defense).isEqualTo(1)
+        assertThat(armor.subType).isEqualTo(HELMET)
     }
 
     @Test

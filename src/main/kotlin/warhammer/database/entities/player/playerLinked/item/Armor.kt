@@ -1,5 +1,7 @@
 package warhammer.database.entities.player.playerLinked.item
 
+import warhammer.database.entities.player.playerLinked.item.enums.ArmorType
+import warhammer.database.entities.player.playerLinked.item.enums.ItemSubType
 import warhammer.database.entities.player.playerLinked.item.enums.ItemType.ARMOR
 import warhammer.database.entities.player.playerLinked.item.enums.Quality
 import warhammer.database.entities.player.playerLinked.item.enums.Range
@@ -9,6 +11,7 @@ data class Armor(override var name: String = "Armor",
                  override var encumbrance: Int = 0,
                  override var quantity: Int = 1,
                  override var quality: Quality = Quality.NORMAL,
+                 override var subType: ItemSubType? = ArmorType.LEATHER,
 
                  override var isEquipped: Boolean? = false,
 

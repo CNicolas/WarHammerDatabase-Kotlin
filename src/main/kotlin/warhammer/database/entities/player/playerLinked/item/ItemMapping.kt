@@ -3,9 +3,11 @@ package warhammer.database.entities.player.playerLinked.item
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import warhammer.database.entities.player.Player
+import warhammer.database.entities.player.playerLinked.item.enums.ArmorType
 import warhammer.database.entities.player.playerLinked.item.enums.ItemType.*
 import warhammer.database.entities.player.playerLinked.item.enums.Quality
 import warhammer.database.entities.player.playerLinked.item.enums.Range
+import warhammer.database.entities.player.playerLinked.item.enums.WeaponType
 import warhammer.database.tables.ItemsTable
 
 internal fun ResultRow?.mapToItem(): Item? = when (this) {
@@ -38,6 +40,7 @@ internal fun ResultRow?.mapToItem(): Item? = when (this) {
                     encumbrance = this[ItemsTable.encumbrance],
                     quantity = this[ItemsTable.quantity],
                     quality = Quality.valueOf(this[ItemsTable.quality]),
+                    subType = ArmorType.valueOf(this[ItemsTable.subType]),
                     isEquipped = this[ItemsTable.isEquipped]!!,
                     soak = this[ItemsTable.soak],
                     defense = this[ItemsTable.defense]
@@ -49,6 +52,7 @@ internal fun ResultRow?.mapToItem(): Item? = when (this) {
                     encumbrance = this[ItemsTable.encumbrance],
                     quantity = this[ItemsTable.quantity],
                     quality = Quality.valueOf(this[ItemsTable.quality]),
+                    subType = WeaponType.valueOf(this[ItemsTable.subType]),
                     isEquipped = this[ItemsTable.isEquipped]!!,
                     damage = this[ItemsTable.damage]!!,
                     criticalLevel = this[ItemsTable.criticalLevel]!!,
@@ -67,6 +71,7 @@ fun UpdateBuilder<Int>.mapFieldsOfEntity(entity: Item, player: Player) {
     this[ItemsTable.quantity] = entity.quantity
     this[ItemsTable.quality] = entity.quality.toString()
     this[ItemsTable.type] = entity.type.toString()
+    this[ItemsTable.subType] = entity.subType.toString()
 
     this[ItemsTable.uses] = entity.uses
 

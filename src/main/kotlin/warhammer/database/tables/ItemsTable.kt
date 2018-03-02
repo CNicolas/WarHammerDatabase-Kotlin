@@ -11,6 +11,7 @@ object ItemsTable : IntIdTable() {
     val quantity = integer("quantity")
     val quality = varchar("quality", 20)
     val type = varchar("type", length = 20)
+    val subType = varchar("subType", length = 30)
 
     val uses = integer("uses").nullable()
 

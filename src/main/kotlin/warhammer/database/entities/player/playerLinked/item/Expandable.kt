@@ -1,5 +1,6 @@
 package warhammer.database.entities.player.playerLinked.item
 
+import warhammer.database.entities.player.playerLinked.item.enums.ItemSubType
 import warhammer.database.entities.player.playerLinked.item.enums.ItemType
 import warhammer.database.entities.player.playerLinked.item.enums.Quality
 import warhammer.database.entities.player.playerLinked.item.enums.Range
@@ -16,6 +17,7 @@ data class Expandable(override var name: String = "Expandable",
 
     override var type = ItemType.EXPANDABLE
 
+    override var subType: ItemSubType? = null
     override var isEquipped: Boolean? = null
     override var soak: Int? = null
     override var defense: Int? = null

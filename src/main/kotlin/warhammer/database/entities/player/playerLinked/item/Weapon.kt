@@ -1,14 +1,17 @@
 package warhammer.database.entities.player.playerLinked.item
 
+import warhammer.database.entities.player.playerLinked.item.enums.ItemSubType
 import warhammer.database.entities.player.playerLinked.item.enums.ItemType.WEAPON
 import warhammer.database.entities.player.playerLinked.item.enums.Quality
 import warhammer.database.entities.player.playerLinked.item.enums.Range
+import warhammer.database.entities.player.playerLinked.item.enums.WeaponType
 
 data class Weapon(override var name: String = "Weapon",
                   override var description: String? = null,
                   override var encumbrance: Int = 0,
                   override var quantity: Int = 1,
                   override var quality: Quality = Quality.NORMAL,
+                  override var subType: ItemSubType? = WeaponType.SWORD,
 
                   override var isEquipped: Boolean? = false,
 
