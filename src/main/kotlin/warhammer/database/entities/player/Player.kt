@@ -3,6 +3,7 @@ package warhammer.database.entities.player
 import warhammer.database.entities.NamedEntity
 import warhammer.database.entities.player.enums.Characteristic
 import warhammer.database.entities.player.enums.Race
+import warhammer.database.entities.player.extensions.getArmors
 import warhammer.database.entities.player.playerLinked.item.Item
 import warhammer.database.entities.player.playerLinked.skill.Skill
 import warhammer.database.entities.player.playerLinked.talent.Talent
@@ -59,6 +60,12 @@ data class Player(override var name: String,
             Race.DWARF -> 5
             else -> 0
         }
+
+    val defense: Int
+        get() = getArmors().sumBy { it.defense ?: 0 }
+
+    val soak: Int
+        get() = getArmors().sumBy { it.soak ?: 0 }
 
     operator fun get(characteristic: Characteristic): CharacteristicValue = when (characteristic) {
         Characteristic.STRENGTH -> strength

@@ -14,8 +14,13 @@ import warhammer.database.entities.player.playerLinked.item.Armor
 import warhammer.database.entities.player.playerLinked.item.Expandable
 import warhammer.database.entities.player.playerLinked.item.GenericItem
 import warhammer.database.entities.player.playerLinked.item.Weapon
+import warhammer.database.entities.player.playerLinked.item.enums.ArmorType.HELMET
+import warhammer.database.entities.player.playerLinked.item.enums.ArmorType.SHIELD
 import warhammer.database.entities.player.playerLinked.item.enums.Quality.LOW
 import warhammer.database.entities.player.playerLinked.item.enums.Quality.NORMAL
+import warhammer.database.entities.player.playerLinked.item.enums.Range
+import warhammer.database.entities.player.playerLinked.item.enums.WeaponType.BOW
+import warhammer.database.entities.player.playerLinked.item.enums.WeaponType.STICK
 
 class PlayerTest {
     @Test
@@ -68,6 +73,37 @@ class PlayerTest {
         assertThat(dwarf.maxExhaustion).isEqualTo(10)
         assertThat(dwarf.maxStress).isEqualTo(6)
         assertThat(dwarf.maxEncumbrance).isEqualTo(30)
+    }
+
+    @Test
+    fun should_get_defense_and_soak() {
+        val player = Player(
+                "John",
+                items = listOf(
+                        Armor("Helm", defense = 1, soak = 2, subType = HELMET),
+                        Armor("Oaken shield", defense = 1, soak = 2, subType = SHIELD)
+                )
+        )
+
+        assertThat(player.defense).isEqualTo(2)
+        assertThat(player.soak).isEqualTo(4)
+    }
+
+    @Test
+    fun should_get_damage_of_weapon() {
+        val staff = Weapon("Staff", damage = 4, subType = STICK)
+        val bow = Weapon("BOW", damage = 4, range = Range.LONG, subType = BOW)
+        val player = Player(
+                "John",
+                strength = CharacteristicValue(4, 1),
+                agility = CharacteristicValue(3),
+                items = listOf(staff, bow)
+        )
+
+        assertThat(player.defense).isEqualTo(0)
+        assertThat(player.soak).isEqualTo(0)
+        assertThat(player.getWeaponDamage(staff)).isEqualTo(8)
+        assertThat(player.getWeaponDamage(bow)).isEqualTo(7)
     }
 
     @Test

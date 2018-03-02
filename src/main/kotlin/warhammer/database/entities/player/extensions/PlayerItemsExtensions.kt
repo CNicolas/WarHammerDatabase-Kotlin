@@ -3,6 +3,7 @@ package warhammer.database.entities.player.extensions
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.playerLinked.item.*
 import warhammer.database.entities.player.playerLinked.item.enums.ItemType
+import warhammer.database.entities.player.playerLinked.item.enums.Range
 
 fun Player.addItem(item: Item): List<Item> {
     val mutableItems = items.toMutableList()
@@ -43,4 +44,13 @@ fun Player.removeItem(item: Item): List<Item> {
 
 fun Player.removeAllItems() {
     items = listOf()
+}
+
+fun Player.getWeaponDamage(weapon: Weapon): Int {
+    val weaponDamage = weapon.damage ?: 0
+    return when (weapon.range) {
+        null -> weaponDamage
+        Range.ENGAGED -> strength.value + weaponDamage
+        else -> agility.value + weaponDamage
+    }
 }
