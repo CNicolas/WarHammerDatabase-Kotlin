@@ -20,12 +20,12 @@ class PlayerFacade(databaseUrl: String = "jdbc:sqlite:file:warhammer", driver: S
     fun save(player: Player): Player {
         val existingPlayer = playerRepository.findById(player.id)
         return when (existingPlayer) {
-            null -> addPlayer(player)
-            else -> updatePlayer(player)
+            null -> add(player)
+            else -> update(player)
         }
     }
 
-    private fun addPlayer(player: Player): Player {
+    fun add(player: Player): Player {
         createSkillsForPlayer(player)
         val savedPlayer = playerRepository.add(player)
 
@@ -35,7 +35,7 @@ class PlayerFacade(databaseUrl: String = "jdbc:sqlite:file:warhammer", driver: S
         return find(player.name)!!
     }
 
-    private fun updatePlayer(player: Player): Player {
+    fun update(player: Player): Player {
         playerRepository.update(player)
         updateItems(player)
 

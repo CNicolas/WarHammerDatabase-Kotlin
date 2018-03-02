@@ -10,12 +10,15 @@ class HandFacade(databaseUrl: String = "jdbc:sqlite:file:warhammer", driver: Str
     fun save(hand: Hand): Hand {
         val existingHand = handRepository.findById(hand.id)
         when (existingHand) {
-            null -> handRepository.add(hand)
-            else -> handRepository.update(hand)
+            null -> add(hand)
+            else -> update(hand)
         }
 
         return find(hand.name)!!
     }
+
+    fun add(hand: Hand) = handRepository.add(hand)
+    fun update(hand: Hand) = handRepository.update(hand)
 
     // endregion
 
