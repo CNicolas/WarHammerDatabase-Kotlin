@@ -1,7 +1,7 @@
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.2.21'
+    ext.kotlin_version = '1.2.30'
 
     repositories {
         mavenCentral()
@@ -24,7 +24,7 @@ repositories {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-reflect:1.2.21"
+    compile "org.jetbrains.kotlin:kotlin-reflect:1.2.30"
 
     compile "org.xerial:sqlite-jdbc:3.21.0"
     compile "org.jetbrains.exposed:exposed:0.9.1"
