@@ -3,6 +3,7 @@ package warhammer.database.staticData
 import com.beust.klaxon.Klaxon
 import warhammer.database.entities.player.playerLinked.skill.Skill
 import warhammer.database.entities.player.playerLinked.skill.SkillType
+import warhammer.database.entities.player.playerLinked.skill.Specialization
 import warhammer.database.entities.player.playerLinked.talent.Talent
 import warhammer.database.entities.player.playerLinked.talent.TalentCooldown
 import warhammer.database.entities.player.playerLinked.talent.TalentType
@@ -13,6 +14,10 @@ fun getAllSkills(): List<Skill> =
 
 fun getAdvancedSkills(): List<Skill> =
         getAllSkills().filter { it.type == SkillType.ADVANCED }
+
+
+fun getAllSpecializations(): Map<Skill, List<Specialization>> =
+        getAllSkills().map { it to it.specializations }.toMap()
 
 
 fun getAllTalents(): List<Talent> =

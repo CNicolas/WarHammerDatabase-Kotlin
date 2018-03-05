@@ -21,14 +21,14 @@ fun Player.getSkillsByCharacteristic(characteristic: Characteristic): List<Skill
 
 fun Player.getSpecializations(): List<Specialization> =
         skills.flatMap {
-            it.getSpecializations()
+            it.getSpecializedSpecializations()
         }
 
 fun Player.getSpecializationByName(name: String): Specialization? =
         getSpecializations().firstOrNull { it.name == name }
 
 
-fun Skill.getSpecializations(): List<Specialization> =
+fun Skill.getSpecializedSpecializations(): List<Specialization> =
         specializations.filter { it.isSpecialized }
 
 fun Skill.getSpecializationByName(name: String): Specialization? =

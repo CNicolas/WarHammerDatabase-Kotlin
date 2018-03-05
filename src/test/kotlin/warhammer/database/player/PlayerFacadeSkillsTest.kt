@@ -9,6 +9,7 @@ import warhammer.database.entities.player.enums.Characteristic.*
 import warhammer.database.entities.player.playerLinked.skill.SkillType
 import warhammer.database.extensions.skills.*
 import warhammer.database.staticData.getAdvancedSkills
+import warhammer.database.staticData.getAllSpecializations
 
 class PlayerFacadeSkillsTest {
     private val playerFacade = PlayerFacade(
@@ -91,5 +92,15 @@ class PlayerFacadeSkillsTest {
 
         assertThat(fellowshipSkills).isNotEmpty
         assertThat(fellowshipSkills.size).isEqualTo(4)
+    }
+
+    @Test
+    fun should_map_skill_with_specializations() {
+        val specializationsBySkill = getAllSpecializations()
+        val shootingSkill = specializationsBySkill.keys.first { it.name == "Capacité de Tir" }
+        val specializations = specializationsBySkill[shootingSkill]!!
+
+        assertThat(specializations.size).isEqualTo(4)
+        assertThat(specializations.map { it.name }).containsExactly("Arcs", "Arbalètes", "Armes de Jet", "Armes à Poudre")
     }
 }
