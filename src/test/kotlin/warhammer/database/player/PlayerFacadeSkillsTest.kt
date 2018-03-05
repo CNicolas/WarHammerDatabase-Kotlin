@@ -6,8 +6,9 @@ import org.testng.annotations.Test
 import warhammer.database.PlayerFacade
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.enums.Characteristic.*
-import warhammer.database.entities.player.extensions.*
 import warhammer.database.entities.player.playerLinked.skill.SkillType
+import warhammer.database.extensions.skills.*
+import warhammer.database.staticData.getAdvancedSkills
 
 class PlayerFacadeSkillsTest {
     private val playerFacade = PlayerFacade(
@@ -26,7 +27,7 @@ class PlayerFacadeSkillsTest {
         assertThat(player.name).isEqualTo("John")
         assertThat(player.skills.size).isEqualTo(18)
 
-        val advancedSkills = playerFacade.getAdvancedSkills()
+        val advancedSkills = getAdvancedSkills()
         println(advancedSkills)
         assertThat(advancedSkills.map { it.type }.distinct()).isEqualTo(listOf(SkillType.ADVANCED))
         player.addSkill(advancedSkills[0])
@@ -59,7 +60,7 @@ class PlayerFacadeSkillsTest {
         assertThat(newSkill.characteristic).isEqualTo(STRENGTH)
         assertThat(newSkill.level).isEqualTo(2)
         assertThat(newSkill.getSpecializationByName("Armes d’Hast")?.isSpecialized).isTrue()
-        assertThat(updatedPlayer.getSpecializations()).isNotEmpty()
+        assertThat(updatedPlayer.getSpecializations()).isNotEmpty
         assertThat(updatedPlayer.getSpecializationByName("Armes d’Hast")?.isSpecialized).isTrue()
     }
 
@@ -73,22 +74,22 @@ class PlayerFacadeSkillsTest {
         val willpowerSkills = player.getSkillsByCharacteristic(WILLPOWER)
         val fellowshipSkills = player.getSkillsByCharacteristic(FELLOWSHIP)
 
-        assertThat(strengthSkills).isNotEmpty()
+        assertThat(strengthSkills).isNotEmpty
         assertThat(strengthSkills.size).isEqualTo(3)
 
-        assertThat(toughnessSkills).isNotEmpty()
+        assertThat(toughnessSkills).isNotEmpty
         assertThat(toughnessSkills.size).isEqualTo(1)
 
-        assertThat(agilitySkills).isNotEmpty()
+        assertThat(agilitySkills).isNotEmpty
         assertThat(agilitySkills.size).isEqualTo(5)
 
-        assertThat(intelligenceSkills).isNotEmpty()
+        assertThat(intelligenceSkills).isNotEmpty
         assertThat(intelligenceSkills.size).isEqualTo(4)
 
-        assertThat(willpowerSkills).isNotEmpty()
+        assertThat(willpowerSkills).isNotEmpty
         assertThat(willpowerSkills.size).isEqualTo(1)
 
-        assertThat(fellowshipSkills).isNotEmpty()
+        assertThat(fellowshipSkills).isNotEmpty
         assertThat(fellowshipSkills.size).isEqualTo(4)
     }
 }

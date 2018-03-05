@@ -1,4 +1,4 @@
-package warhammer.database.entities.player.extensions
+package warhammer.database.extensions.skills
 
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.enums.Characteristic
@@ -19,16 +19,17 @@ fun Player.getSkillByName(name: String): Skill? =
 fun Player.getSkillsByCharacteristic(characteristic: Characteristic): List<Skill> =
         skills.filter { it.characteristic == characteristic }
 
-fun Player.getSpecializationByName(name: String): Specialization? =
-        getSpecializations().firstOrNull { it.name == name }
-
-fun Skill.getSpecializationByName(name: String): Specialization? =
-        specializations.firstOrNull { it.name == name }
-
 fun Player.getSpecializations(): List<Specialization> =
         skills.flatMap {
             it.getSpecializations()
         }
 
+fun Player.getSpecializationByName(name: String): Specialization? =
+        getSpecializations().firstOrNull { it.name == name }
+
+
 fun Skill.getSpecializations(): List<Specialization> =
         specializations.filter { it.isSpecialized }
+
+fun Skill.getSpecializationByName(name: String): Specialization? =
+        specializations.firstOrNull { it.name == name }

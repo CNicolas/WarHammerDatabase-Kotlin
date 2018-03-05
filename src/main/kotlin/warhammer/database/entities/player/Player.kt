@@ -3,7 +3,7 @@ package warhammer.database.entities.player
 import warhammer.database.entities.NamedEntity
 import warhammer.database.entities.player.enums.Characteristic
 import warhammer.database.entities.player.enums.Race
-import warhammer.database.entities.player.extensions.getArmors
+import warhammer.database.extensions.items.getArmors
 import warhammer.database.entities.player.playerLinked.item.Item
 import warhammer.database.entities.player.playerLinked.skill.Skill
 import warhammer.database.entities.player.playerLinked.talent.Talent

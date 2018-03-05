@@ -1,4 +1,4 @@
-package warhammer.database.entities.player.extensions
+package warhammer.database.extensions.talents
 
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.playerLinked.talent.Talent
@@ -14,14 +14,10 @@ fun Player.addTalent(talent: Talent): List<Talent> {
     return talents
 }
 
-fun Player.getTalentsByType(talentType: TalentType): List<Talent> =
-        talents.filterByType(talentType)
-
-fun Player.getPassiveTalents(): List<Talent> =
-        talents.filterPassive()
-
-fun Player.getEquippedTalents(): List<Talent> =
-        talents.filter { it.isEquipped }
+fun Player.getTalentsByType(talentType: TalentType) = talents.findByType(talentType)
+fun Player.getPassiveTalents() = talents.filter { it.cooldown == PASSIVE }
+fun Player.getExhaustibleTalents() = talents.filter { it.cooldown == TALENT }
+fun Player.getEquippedTalents() = talents.filter { it.isEquipped }
 
 fun Player.equipTalent(talent: Talent): List<Talent> {
     talents.firstOrNull { it == talent }?.isEquipped = true
@@ -29,11 +25,6 @@ fun Player.equipTalent(talent: Talent): List<Talent> {
     return getEquippedTalents()
 }
 
-fun List<Talent>.filterPassive() =
-        filter { it.cooldown == PASSIVE }
 
-fun List<Talent>.filterExhaustible() =
-        filter { it.cooldown == TALENT }
-
-fun List<Talent>.filterByType(talentType: TalentType) =
+fun List<Talent>.findByType(talentType: TalentType) =
         filter { it.type == talentType }

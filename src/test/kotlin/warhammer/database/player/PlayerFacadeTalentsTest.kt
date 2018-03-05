@@ -5,13 +5,13 @@ import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 import warhammer.database.PlayerFacade
 import warhammer.database.entities.player.Player
-import warhammer.database.entities.player.extensions.addTalent
-import warhammer.database.entities.player.extensions.equipTalent
-import warhammer.database.entities.player.extensions.getPassiveTalents
-import warhammer.database.entities.player.extensions.getTalentsByType
 import warhammer.database.entities.player.playerLinked.talent.TalentCooldown
 import warhammer.database.entities.player.playerLinked.talent.TalentCooldown.PASSIVE
 import warhammer.database.entities.player.playerLinked.talent.TalentType.FAITH
+import warhammer.database.extensions.talents.*
+import warhammer.database.staticData.getExhaustibleTalents
+import warhammer.database.staticData.getPassiveTalents
+import warhammer.database.staticData.getTalentsByType
 
 class PlayerFacadeTalentsTest {
     private val playerFacade = PlayerFacade(
@@ -29,7 +29,7 @@ class PlayerFacadeTalentsTest {
         val player = playerFacade.save(Player("John"))
         assertThat(player.talents).isEmpty()
 
-        val passiveTalents = playerFacade.getPassiveTalents()
+        val passiveTalents = getPassiveTalents()
         val selectedTalent = passiveTalents.first { it.type == FAITH }
         player.addTalent(selectedTalent)
 
@@ -48,7 +48,7 @@ class PlayerFacadeTalentsTest {
         val player = playerFacade.save(Player("John"))
         assertThat(player.talents).isEmpty()
 
-        val exhaustibleTalent = playerFacade.getExhaustibleTalents()[0]
+        val exhaustibleTalent = getExhaustibleTalents()[0]
         player.addTalent(exhaustibleTalent)
 
         val updatedPlayer1 = playerFacade.save(player)
@@ -64,6 +64,7 @@ class PlayerFacadeTalentsTest {
         assertThat(updatedPlayer2.talents[0].name).isEqualTo(exhaustibleTalent.name)
         assertThat(updatedPlayer2.talents[0].cooldown).isEqualTo(TalentCooldown.TALENT)
         assertThat(updatedPlayer2.talents[0].isEquipped).isTrue()
+        assertThat(updatedPlayer2.getExhaustibleTalents()[0]).isEqualToComparingFieldByField(exhaustibleTalent)
 
         exhaustibleTalent.isEquipped = false
 
@@ -76,8 +77,8 @@ class PlayerFacadeTalentsTest {
 
     @Test
     fun should_load_talent_by_type_and_passive() {
-        val passiveFaithTalent = playerFacade.getPassiveTalents().first { it.type == FAITH }
-        val faithPassiveTalent = playerFacade.getTalentsByType(FAITH).first { it.cooldown == PASSIVE }
+        val passiveFaithTalent = getPassiveTalents().first { it.type == FAITH }
+        val faithPassiveTalent = getTalentsByType(FAITH).first { it.cooldown == PASSIVE }
 
         assertThat(passiveFaithTalent).isEqualToComparingFieldByField(faithPassiveTalent)
     }

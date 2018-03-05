@@ -1,4 +1,4 @@
-package warhammer.database.entities.player.extensions
+package warhammer.database.extensions.items
 
 import warhammer.database.entities.player.Player
 import warhammer.database.entities.player.playerLinked.item.*
@@ -13,21 +13,10 @@ fun Player.addItem(item: Item): List<Item> {
     return items
 }
 
-fun Player.getArmors() =
-        items.filter { it.type == ItemType.ARMOR }
-                .map { it as Armor }
-
-fun Player.getExpandables() =
-        items.filter { it.type == ItemType.EXPANDABLE }
-                .map { it as Expandable }
-
-fun Player.getGenericItems() =
-        items.filter { it.type == ItemType.GENERIC_ITEM }
-                .map { it as GenericItem }
-
-fun Player.getWeapons() =
-        items.filter { it.type == ItemType.WEAPON }
-                .map { it as Weapon }
+fun Player.getArmors() = items.getArmors()
+fun Player.getExpandables() = items.getExpandables()
+fun Player.getGenericItems() = items.getGenericItems()
+fun Player.getWeapons() = items.getWeapons()
 
 fun Player.getArmorByName(name: String): Armor? = getArmors().firstOrNull { it.name == name }
 fun Player.getExpandableByName(name: String): Expandable? = getExpandables().firstOrNull { it.name == name }
@@ -54,3 +43,20 @@ fun Player.getWeaponDamage(weapon: Weapon): Int {
         else -> agility.value + weaponDamage
     }
 }
+
+
+fun List<Item>.getArmors(): List<Armor> =
+        filter { it.type == ItemType.ARMOR }
+                .map { it as Armor }
+
+fun List<Item>.getExpandables(): List<Expandable> =
+        filter { it.type == ItemType.EXPANDABLE }
+                .map { it as Expandable }
+
+fun List<Item>.getGenericItems(): List<GenericItem> =
+        filter { it.type == ItemType.GENERIC_ITEM }
+                .map { it as GenericItem }
+
+fun List<Item>.getWeapons(): List<Weapon> =
+        filter { it.type == ItemType.WEAPON }
+                .map { it as Weapon }

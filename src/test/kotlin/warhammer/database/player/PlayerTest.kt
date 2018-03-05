@@ -9,7 +9,6 @@ import warhammer.database.entities.player.enums.Characteristic
 import warhammer.database.entities.player.enums.Characteristic.AGILITY
 import warhammer.database.entities.player.enums.Race.DWARF
 import warhammer.database.entities.player.enums.Race.WOOD_ELF
-import warhammer.database.entities.player.extensions.*
 import warhammer.database.entities.player.playerLinked.item.Armor
 import warhammer.database.entities.player.playerLinked.item.Expandable
 import warhammer.database.entities.player.playerLinked.item.GenericItem
@@ -21,6 +20,7 @@ import warhammer.database.entities.player.playerLinked.item.enums.Quality.NORMAL
 import warhammer.database.entities.player.playerLinked.item.enums.Range
 import warhammer.database.entities.player.playerLinked.item.enums.WeaponType.BOW
 import warhammer.database.entities.player.playerLinked.item.enums.WeaponType.STICK
+import warhammer.database.extensions.items.*
 
 class PlayerTest {
     @Test

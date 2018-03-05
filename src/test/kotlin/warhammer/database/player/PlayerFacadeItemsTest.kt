@@ -5,13 +5,13 @@ import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 import warhammer.database.PlayerFacade
 import warhammer.database.entities.player.Player
-import warhammer.database.entities.player.extensions.*
 import warhammer.database.entities.player.playerLinked.item.Armor
 import warhammer.database.entities.player.playerLinked.item.Expandable
 import warhammer.database.entities.player.playerLinked.item.GenericItem
 import warhammer.database.entities.player.playerLinked.item.Weapon
 import warhammer.database.entities.player.playerLinked.item.enums.ArmorType.HELMET
 import warhammer.database.entities.player.playerLinked.item.enums.Quality
+import warhammer.database.extensions.items.*
 
 class PlayerFacadeItemsTest {
     private val playerFacade = PlayerFacade(
